@@ -1,0 +1,41 @@
+lint:
+  files_exist:
+  - CODE_OF_CONDUCT.md
+  - assets/nf-core-igsmp_logo_light.png
+  - docs/images/nf-core-igsmp_logo_light.png
+  - docs/images/nf-core-igsmp_logo_dark.png
+  - .github/ISSUE_TEMPLATE/config.yml
+  - .github/workflows/awstest.yml
+  - .github/workflows/awsfulltest.yml
+  - .github/workflows/branch.yml
+  - .github/workflows/ci.yml
+  - .github/workflows/linting_comment.yml
+  - .github/workflows/linting.yml
+  - conf/igenomes.config
+  - conf/igenomes.config
+  files_unchanged:
+  - CODE_OF_CONDUCT.md
+  - assets/nf-core-igsmp_logo_light.png
+  - docs/images/nf-core-igsmp_logo_light.png
+  - docs/images/nf-core-igsmp_logo_dark.png
+  - .github/ISSUE_TEMPLATE/bug_report.yml
+  multiqc_config:
+  - report_comment
+  nextflow_config:
+  - manifest.name
+  - manifest.homePage
+  - process.cpus
+  - process.memory
+  - process.time
+  - custom_config
+  readme:
+  - nextflow_badge
+nf_core_version: 2.14.1
+repository_type: pipeline
+template:
+  prefix: rki-mf1
+  skip:
+  - ci
+  - github_badges
+  - igenomes
+  - nf_core_configs
