@@ -53,7 +53,7 @@ nextflow run rki-mf1/igsmp \
 
 ## Credits
 
-rki-mf1/igsmp was originally written by me.
+rki-mf1/igsmp was originally written by the RKI MF1 Viroinf team.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
