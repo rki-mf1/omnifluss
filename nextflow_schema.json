@@ -46,6 +46,120 @@
                 }
             }
         },
+        "reference_genome_options": {
+            "title": "Reference genome options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-book-open",
+            "properties": {
+                "reference_selection": {
+                    "type": "string",
+                    "enum": [
+                        "fixed",
+                        "dynamic"
+                    ]
+                },
+                "fasta": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Path to FASTA genome file."
+                },
+                "gff": {
+                    "type": "string",
+                    "format": "file-path",
+                    "description": "Full path to GFF annotation file."
+                },
+                "fasta_db": {
+                    "type": "string"
+                },
+                "primer_bed": {
+                    "type": "string",
+                    "format": "file-path"
+                }
+            }
+        },
+        "tools_and-step-options": {
+            "title": "Tools and step options",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "fa_icon": "fas fa-wrench",
+            "properties": {
+                "read_qc": {
+                    "type": "string",
+                    "default": "fastqc,fastp",
+                    "pattern": "^((fastqc|fastp)?,?)*(?<!,)$",
+                    "description": "Tools to use for read QC.",
+                    "help_text": "Multiple tools separated with commas."
+                },
+                "taxonomic_classifier": {
+                    "type": "string",
+                    "enum": [
+                        "kraken2"
+                    ],
+                    "default": "kraken2",
+                    "description": "Tool to use for taxonomic classifiacation and fltering."
+                },
+                "kraken2_db": {
+                    "type": "string",
+                    "description": "Path to a Kraken2 database."
+                },
+                "kraken2_taxid_filter_list": {
+                    "type": "string",
+                    "description": "List of taxids to filter from the Kraken2 results.",
+                    "help_text": "Multiple taxids separated with commas."
+                },
+                "aligner": {
+                    "type": "string",
+                    "enum": [
+                        "bwa"
+                    ],
+                    "default": "bwa",
+                    "description": "Tool to use for read aligment."
+                },
+                "primer_clipper": {
+                    "type": "string",
+                    "enum": [
+                        "bamclipper",
+                        "ivar"
+                    ],
+                    "description": "Tool to use for primer clipping."
+                },
+                "varian_caller": {
+                    "type": "string",
+                    "enum": [
+                        "freebayes",
+                        "lofreq"
+                    ],
+                    "description": "Tool to use for variant detection."
+                },
+                "consensus_caller": {
+                    "type": "string",
+                    "default": "bcftools",
+                    "enum": [
+                        "bcftools"
+                    ],
+                    "description": "Tool to use for consesus generation"
+                },
+                "skip_read_qc": {
+                    "type": "boolean",
+                    "description": "Skip the raw read QC step"
+                },
+                "skip_taxonomic_filtering": {
+                    "type": "boolean",
+                    "description": "Skip the taxonomic classifiaction and filtering of reads"
+                },
+                "skip_primer_clipping": {
+                    "type": "boolean",
+                    "description": "Skip the primer clipping step after mapping"
+                },
+                "skip_multiqc": {
+                    "type": "boolean",
+                    "description": "Skip MultiQC report generation"
+                }
+            }
+        },
         "institutional_config_options": {
             "title": "Institutional config options",
             "type": "object",
@@ -231,6 +345,12 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/reference_genome_options"
+        },
+        {
+            "$ref": "#/definitions/tools_and-step-options"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
