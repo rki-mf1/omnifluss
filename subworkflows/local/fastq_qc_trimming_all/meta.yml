@@ -4,7 +4,9 @@ description: Container for raw read QC steps
 keywords:
   - fastq
   - qc
-components: []
+components:
+  - fastqc
+  - fastp
 input:
   - tools:
       type: string
