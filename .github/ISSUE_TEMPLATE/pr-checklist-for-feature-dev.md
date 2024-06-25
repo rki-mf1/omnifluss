@@ -11,9 +11,8 @@ assignees: ''
 _\<Info here...\>_
 
 ---
-- [ ] [**Naming**] Branches being requested for a merge into dev shall be clearly named after their addition or fix (e.g. feature_<pipeline_step>, fix_<issue>, add_<documentation>, ...)
 - [ ] [**Minimalism**] Every PR to dev should be a minimal functional upgrade, i.e. a PR should not contain more than the functionally required code for one particular addition or fix.
 - [ ] [**Review**] PRs should always be reviewed by at least one project maintainer. Never force push to main branch!
 - [ ] [**Reproducibility**] PRs need to provide a command/description to reproduce their functionality. Ideally, they also provide evidence that they are functional (e.g. screenshots, log, ...)
-- [ ] [**Contribution**] Tag corresponding issues in the PR if relevant.
+- [ ] [**Contribution**] Tag corresponding issues in the PR if relevant. Leave a short and precise comment in the CHANGELOG.md about your changes.
 - [ ] [**Cleaning**] Delete the PR-branch if no longer required.
