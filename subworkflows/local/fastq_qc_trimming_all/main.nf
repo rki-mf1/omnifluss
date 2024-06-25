@@ -7,7 +7,7 @@ workflow FASTQ_QC_TRIMMING_ALL {
     ch_reads  // channel: [ val(meta), fastq ]
 
     main:
-    ch_trimmed_reads = Channel.empty()
+    ch_trimmed_reads  = Channel.empty()
     ch_multiqc_files  = Channel.empty()
     ch_versions       = Channel.empty()
 
