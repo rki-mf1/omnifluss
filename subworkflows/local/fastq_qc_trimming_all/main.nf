@@ -3,8 +3,8 @@ include { FASTP                  } from '../../../modules/nf-core/fastp/main'
 
 workflow FASTQ_QC_TRIMMING_ALL {
     take:
-    tools
-    samplesheet
+    tools     // string
+    ch_reads  // channel: [ val(meta), fastq ]
 
     main:
     ch_trimmed_reads = Channel.empty()
@@ -14,7 +14,7 @@ workflow FASTQ_QC_TRIMMING_ALL {
     // FASTQC
     if (tools.split(',').contains('fastqc')) {
         FASTQC (
-            samplesheet
+            ch_reads
         )
         ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
         ch_versions = ch_versions.mix(FASTQC.out.versions.first())
@@ -23,7 +23,7 @@ workflow FASTQ_QC_TRIMMING_ALL {
     // FASTP
     if (tools.split(',').contains('fastp')) {
         FASTP(
-            samplesheet,
+            ch_reads,
             [],
             false,
             false,
@@ -36,9 +36,9 @@ workflow FASTQ_QC_TRIMMING_ALL {
     }
 
     emit:
-    trimmed_reads = ch_trimmed_reads
+    trimmed_reads     = ch_trimmed_reads  // channel: [ val(meta), fastq ]
 
-    multiqc_files     = ch_multiqc_files
-    versions          = ch_versions
+    multiqc_files     = ch_multiqc_files  // channel: [ multiqc_files ]
+    versions          = ch_versions       // channel: [ versions.yml ]
 
 }
