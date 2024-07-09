@@ -1,0 +1,3 @@
+subworkflows/fastq_qc_trimming_all:
+  - subworkflows/local/fastq_qc_trimming_all/**
+
