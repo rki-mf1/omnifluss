@@ -7,8 +7,10 @@ assignees: ''
 
 ---
 
-## Describe the feature or addition you are working on
-_\<Info here...\>_
+## Describe the feature, fix or addition you are working on
+_\<General info here...\>_  
+_\<Have you introduced new nf-core modules? ...\>_  
+_\<Have you added a test/ stub command? ...\>_
 
 ---
 - [ ] [**Minimalism**] Every PR to dev should be a minimal functional upgrade, i.e. a PR should not contain more than the functionally required code for one particular addition or fix.
