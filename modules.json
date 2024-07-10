@@ -19,6 +19,20 @@
                             "modules"
                         ]
                     },
+                    "lofreq/callparallel": {
+                        "branch": "master",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
+                    "lofreq/indelqual": {
+                        "branch": "master",
+                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
                     "lofreq/viterbi": {
                         "branch": "master",
                         "git_sha": "26dc61f087ef47f79ddd724476596cfe31fa5ec7",
@@ -29,6 +43,13 @@
                     "multiqc": {
                         "branch": "master",
                         "git_sha": "8f2062e7b4185590fb9f43c275381a31a6544fc0",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
+                    "samtools/index": {
+                        "branch": "master",
+                        "git_sha": "04fbbc7c43cebc0b95d5b126f6d9fe4effa33519",
                         "installed_by": [
                             "modules"
                         ]
