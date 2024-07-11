@@ -3,9 +3,9 @@ include { FASTQ_ALIGN_BWA        } from '../../nf-core/fastq_align_bwa/main'
 
 workflow FASTP_MAP_ALL {
     take:
-    tools
-    ch_reads
-    reference
+    tools           // string
+    ch_reads        // channel: [ val(meta), fastq ]
+    reference       // channel: [ val(meta), fasta ]
 
     main:
     ch_index = Channel.empty()
@@ -20,16 +20,16 @@ workflow FASTP_MAP_ALL {
     if (tools.split(',').contains('bwa')) {
 
         BWA_INDEX(
-            reference
+            reference   // channel: [ val(meta), fasta ]
         )
         ch_index = BWA_INDEX.out.index
         ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
 
         FASTQ_ALIGN_BWA(
-            ch_reads,
-            ch_index,
+            ch_reads,   // channel: [ val(meta), fastq ]
+            ch_index,   // channel: [ val(meta), index ]
             true,
-            reference
+            reference   // channel: [ val(meta), fasta ]
         )
         ch_bam_orig = FASTQ_ALIGN_BWA.out.bam_orig
         ch_bam = FASTQ_ALIGN_BWA.out.bam
