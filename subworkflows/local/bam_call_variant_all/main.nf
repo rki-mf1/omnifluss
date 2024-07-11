@@ -46,12 +46,10 @@ workflow BAM_CALL_VARIANT_ALL {
 
     // LOFREQ_CALLPARALLEL does the actual variant calling
     // LOFREQ_CALLPARALLEL requires formatting of the input Channel
-    ch_iqbam_list   = ch_iqbam.toList()
-    ch_bai_list     = ch_bai.toList()
-    ch_callbam      = ch_iqbam_list
-                            .join(ch_bai_list)
-                            .map{ it -> [it, ""] }
-                            .flatten()  // [ val(meta), [bam], [bai], ""]   // TODO: To be tested!
+    ch_callbam = ch_iqbam
+                    .join(ch_bai)
+                    .map{ it -> [it[0], it[1], it[2], [] ] }
+                    // [ val(meta), [bam], [bai], ""]
 
     LOFREQ_CALLPARALLEL (
         ch_callbam,
