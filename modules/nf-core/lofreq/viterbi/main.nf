@@ -26,7 +26,7 @@ process LOFREQ_VITERBI {
     lofreq \\
         viterbi \\
         $args \\
-        -ref $fasta \\
+        --ref $fasta \\
         $bam |
         samtools sort \\
             $args2 \\
