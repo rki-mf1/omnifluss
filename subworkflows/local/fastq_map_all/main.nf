@@ -1,7 +1,9 @@
 include { BWA_INDEX              } from '../../../modules/nf-core/bwa/index/main'
 include { FASTQ_ALIGN_BWA        } from '../../nf-core/fastq_align_bwa/main'
+include { SAMTOOLS_FAIDX         } from '../../../modules/nf-core/samtools/faidx/main' 
+include { PICARD_MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
 
-workflow FASTP_MAP_ALL {
+workflow FASTQ_MAP_ALL {
     take:
     tools           // string
     ch_reads        // channel: [ val(meta), fastq ]
@@ -39,9 +41,25 @@ workflow FASTP_MAP_ALL {
         ch_idxstats = FASTQ_ALIGN_BWA.out.idxstats
         ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
 
+        SAMTOOLS_FAIDX(
+            reference,
+            [[], []]    // channel: [empty, empty]
+        )
+
+        ch_fai_index = SAMTOOLS_FAIDX.out.fai
+
+        PICARD_MARKDUPLICATES(
+            ch_bam,         // channel: [ val(meta), bam ]
+            reference,
+            ch_fai_index    // channel: [ val(meta), index ]
+        )
+        ch_deduped_bam = PICARD_MARKDUPLICATES.out.bam
+        ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
+
     }
     emit:
     ch_mapping        = ch_bam
+    ch_deduped_bam    = ch_deduped_bam
     versions          = ch_versions
 
 }
