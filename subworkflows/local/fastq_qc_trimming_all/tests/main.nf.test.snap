@@ -1,0 +1,114 @@
+{
+    "sarscov2 - single_end - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.fastp.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        "test.fastp.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        "test.zip:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,4923a99cb98c366d658eaa38d11e98f0",
+                    "versions.yml:md5,988a1086de844c2926d325a53b370b7b"
+                ],
+                "multiqc_files": [
+                    [
+                        "test.fastp.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        "test.zip:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "trimmed_reads": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.fastp.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,4923a99cb98c366d658eaa38d11e98f0",
+                    "versions.yml:md5,988a1086de844c2926d325a53b370b7b"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-07-08T16:56:46.290323648"
+    },
+    "sarscov2 - paired_end - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        [
+                            "test_1.fastp.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "test_2.fastp.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "1": [
+                    [
+                        "test.fastp.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        "test.zip:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,4923a99cb98c366d658eaa38d11e98f0",
+                    "versions.yml:md5,988a1086de844c2926d325a53b370b7b"
+                ],
+                "multiqc_files": [
+                    [
+                        "test.fastp.json:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ],
+                    [
+                        "test.zip:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "trimmed_reads": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        [
+                            "test_1.fastp.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940",
+                            "test_2.fastp.fastq.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        ]
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,4923a99cb98c366d658eaa38d11e98f0",
+                    "versions.yml:md5,988a1086de844c2926d325a53b370b7b"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-07-08T16:56:56.511098294"
+    }
+}
