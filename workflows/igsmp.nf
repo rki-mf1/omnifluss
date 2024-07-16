@@ -49,11 +49,12 @@ workflow IGSMP {
     //
     if (! params.skip_taxonomic_filtering) {
         FASTQ_TAXONOMIC_FILTERING_ALL(
+            params.taxonomic_classifier,
             ch_reads,
             params.kraken2_db,
             params.kraken2_taxid_filter_list
         )
-        .ch_extracted_kraken2_reads
+        .extracted_kraken2_reads
         | set {ch_reads}
         ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect{it[1]})
         ch_versions = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions.first())

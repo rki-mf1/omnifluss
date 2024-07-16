@@ -34,7 +34,7 @@ output:
       description: |
         Groovy Map containing sample information
         e.g. `[ id:'sample1', single_end:false ]`
-  - report:
+  - kraken2_report:
       type: file
       description: |
         Kraken2 report containing stats about classified

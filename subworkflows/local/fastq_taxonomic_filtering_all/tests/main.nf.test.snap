@@ -33,7 +33,7 @@
                     "versions.yml:md5,069d28ae8ba2c11ddb0fa5e3ec81abde",
                     "versions.yml:md5,e233d30c1299470770ba4f701e58b0e4"
                 ],
-                "ch_extracted_kraken2_reads": [
+                "extracted_kraken2_reads": [
                     [
                         {
                             "id": "test",
@@ -42,7 +42,7 @@
                         "test.extracted_kraken2_read.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "ch_kraken2_report": [
+                "kraken2_report": [
                     [
                         {
                             "id": "test",
@@ -70,7 +70,7 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-10T15:59:29.2410164"
+        "timestamp": "2024-07-16T08:14:18.551780416"
     },
     "sarscov2 - paired_end - stub": {
         "content": [
@@ -109,7 +109,7 @@
                     "versions.yml:md5,069d28ae8ba2c11ddb0fa5e3ec81abde",
                     "versions.yml:md5,e233d30c1299470770ba4f701e58b0e4"
                 ],
-                "ch_extracted_kraken2_reads": [
+                "extracted_kraken2_reads": [
                     [
                         {
                             "id": "test",
@@ -121,7 +121,7 @@
                         ]
                     ]
                 ],
-                "ch_kraken2_report": [
+                "kraken2_report": [
                     [
                         {
                             "id": "test",
@@ -149,6 +149,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-10T15:59:37.940956067"
+        "timestamp": "2024-07-16T08:14:31.483666791"
     }
 }
