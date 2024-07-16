@@ -20,7 +20,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_igsm
 workflow IGSMP {
 
     take:
-    ch_samplesheet // channel: samplesheet read in from --input
+    ch_samplesheet                       // channel: [ meta, fastq ]
 
     main:
     ch_reads = ch_samplesheet
