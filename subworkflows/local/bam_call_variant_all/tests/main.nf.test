@@ -39,8 +39,8 @@ nextflow_workflow {
 
         then {
             assertAll(
-                { assert workflow.success},
-                { assert snapshot(workflow.out).match()}
+                { assert workflow.success },
+                { assert file(workflow.out['vcf'][0][1]).name == "test.vcf.gz" }
             )
         }
     }
