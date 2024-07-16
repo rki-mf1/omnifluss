@@ -12,13 +12,17 @@ components:
   - lofreq/indelqual
   - lofreq/callparallel
   - samtools/index
-## TODO nf-core: List all of the channels used as input with a description and their structure
 input:
-  - ch_bam:
+  - meta:
       type: map
       description: |
         Groovy Map containing sample information and a corresponding read alignment file (BAM)
-        Structure: [ val(meta), path(bam) ]
+        e.g. [ id:'test', single_end:false ]
+  - ch_bam:
+      type: file
+      description: |
+        File in BAM format containing read alignments
+      pattern: "*.{bam}"
   - ch_ref:
       type: file
       description: |
@@ -30,6 +34,11 @@ input:
         Index file for the reference sequences
       pattern: "*.{fai}"
 output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding read alignment file (BAM)
+        e.g. [ id:'test', single_end:false ]
   - bam:
       type: map
       description: |
