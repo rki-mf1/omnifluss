@@ -39,7 +39,7 @@ workflow IGSMP {
         | set {ch_reads}
 
         ch_multiqc_files = ch_multiqc_files.mix(FASTQ_QC_TRIMMING_ALL.out.multiqc_files.collect())
-        ch_versions = ch_versions.mix(FASTQ_QC_TRIMMING_ALL.out.versions.first())
+        ch_versions = ch_versions.mix(FASTQ_QC_TRIMMING_ALL.out.versions)
     }
 
     //
@@ -55,7 +55,7 @@ workflow IGSMP {
     //     .filtered_reads
     //     | set {ch_reads}
     //     ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
-    //     ch_versions = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions.first())
+    //     ch_versions = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
     // }
 
     //
@@ -65,7 +65,7 @@ workflow IGSMP {
     //
     // )
     // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(FASTA_SELECT_REFERENCE_ALL.out.versions.first())
+    // ch_versions = ch_versions.mix(FASTA_SELECT_REFERENCE_ALL.out.versions)
 
     //
     // Mapping
@@ -74,7 +74,7 @@ workflow IGSMP {
     //
     // )
     // ch_multiqc_files = ch_multiqc_files.mix(FASTP_MAP_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(FASTP_MAP_ALL.out.versions.first())
+    // ch_versions = ch_versions.mix(FASTP_MAP_ALL.out.versions)
 
     //
     // Primer clipping
@@ -84,7 +84,7 @@ workflow IGSMP {
     //
     // )
     // ch_multiqc_files = ch_multiqc_files.mix(BAM_CLIP_PRIMER_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(BAM_CLIP_PRIMER_ALL.out.versions.first())
+    // ch_versions = ch_versions.mix(BAM_CLIP_PRIMER_ALL.out.versions)
     // }
 
     //
@@ -94,7 +94,7 @@ workflow IGSMP {
     //
     // )
     // ch_multiqc_files = ch_multiqc_files.mix(BAM_CALL_VARIANT_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions.first())
+    // ch_versions = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
     // Consensus calling
@@ -103,7 +103,7 @@ workflow IGSMP {
     //
     // )
     // ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions.first())
+    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
     //
     // Genome QC
@@ -112,7 +112,7 @@ workflow IGSMP {
     //
     // )
     // ch_multiqc_files = ch_multiqc_files.mix(FASTA_GENOME_QC_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(FASTA_GENOME_QC_ALL.out.versions.first())
+    // ch_versions = ch_versions.mix(FASTA_GENOME_QC_ALL.out.versions)
 
     //
     // Downstream analysis
@@ -121,7 +121,7 @@ workflow IGSMP {
     //
     // )
     // ch_multiqc_files = ch_multiqc_files.mix(DOWNSTREAM_ANALYSIS_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(DOWNSTREAM_ANALYSIS_ALL.out.versions.first())
+    // ch_versions = ch_versions.mix(DOWNSTREAM_ANALYSIS_ALL.out.versions)
 
     //
     // Collate and save software versions
