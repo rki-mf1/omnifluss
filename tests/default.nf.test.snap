@@ -1,12 +1,12 @@
 {
     "software_versions": {
         "content": [
-            "{FASTP={fastp=0.23.4}, Workflow={rki-mf1/igsmp=v1.0dev}}"
+            "{FASTP={fastp=0.23.4}, FASTQC={fastqc=0.12.1}, Workflow={rki-mf1/igsmp=v1.0dev}}"
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-16T10:59:54.072890824"
+        "timestamp": "2024-07-17T16:17:22.046326129"
     }
 }
