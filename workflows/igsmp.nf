@@ -33,7 +33,8 @@ workflow IGSMP {
     if (! params.skip_read_qc) {
         FASTQ_QC_TRIMMING_ALL(
             params.read_qc,
-            ch_reads
+            ch_reads,
+            params.fastp_adapter_fasta
         )
         .trimmed_reads
         | set {ch_reads}
