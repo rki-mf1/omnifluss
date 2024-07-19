@@ -95,7 +95,6 @@
                 },
                 "fastp_adapter_fasta": {
                     "type": "string",
-                    "default": "[]",
                     "description": "Path to a custom adapter FASTA file for fastp."
                 },
                 "taxonomic_classifier": {

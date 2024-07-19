@@ -34,7 +34,7 @@ workflow IGSMP {
         FASTQ_QC_TRIMMING_ALL(
             params.read_qc,
             ch_reads,
-            params.fastp_adapter_fasta
+            params.fastp_adapter_fasta ? file(params.fastp_adapter_fasta, checkIfExists:true) : []
         )
         .trimmed_reads
         | set {ch_reads}
