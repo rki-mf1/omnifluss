@@ -8,8 +8,8 @@ process LOFREQ_VITERBI {
         'biocontainers/lofreq:2.1.5--py310h47ef89e_10' }"
 
     input:
-    tuple val(meta), path(bam)
-    path(fasta)
+    tuple val(meta),  path(bam)
+    tuple val(meta2), path(fasta)
 
     output:
     tuple val(meta), path("*.bam"), emit: bam
@@ -26,7 +26,7 @@ process LOFREQ_VITERBI {
     lofreq \\
         viterbi \\
         $args \\
-        --ref $fasta \\
+        -ref $fasta \\
         $bam |
         samtools sort \\
             $args2 \\
