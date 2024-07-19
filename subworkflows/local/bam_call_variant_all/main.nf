@@ -8,9 +8,9 @@ workflow BAM_CALL_VARIANT_ALL {
 
     take:
     tools           // String
-    ch_bam          // channel: [ val(meta), [ bam ] ]
-    ch_ref          // channel: path(fasta)
-    ch_ref_index    // channel: path(fai)
+    ch_bam          // channel: [ val(meta), [ bam ]   ]
+    ch_ref          // channel: [ val(meta), [ fasta ] ]
+    ch_ref_index    // channel: [ val(meta), [ fai ]   ]
 
 
     main:
@@ -42,7 +42,7 @@ workflow BAM_CALL_VARIANT_ALL {
         SAMTOOLS_INDEX (
             ch_iqbam
         )
-        ch_bai      = SAMTOOLS_INDEX.out.bai
+        ch_bai      = SAMTOOLS_INDEX.out.bai    // [ val(meta), path("*.bai") ]
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
 
         // LOFREQ_CALLPARALLEL does the actual variant calling
