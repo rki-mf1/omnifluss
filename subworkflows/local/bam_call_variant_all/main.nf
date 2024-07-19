@@ -15,6 +15,7 @@ workflow BAM_CALL_VARIANT_ALL {
 
     main:
     ch_iqbam    = Channel.empty()
+    ch_bai      = Channel.empty()
     ch_vcf      = Channel.empty()
     ch_versions = Channel.empty()
 
