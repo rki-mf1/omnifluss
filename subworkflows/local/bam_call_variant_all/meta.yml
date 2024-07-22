@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
 name: "bam_call_variant_all"
-description: The subworkflow implements SNV and indel variant calling using the lofreq variant caller. In brief, the workflow takes a set of aligned reads (BAM), normalizes and annotates the alignments, performs probabilistic variant calling and returns a raw set of variants (VCF).
+description: The subworkflow implements SNV and indel variant calling using the a variant caller of choice.
 keywords:
   - variant calling
   - variant
