@@ -21,21 +21,21 @@
                     },
                     "lofreq/callparallel": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "94e871f884efe963381a04e173f21924c9e9aba2",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "lofreq/indelqual": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "b04f6e0f44f4303c6c86a4e6af22ae5f8ed01e27",
                         "installed_by": [
                             "modules"
                         ]
                     },
                     "lofreq/viterbi": {
                         "branch": "master",
-                        "git_sha": "26dc61f087ef47f79ddd724476596cfe31fa5ec7",
+                        "git_sha": "64941387342b5ae6494ce01bf2fd6b6536711137",
                         "installed_by": [
                             "modules"
                         ]
