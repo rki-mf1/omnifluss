@@ -1,0 +1,45 @@
+{
+    "vcf_call_consensus_all": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.fa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,0686151f8904a178e94d7b45febf55fa",
+                    "versions.yml:md5,4b863f593f80aaf04f25682c02c04049",
+                    "versions.yml:md5,53e6daebdd619151ad85e86f809a4ccc",
+                    "versions.yml:md5,d90f50b56cb7bff2ecda7ef3bba5d74a",
+                    "versions.yml:md5,ee1d9a95e761a2cf1b6505abe9be44de"
+                ],
+                "consensus_calls": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.fa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,0686151f8904a178e94d7b45febf55fa",
+                    "versions.yml:md5,4b863f593f80aaf04f25682c02c04049",
+                    "versions.yml:md5,53e6daebdd619151ad85e86f809a4ccc",
+                    "versions.yml:md5,d90f50b56cb7bff2ecda7ef3bba5d74a",
+                    "versions.yml:md5,ee1d9a95e761a2cf1b6505abe9be44de"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-07-23T15:12:35.643064807"
+    }
+}

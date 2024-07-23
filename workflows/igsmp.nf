@@ -5,7 +5,9 @@
 */
 
 include { FASTQ_QC_TRIMMING_ALL  } from '../subworkflows/local/fastq_qc_trimming_all'
+include { VCF_CALL_CONSENSUS_ALL } from '../subworkflows/local/vcf_call_consensus_all'
 include { MULTIQC                } from '../modules/nf-core/multiqc/main'
+
 include { paramsSummaryMap       } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
@@ -99,9 +101,14 @@ workflow IGSMP {
     //
     // Consensus calling
     //
-    // VCF_CALL_CONSENSUS_ALL(
-    //
-    // )
+    VCF_CALL_CONSENSUS_ALL(
+        params.consensus_caller,
+        ch1,                                // channel: [ val(meta), vcf ] (output from normVcf)
+        ch2,                                // channel: [ val(meta), bam ] (output from callGenomicVariants_lofreq)
+        ch3                                 // channel: [ val(meta), bed ] (output from R_filter_variants_special_variant_case)
+    )
+
+    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions.first())
     // ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect{it[1]})
     // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions.first())
 

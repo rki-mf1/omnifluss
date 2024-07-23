@@ -1,0 +1,7 @@
+name: prepareReference
+channels:
+ - bioconda
+ - conda-forge
+ - anaconda
+dependencies:
+ - biopython==1.73
