@@ -14,8 +14,8 @@ process RESCUE_VARIANTS {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    // TODO
     """
+    python $projectDir/bin/rescue_HQ_variants.py $vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
