@@ -41,7 +41,8 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert file(workflow.out['vcf'][0][1]).name == "test.vcf.gz" },
+                { assert file(workflow.out['vcf'][0][1]).name == "test.normed.vcf.gz" },
+                { assert file(workflow.out['tbi'][0][1]).name == "test.normed.vcf.gz.tbi" },
                 { assert file(workflow.out['bam'][0][1]).name == "test.indelqual.bam" },
                 { assert file(workflow.out['bai'][0][1]).name == "test.indelqual.bam.bai" },
 
@@ -82,7 +83,8 @@ nextflow_workflow {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert file(workflow.out['vcf'][0][1]).name == "test.vcf.gz" },
+                { assert file(workflow.out['vcf'][0][1]).name == "test.normed.vcf.gz" },
+                { assert file(workflow.out['tbi'][0][1]).name == "test.normed.vcf.gz.tbi" },
                 { assert file(workflow.out['bam'][0][1]).name == "test.indelqual.bam" },
                 { assert file(workflow.out['bai'][0][1]).name == "test.indelqual.bam.bai" },
 
