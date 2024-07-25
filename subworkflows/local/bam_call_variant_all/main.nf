@@ -29,7 +29,7 @@ workflow BAM_CALL_VARIANT_ALL {
             ch_bam,
             ch_ref
         )
-        ch_versions             = ch_versions.mix(LOFREQ_VITERBI.out.versions.first())
+        ch_versions = ch_versions.mix(LOFREQ_VITERBI.out.versions.first())
 
         // LOFREQ_INDELQUAL adds indel qualities to BAM files
         LOFREQ_INDELQUAL (
