@@ -7,7 +7,7 @@ workflow FASTQ_MAP_ALL {
     take:
     tools           // string
     ch_reads        // channel: [ val(meta), fastq ]
-    reference       // channel: [ val(meta), fasta ]
+    ch_ref          // channel: [ val(meta), fasta ]
 
     main:
     ch_index = Channel.empty()
@@ -22,7 +22,7 @@ workflow FASTQ_MAP_ALL {
     if (tools.split(',').contains('bwa')) {
 
         BWA_INDEX(
-            reference   // channel: [ val(meta), fasta ]
+            ch_ref   // channel: [ val(meta), fasta ]
         )
         ch_index = BWA_INDEX.out.index
         ch_versions = ch_versions.mix(BWA_INDEX.out.versions)
@@ -31,7 +31,7 @@ workflow FASTQ_MAP_ALL {
             ch_reads,   // channel: [ val(meta), fastq ]
             ch_index,   // channel: [ val(meta), index ]
             true,
-            reference   // channel: [ val(meta), fasta ]
+            ch_ref      // channel: [ val(meta), fasta ]
         )
         ch_bam_orig = FASTQ_ALIGN_BWA.out.bam_orig
         ch_bam = FASTQ_ALIGN_BWA.out.bam
@@ -40,26 +40,21 @@ workflow FASTQ_MAP_ALL {
         ch_flagstat = FASTQ_ALIGN_BWA.out.flagstat
         ch_idxstats = FASTQ_ALIGN_BWA.out.idxstats
         ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
-
-        SAMTOOLS_FAIDX(
-            reference,
-            [[], []]    // channel: [empty, empty]
-        )
-
-        ch_fai_index = SAMTOOLS_FAIDX.out.fai
-
-        PICARD_MARKDUPLICATES(
-            ch_bam,         // channel: [ val(meta), bam ]
-            reference,
-            ch_fai_index    // channel: [ val(meta), index ]
-        )
-        ch_deduped_bam = PICARD_MARKDUPLICATES.out.bam
-        ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
-
     }
+
+
+    PICARD_MARKDUPLICATES(
+        ch_bam,         // channel: [ val(meta), bam ]
+        ch_ref,
+        [[], []]        // channel: [ val(meta), index ]
+    )
+    ch_deduped_bam = PICARD_MARKDUPLICATES.out.bam
+    ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
+
+
     emit:
-    ch_mapping        = ch_bam
-    ch_deduped_bam    = ch_deduped_bam
+    bam               = ch_bam
+    deduped_bam       = ch_deduped_bam
     versions          = ch_versions
 
 }
