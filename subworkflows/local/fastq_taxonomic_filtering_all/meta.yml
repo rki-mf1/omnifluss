@@ -23,8 +23,8 @@ input:
         List of input FastQ files of size 1 and 2 for single-end and paired-end data,
         respectively.
   - ch_db:
-      type: directory
-      description: Kraken2 database
+      type: string
+      description: Path to Kraken2 database 
   - val_taxid:
       type: string
       description: A string of one or more of taxonomic IDs (e.g. from NCBI Taxonomy) separated by spaces
@@ -39,6 +39,10 @@ output:
       description: |
         Kraken2 report containing stats about classified
         and not classified reads.
+  - multiqc_output:
+      type: file
+      description: |
+        Kraken2 report (see above).
   - extracted_kraken2_reads:
       type: file
       description: |

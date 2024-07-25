@@ -49,10 +49,10 @@ workflow IGSMP {
     //
     if (! params.skip_taxonomic_filtering) {
         FASTQ_TAXONOMIC_FILTERING_ALL(
-            params.taxonomic_classifier,
-            ch_reads,
-            params.kraken2_db,
-            params.kraken2_taxid_filter_list
+            params.taxonomic_classifier,                // string
+            ch_reads,                                   // channel: [ val(meta), fastq ]
+            params.kraken2_db,                          // string
+            params.kraken2_taxid_filter_list            // string
         )
         .extracted_kraken2_reads
         | set {ch_reads}

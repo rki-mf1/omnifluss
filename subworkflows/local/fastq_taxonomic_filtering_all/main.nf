@@ -2,10 +2,10 @@ include { FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS } from '../../nf-core/fastq_extract_k
 
 workflow FASTQ_TAXONOMIC_FILTERING_ALL {
     take:
-    tools
-    ch_reads
-    ch_db
-    val_taxid
+    tools               // string
+    ch_reads            // channel: [ val(meta), fastq ]
+    ch_db               // string
+    ch_taxid            // string
 
     main:
     ch_kraken2_report           = Channel.empty()
@@ -17,7 +17,7 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS(
             ch_reads,
             ch_db,
-            val_taxid
+            ch_taxid
         )
 
         ch_kraken2_report = FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.kraken2_report
@@ -27,10 +27,10 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
     }
 
     emit:
-    kraken2_report = ch_kraken2_report
-    extracted_kraken2_reads = ch_extracted_kraken2_reads
+    kraken2_report = ch_kraken2_report                          // channel: [ val(meta), report ]
+    extracted_kraken2_reads = ch_extracted_kraken2_reads        // channel: [ val(meta), fastq/fasta ]
 
-    multiqc_files     = ch_multiqc_files
-    versions          = ch_versions
+    multiqc_files     = ch_multiqc_files                        // channel: [ val(meta), report ]
+    versions          = ch_versions                             // channel: [ versions ]
 
 }
