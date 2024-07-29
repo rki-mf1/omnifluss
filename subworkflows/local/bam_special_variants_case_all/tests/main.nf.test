@@ -18,34 +18,35 @@ nextflow_workflow {
     test("sarscov2 - bam") {
 
         when {
-            workflow {
+            workflow {  // ERROR: this test doesn't work yet. Input channel types don't work yet
                 """
-                input[0] =  [
+                input[0] =  Channel.of([
                                 [ id:'testbam' ],
-                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true) ]
-                            ]
-                input[1] =  [
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true)
+                            ])
+                input[1] =  Channel.of([
                                 [ id:'testbai' ],
-                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true) ]
-                            ]
-                input[2] =  [
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true)
+                            ])
+                input[2] =  Channel.of([
                                 [ id:'testref' ],
-                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
-                            ]
-                input[3] =  [
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                            ])
+                input[3] =  Channel.of([
                                 [ id:'testfai' ],
-                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true) ]
-                            ]
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)
+                            ])
                 """
             }
         }
 
         then {
             assertAll(
-                { assert workflow.success},
-//                { assert snapshot(workflow.out.bed).match()},
-//                { assert snapshot(workflow.out.versions).match()},
-//                { assert file(workflow.out['vcf'][0][1].find { file(it).name == "testbam.vcf" }).exists() }
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() },
+                //{ assert snapshot(workflow.out.bed).match()},
+                //{ assert snapshot(workflow.out.versions).match()},
+                //{ assert file(workflow.out['vcf'][0][1].find { file(it).name == "testbam.vcf" }).exists() }
             )
         }
     }
