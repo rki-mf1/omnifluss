@@ -93,6 +93,10 @@
                     "description": "Tools to use for read QC.",
                     "help_text": "Multiple tools separated with commas."
                 },
+                "fastp_adapter_fasta": {
+                    "type": "string",
+                    "description": "Path to a custom adapter FASTA file for fastp."
+                },
                 "taxonomic_classifier": {
                     "type": "string",
                     "enum": [
