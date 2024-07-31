@@ -4,14 +4,14 @@ include { KRAKENTOOLS_EXTRACTKRAKENREADS } from '../../../modules/nf-core/kraken
 workflow FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS {
 
     take:
-    ch_reads   // channel: [ val(meta), fastq ]
-    val_db     // string
-    val_taxid  // string
+    ch_reads  // channel: [ val(meta), path(reads) ]
+    ch_db     // channel: [ path db ]
+    val_taxid // string: taxonomic ids, separated by spaces
 
     main:
     ch_versions = Channel.empty()
 
-    KRAKEN2_KRAKEN2 ( ch_reads, val_db, true, true )
+    KRAKEN2_KRAKEN2 ( ch_reads, ch_db, true, true )
     ch_versions = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions.first())
 
     KRAKENTOOLS_EXTRACTKRAKENREADS ( val_taxid, KRAKEN2_KRAKEN2.out.classified_reads_assignment, KRAKEN2_KRAKEN2.out.classified_reads_fastq, KRAKEN2_KRAKEN2.out.report )
