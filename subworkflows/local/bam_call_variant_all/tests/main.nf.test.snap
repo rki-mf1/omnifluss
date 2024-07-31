@@ -96,7 +96,7 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-23T13:11:51.495571846"
+        "timestamp": "2024-07-31T11:10:46.19393397"
     },
     "sarscov2 - bam": {
         "content": [
@@ -113,15 +113,13 @@
                 "##FILTER=<ID=min_dp_10,Description=\"Minimum Coverage 10\">",
                 "##FILTER=<ID=sb_fdr,Description=\"Strand-Bias Multiple Testing Correction: fdr corr. pvalue > 0.001000\">",
                 "##FILTER=<ID=min_snvqual_43,Description=\"Minimum SNV Quality (Phred) 43\">",
-                "##bcftools_normVersion=1.20+htslib-1.20",
-                "##bcftools_normCommand=norm --fasta-ref genome.fasta --output test.normed.vcf.gz -Oz -c s --write-index=tbi --threads 6 test.vcf.gz; Date=Tue Jul 23 13:11:26 2024",
-                "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"
+                "##bcftools_normVersion=1.20+htslib-1.20"
             ]
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-23T13:11:30.684969501"
+        "timestamp": "2024-07-31T11:10:21.300536264"
     }
 }

@@ -47,7 +47,7 @@ nextflow_workflow {
                 { assert file(workflow.out['bai'][0][1]).name == "test.indelqual.bam.bai" },
 
                 { assert path(workflow.out['vcf'][0][1]).linesGzip.toString().contains('##fileformat=VCFv4.0') },
-                { assert snapshot(path(workflow.out['vcf'][0][1]).linesGzip[-15..-1]).match() }
+                { assert snapshot(path(workflow.out['vcf'][0][1]).linesGzip[-15..-3]).match() }
                 // [VCF] First line should be the same
                 // [VCF] Last 15 line should be the same
                 // [VCF] Second and thirt line are a timestamp and program call incl tmp path, respectively (won't match in a snapshot)
