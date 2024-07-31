@@ -10,8 +10,8 @@ workflow VCF_CALL_CONSENSUS_ALL {
     take:
     tools                       // string
     ch_vcf                      // channel: [ val(meta), vcf ]
-    ch_variantbams              // channel: [ val(meta), bam ]
-    ch_specialvariant           // channel: [ val(meta), bed ]
+    ch_bam                      // channel: [ val(meta), bam ]
+    ch_rescued_variants         // channel: [ val(meta), bed ]
 
     main:
     ch_versions                 = Channel.empty()
@@ -44,8 +44,8 @@ workflow VCF_CALL_CONSENSUS_ALL {
         CREATE_MASK_CONSENSUS(
             params.cns_mincov,          // integer
             ch_del_adjusted_vcf,        // channel: [ val(meta), vcf ]
-            ch_variantbams,             // channel: [ val(meta), bam ]
-            ch_specialvariant           // channel: [ val(meta), bed ]
+            ch_bam,                     // channel: [ val(meta), bam ]
+            ch_rescued_variants         // channel: [ val(meta), bed ]
         ).final_bed
         | set {ch_final_bed}
 
