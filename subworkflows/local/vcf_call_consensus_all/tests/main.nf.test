@@ -20,15 +20,18 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = "bcftools"
-                input[1] = [ [ id:'test', single_end:false],
-                             [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true)]
-                ]           
-                input[2] = [ [ id:'test', single_end:false],
-                             [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.bam', checkIfExists: true)]
-                ]
-                input[3] = [ [ id:'test', single_end:false],
-                             [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bedgraph/test.bedgraph', checkIfExists: true)]
-                ]
+                input[1] = Channel.of([ 
+                    [ id:'test', single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true) ]
+                ]  )         
+                input[2] = Channel.of([ 
+                    [ id:'test', single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.bam', checkIfExists: true) ]
+                ])
+                input[3] = Channel.of([ 
+                    [ id:'test', single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bedgraph/test.bedgraph', checkIfExists: true) ]
+                ])
                 """
             }
         }
