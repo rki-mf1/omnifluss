@@ -26,11 +26,11 @@ nextflow_workflow {
                                 [ id:'test', single_end:false ],
                                 [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true) ]
                             ])
-                input[2] =  Channel.of([
+                input[2] =  Channel.value([
                                 [ id:'reference' ],
                                 [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
                             ])
-                input[3] =  Channel.of([
+                input[3] =  Channel.value([
                                 [ id:'index' ],
                                 [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true) ]
                             ])
