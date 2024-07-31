@@ -6,6 +6,7 @@
 
 include { FASTQ_QC_TRIMMING_ALL         } from '../subworkflows/local/fastq_qc_trimming_all'
 include { FASTQ_TAXONOMIC_FILTERING_ALL } from '../subworkflows/local/fastq_taxonomic_filtering_all'
+include { FASTQ_MAP_ALL          } from '../subworkflows/local/fastq_map_all'
 include { MULTIQC                       } from '../modules/nf-core/multiqc/main'
 
 include { paramsSummaryMap              } from 'plugin/nf-validation'
@@ -60,7 +61,7 @@ workflow IGSMP {
         ch_multiqc_files  = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
         ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
     }
-    
+
     //
     // Reference selection
     //
@@ -73,11 +74,14 @@ workflow IGSMP {
     //
     // Mapping
     //
-    // FASTP_MAP_ALL(
-    //
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTP_MAP_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(FASTP_MAP_ALL.out.versions)
+    FASTQ_MAP_ALL(
+        params.aligner,                                                               // string
+        ch_reads,                                                                     // channel: [ val(meta), fastq ]
+        tuple([id:params.fasta.split("/")[-1].split("\\.")[0]], params.fasta)         // channel: [ val(meta), fasta ]
+
+    )
+    ch_mapping = FASTQ_MAP_ALL.out.deduped_bam
+    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions.first())
 
     //
     // Primer clipping
@@ -170,6 +174,11 @@ workflow IGSMP {
             )
         )
 
+
+        // ch_multiqc_files.view()
+        // ch_multiqc_config.view()
+        // ch_multiqc_custom_config.view()
+        // ch_multiqc_logo.view()
         MULTIQC (
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),
