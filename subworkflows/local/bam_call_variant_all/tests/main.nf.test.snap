@@ -26,10 +26,21 @@
                             "id": "test",
                             "single_end": false
                         },
-                        "test.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "test.normed.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "3": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.normed.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    "versions.yml:md5,03d3f12fc45600a49531ffdca6340ec6",
+                    "versions.yml:md5,2bbb3ad61356fe366ce767350d36b299",
                     "versions.yml:md5,3ee8176c6b98480d5a06b8d0e5fc2f37",
                     "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
                     "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
@@ -53,16 +64,27 @@
                         "test.indelqual.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
+                "tbi": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.normed.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
                 "vcf": [
                     [
                         {
                             "id": "test",
                             "single_end": false
                         },
-                        "test.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                        "test.normed.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
                     ]
                 ],
                 "versions": [
+                    "versions.yml:md5,03d3f12fc45600a49531ffdca6340ec6",
+                    "versions.yml:md5,2bbb3ad61356fe366ce767350d36b299",
                     "versions.yml:md5,3ee8176c6b98480d5a06b8d0e5fc2f37",
                     "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
                     "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
@@ -74,12 +96,11 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-19T16:42:37.359313916"
+        "timestamp": "2024-07-31T11:10:46.19393397"
     },
     "sarscov2 - bam": {
         "content": [
             [
-                "##reference=genome.fasta",
                 "##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Raw Depth\">",
                 "##INFO=<ID=AF,Number=1,Type=Float,Description=\"Allele Frequency\">",
                 "##INFO=<ID=SB,Number=1,Type=Integer,Description=\"Phred-scaled strand bias at this position\">",
@@ -92,14 +113,13 @@
                 "##FILTER=<ID=min_dp_10,Description=\"Minimum Coverage 10\">",
                 "##FILTER=<ID=sb_fdr,Description=\"Strand-Bias Multiple Testing Correction: fdr corr. pvalue > 0.001000\">",
                 "##FILTER=<ID=min_snvqual_43,Description=\"Minimum SNV Quality (Phred) 43\">",
-                "##FILTER=<ID=min_indelqual_20,Description=\"Minimum Indel Quality (Phred) 20\">",
-                "#CHROM\tPOS\tID\tREF\tALT\tQUAL\tFILTER\tINFO"
+                "##bcftools_normVersion=1.20+htslib-1.20"
             ]
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-19T16:42:24.573375533"
+        "timestamp": "2024-07-31T11:10:21.300536264"
     }
 }

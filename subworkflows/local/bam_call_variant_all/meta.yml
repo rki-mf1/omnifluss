@@ -12,6 +12,8 @@ components:
   - lofreq/indelqual
   - lofreq/callparallel
   - samtools/index
+  - bcftools/norm
+  - bcftools/index
 input:
   - meta:
       type: map
@@ -56,8 +58,14 @@ output:
       type: map
       description: |
         Groovy Map containing sample information and a corresponding set of raw variant calls (VCF).
-        Structure: [ val(meta), path(csi) ]
+        Structure: [ val(meta), path(vcf) ]
       pattern: "*.vcf"
+  - tbi:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding variant call index (TBI).
+        Structure: [ val(meta), path(tbi) ]
+      pattern: "*.tbi"
   - versions:
       type: file
       description: |

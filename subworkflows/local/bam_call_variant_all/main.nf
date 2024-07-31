@@ -2,6 +2,8 @@ include { LOFREQ_VITERBI }      from '../../../modules/nf-core/lofreq/viterbi/ma
 include { LOFREQ_INDELQUAL }    from '../../../modules/nf-core/lofreq/indelqual/main'
 include { LOFREQ_CALLPARALLEL } from '../../../modules/nf-core/lofreq/callparallel/main'
 include { SAMTOOLS_INDEX }      from '../../../modules/nf-core/samtools/index/main'
+include { BCFTOOLS_NORM }       from '../../../modules/nf-core/bcftools/norm/main'
+include { BCFTOOLS_INDEX}       from '../../../modules/nf-core/bcftools/index/main'
 
 
 workflow BAM_CALL_VARIANT_ALL {
@@ -17,6 +19,7 @@ workflow BAM_CALL_VARIANT_ALL {
     ch_iqbam    = Channel.empty()
     ch_bai      = Channel.empty()
     ch_vcf      = Channel.empty()
+    ch_tbi      = Channel.empty()
     ch_versions = Channel.empty()
 
     if (tools.split(',').contains('lofreq')) {
@@ -26,7 +29,7 @@ workflow BAM_CALL_VARIANT_ALL {
             ch_bam,
             ch_ref
         )
-        ch_versions             = ch_versions.mix(LOFREQ_VITERBI.out.versions.first())
+        ch_versions = ch_versions.mix(LOFREQ_VITERBI.out.versions.first())
 
         // LOFREQ_INDELQUAL adds indel qualities to BAM files
         LOFREQ_INDELQUAL (
@@ -62,10 +65,36 @@ workflow BAM_CALL_VARIANT_ALL {
         ch_versions = ch_versions.mix(SAMTOOLS_INDEX.out.versions.first())
     }
 
+
+    // Caller-independent postprocessing
+
+    // Creates VCF index (tbi)
+    BCFTOOLS_INDEX (
+        ch_vcf
+    )
+    ch_tbi      = BCFTOOLS_INDEX.out.tbi
+    ch_versions = ch_versions.mix(BCFTOOLS_INDEX.out.versions.first())
+
+    // BCFTOOLS_NORM requires formatting of the input Channel
+    ch_vcf_and_tbi  = ch_vcf
+                        .join(ch_tbi)
+                        //  [ val(meta), [vcf], [tbi] ]
+
+    // Normalize variant notations and positioning; index normed VCF
+    BCFTOOLS_NORM(
+        ch_vcf_and_tbi,
+        ch_ref
+    )
+    ch_vcf      = BCFTOOLS_NORM.out.vcf     // overwrite VCF with VCF after normalization
+    ch_tbi      = BCFTOOLS_NORM.out.tbi     // overwrite TBI with TBI after normalization
+    ch_versions = ch_versions.mix(BCFTOOLS_NORM.out.versions.first())
+
+
     emit:
     bam         = ch_iqbam      // channel: [ val(meta), [ bam ] ]  // Not the same as input bam! Here, the bam got normalized and annotated.
     bai         = ch_bai        // channel: [ val(meta), [ bai ] ]
     vcf         = ch_vcf        // channel: [ val(meta), [ vcf ] ]
+    tbi         = ch_tbi        // channel: [ val(meta), [ tbi ] ]
     versions    = ch_versions   // channel: [ versions.yml ]
 }
 
