@@ -33,6 +33,20 @@
                             "modules"
                         ]
                     },
+                    "kraken2/kraken2": {
+                        "branch": "master",
+                        "git_sha": "ca87ad032a62f025f0c373facacef2df0c5411b2",
+                        "installed_by": [
+                            "fastq_extract_kraken_krakentools"
+                        ]
+                    },
+                    "krakentools/extractkrakenreads": {
+                        "branch": "master",
+                        "git_sha": "77decb880af3f0ea6d22b2383c3f1ed86aac4aa2",
+                        "installed_by": [
+                            "fastq_extract_kraken_krakentools"
+                        ]
+                    },
                     "multiqc": {
                         "branch": "master",
                         "git_sha": "8f2062e7b4185590fb9f43c275381a31a6544fc0",
@@ -93,6 +107,13 @@
             },
             "subworkflows": {
                 "nf-core": {
+                    "fastq_extract_kraken_krakentools": {
+                        "branch": "master",
+                        "git_sha": "c60c14b285b89bdd0607e371417dadb80385ad6e",
+                        "installed_by": [
+                            "subworkflows"
+                        ]
+                    },
                     "bam_sort_stats_samtools": {
                         "branch": "master",
                         "git_sha": "04fbbc7c43cebc0b95d5b126f6d9fe4effa33519",

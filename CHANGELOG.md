@@ -7,8 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### `Added`
 
-- pipeline skeleton
 - read QC step
+  - added pipeline parameter for a custom adapter file for `fastp`
+- pipeline skeleton
 
 ## v1.0dev - [date]
 
