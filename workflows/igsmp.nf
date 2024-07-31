@@ -4,12 +4,15 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { FASTQ_QC_TRIMMING_ALL  } from '../subworkflows/local/fastq_qc_trimming_all'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
+include { FASTQ_QC_TRIMMING_ALL         } from '../subworkflows/local/fastq_qc_trimming_all'
+include { FASTQ_TAXONOMIC_FILTERING_ALL } from '../subworkflows/local/fastq_taxonomic_filtering_all'
+include { FASTQ_MAP_ALL          } from '../subworkflows/local/fastq_map_all'
+include { MULTIQC                       } from '../modules/nf-core/multiqc/main'
+
+include { paramsSummaryMap              } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText        } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +36,8 @@ workflow IGSMP {
     if (! params.skip_read_qc) {
         FASTQ_QC_TRIMMING_ALL(
             params.read_qc,
-            ch_reads
+            ch_reads,
+            params.fastp_adapter_fasta ? file(params.fastp_adapter_fasta, checkIfExists:true) : []
         )
         .trimmed_reads
         | set {ch_reads}
@@ -45,18 +49,18 @@ workflow IGSMP {
     //
     // Taxonomic classification
     //
-    // if (! params.skip_taxonomic_filtering) {
-    //     FASTQ_TAXONOMIC_FILTERING_ALL(
-    //         params.taxonomic_classifier,
-    //         params.kraken2_db,
-    //         params.kraken2_taxid_filter_list,
-    //         ch_reads
-    //     )
-    //     .filtered_reads
-    //     | set {ch_reads}
-    //     ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
-    //     ch_versions = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
-    // }
+    if (! params.skip_taxonomic_filtering) {
+        FASTQ_TAXONOMIC_FILTERING_ALL(
+            params.taxonomic_classifier,                // string
+            ch_reads,                                   // channel: [ val(meta), fastq ]
+            params.kraken2_db,                          // string
+            params.kraken2_taxid_filter_list            // string
+        )
+        .extracted_kraken2_reads
+        | set {ch_reads}
+        ch_multiqc_files  = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
+        ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
+    }
 
     //
     // Reference selection
@@ -70,11 +74,14 @@ workflow IGSMP {
     //
     // Mapping
     //
-    // FASTP_MAP_ALL(
-    //
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTP_MAP_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(FASTP_MAP_ALL.out.versions)
+    FASTQ_MAP_ALL(
+        params.aligner,                                                               // string
+        ch_reads,                                                                     // channel: [ val(meta), fastq ]
+        tuple([id:params.fasta.split("/")[-1].split("\\.")[0]], params.fasta)         // channel: [ val(meta), fasta ]
+
+    )
+    ch_mapping = FASTQ_MAP_ALL.out.deduped_bam
+    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
 
     //
     // Primer clipping
@@ -167,6 +174,11 @@ workflow IGSMP {
             )
         )
 
+
+        // ch_multiqc_files.view()
+        // ch_multiqc_config.view()
+        // ch_multiqc_custom_config.view()
+        // ch_multiqc_logo.view()
         MULTIQC (
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),
