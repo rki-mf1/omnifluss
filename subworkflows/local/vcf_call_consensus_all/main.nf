@@ -1,17 +1,17 @@
-include { PREPARE_REFERENCE                          } from '../../../modules/local/biopython/main'
+include { PREPARE_REFERENCE                          } from '../../../modules/local/inv_consensus_biopython/main'
 include { BCFTOOLS_FILTER                            } from '../../../modules/nf-core/bcftools/filter/main'
-include { ADJUST_DELETION_CONSENSUS                  } from '../../../modules/local/pyvcf/main'
-include { ADJUST_GT_CONSENSUS                        } from '../../../modules/local/bcftools/main'
-include { CREATE_MASK_CONSENSUS                      } from '../../../modules/local/bedtools/main'
+include { ADJUST_DELETION_CONSENSUS                  } from '../../../modules/local/inv_consensus_pyvcf/main'
+include { ADJUST_GT_CONSENSUS                        } from '../../../modules/local/inv_consensus_bcftools/main'
+include { CREATE_MASK_CONSENSUS                      } from '../../../modules/local/inv_consensus_bedtools/main'
 include { TABIX_TABIX                                } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_CONSENSUS                         } from '../../../modules/nf-core/bcftools/consensus/main' 
 
 workflow VCF_CALL_CONSENSUS_ALL {
     take:
-    tools
-    ch_vcf
-    ch_variantbams
-    ch_specialvariant
+    tools                       // string
+    ch_vcf                      // channel: [ val(meta), vcf ]
+    ch_variantbams              // channel: [ val(meta), bam ]
+    ch_specialvariant           // channel: [ val(meta), bed ]
 
     main:
     ch_versions                 = Channel.empty()
