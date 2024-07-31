@@ -15,6 +15,10 @@ components:
   - bcftools/norm
   - bcftools/index
 input:
+  - tools:
+      type: string
+      description: |
+        Comma separated list of activated tools
   - meta:
       type: map
       description: |
