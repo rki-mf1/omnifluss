@@ -81,7 +81,7 @@ workflow IGSMP {
 
     )
     ch_mapping = FASTQ_MAP_ALL.out.deduped_bam
-    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions.first())
+    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
 
     //
     // Primer clipping
