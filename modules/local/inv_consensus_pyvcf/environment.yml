@@ -1,0 +1,6 @@
+name: adjustDeletionConsensus
+channels:
+ - bioconda
+ - conda-forge
+dependencies:
+ - pyvcf==0.6.8

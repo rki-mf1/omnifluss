@@ -5,6 +5,20 @@
         "https://github.com/nf-core/modules.git": {
             "modules": {
                 "nf-core": {
+                    "bcftools/consensus": {
+                        "branch": "master",
+                        "git_sha": "a5ba4d59c2b248c0379b0f8aeb4e7e754566cd1f",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
+                    "bcftools/filter": {
+                        "branch": "master",
+                        "git_sha": "33ef773a7ea36e88323902f63662aa53c9b88988",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
                     "bcftools/index": {
                         "branch": "master",
                         "git_sha": "a5ba4d59c2b248c0379b0f8aeb4e7e754566cd1f",
@@ -75,6 +89,12 @@
                             "modules"
                         ]
                     },
+                    "tabix/tabix": {
+                        "branch": "master",
+                        "git_sha": "9502adb23c0b97ed8e616bbbdfa73b4585aec9a1",
+                        "installed_by": [
+                            "modules"
+                        ]
                     "picard/markduplicates": {
                         "branch": "master",
                         "git_sha": "0dee12b56ccecc416d6f7a1ccd85fd571eab3307",
