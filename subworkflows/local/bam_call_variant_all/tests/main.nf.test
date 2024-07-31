@@ -1,0 +1,96 @@
+nextflow_workflow {
+
+    name "Test Subworkflow BAM_CALL_VARIANT_ALL"
+    script "../main.nf"
+    config "subworkflows/local/bam_call_variant_all/tests/nextflow.config"
+    workflow "BAM_CALL_VARIANT_ALL"
+
+    //  Add tags for the subworkflow
+    tag "subworkflows"
+    tag "subworkflows/local"
+    tag "subworkflows/bam_call_variant_all"
+    tag "bam_call_variant_all"
+
+    tag "lofreq/viterbi"
+    tag "lofreq/indelqual"
+    tag "lofreq/callparallel"
+    tag "samtools/index"
+
+
+    test("sarscov2 - bam") {
+        when {
+            workflow {
+                """
+                input[0] = 'lofreq'
+                input[1] =  Channel.of([
+                                [ id:'test', single_end:false ],
+                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true) ]
+                            ])
+                input[2] =  Channel.value([
+                                [ id:'reference' ],
+                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
+                            ])
+                input[3] =  Channel.value([
+                                [ id:'index' ],
+                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true) ]
+                            ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out['vcf'][0][1]).name == "test.normed.vcf.gz" },
+                { assert file(workflow.out['tbi'][0][1]).name == "test.normed.vcf.gz.tbi" },
+                { assert file(workflow.out['bam'][0][1]).name == "test.indelqual.bam" },
+                { assert file(workflow.out['bai'][0][1]).name == "test.indelqual.bam.bai" },
+
+                { assert path(workflow.out['vcf'][0][1]).linesGzip.toString().contains('##fileformat=VCFv4.0') },
+                { assert snapshot(path(workflow.out['vcf'][0][1]).linesGzip[-15..-3]).match() }
+                // [VCF] First line should be the same
+                // [VCF] Last 15 line should be the same
+                // [VCF] Second and thirt line are a timestamp and program call incl tmp path, respectively (won't match in a snapshot)
+            )
+        }
+    }
+
+
+    test("sarscov2 - bam - stub") {
+
+        tag "stub"
+        options '-stub'
+
+        when {
+            workflow {
+                """
+                input[0] = 'lofreq'
+                input[1] =  Channel.of([
+                                [ id:'test', single_end:false ],
+                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true) ]
+                            ])
+                input[2] =  Channel.of([
+                                [ id:'reference' ],
+                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
+                            ])
+                input[3] =  Channel.of([
+                                [ id:'index' ],
+                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true) ]
+                            ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out['vcf'][0][1]).name == "test.normed.vcf.gz" },
+                { assert file(workflow.out['tbi'][0][1]).name == "test.normed.vcf.gz.tbi" },
+                { assert file(workflow.out['bam'][0][1]).name == "test.indelqual.bam" },
+                { assert file(workflow.out['bai'][0][1]).name == "test.indelqual.bam.bai" },
+
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}
