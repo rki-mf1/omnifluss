@@ -4,12 +4,14 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { FASTQ_QC_TRIMMING_ALL  } from '../subworkflows/local/fastq_qc_trimming_all'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
+include { FASTQ_QC_TRIMMING_ALL         } from '../subworkflows/local/fastq_qc_trimming_all'
+include { FASTQ_TAXONOMIC_FILTERING_ALL } from '../subworkflows/local/fastq_taxonomic_filtering_all'
+include { MULTIQC                       } from '../modules/nf-core/multiqc/main'
+
+include { paramsSummaryMap              } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc          } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML        } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText        } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,19 +48,19 @@ workflow IGSMP {
     //
     // Taxonomic classification
     //
-    // if (! params.skip_taxonomic_filtering) {
-    //     FASTQ_TAXONOMIC_FILTERING_ALL(
-    //         params.taxonomic_classifier,
-    //         params.kraken2_db,
-    //         params.kraken2_taxid_filter_list,
-    //         ch_reads
-    //     )
-    //     .filtered_reads
-    //     | set {ch_reads}
-    //     ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
-    //     ch_versions = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
-    // }
-
+    if (! params.skip_taxonomic_filtering) {
+        FASTQ_TAXONOMIC_FILTERING_ALL(
+            params.taxonomic_classifier,                // string
+            ch_reads,                                   // channel: [ val(meta), fastq ]
+            params.kraken2_db,                          // string
+            params.kraken2_taxid_filter_list            // string
+        )
+        .extracted_kraken2_reads
+        | set {ch_reads}
+        ch_multiqc_files  = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
+        ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
+    }
+    
     //
     // Reference selection
     //
