@@ -4,8 +4,8 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
     take:
     tools               // string
     ch_reads            // channel: [ val(meta), fastq ]
-    ch_db               // string
-    ch_taxid            // string
+    val_db              // string
+    val_taxid           // string
 
     main:
     ch_kraken2_report           = Channel.empty()
@@ -16,8 +16,8 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
     if (tools.split(',').contains('kraken2')) {
         FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS(
             ch_reads,
-            ch_db,
-            ch_taxid
+            val_db,
+            val_taxid
         )
         ch_kraken2_report          = FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.kraken2_report
         ch_extracted_kraken2_reads = FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.extracted_kraken2_reads

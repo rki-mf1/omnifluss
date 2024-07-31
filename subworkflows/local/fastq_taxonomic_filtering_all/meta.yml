@@ -26,9 +26,9 @@ input:
       description: |
         List of input FastQ files of size 1 and 2 for single-end and paired-end data,
         respectively.
-  - ch_db:
+  - val_db:
       type: string
-      description: Path to Kraken2 database 
+      description: Path to Kraken2 database
   - val_taxid:
       type: string
       description: A string of one or more of taxonomic IDs (e.g. from NCBI Taxonomy) separated by spaces
