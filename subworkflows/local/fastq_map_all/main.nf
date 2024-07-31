@@ -10,11 +10,11 @@ workflow FASTQ_MAP_ALL {
     ch_ref          // channel: [ val(meta), fasta ]
 
     main:
-    ch_index = Channel.empty()
+    ch_index    = Channel.empty()
     ch_bam_orig = Channel.empty()
-    ch_bam = Channel.empty()
-    ch_csi = Channel.empty()
-    ch_stats = Channel.empty()
+    ch_bam      = Channel.empty()
+    ch_csi      = Channel.empty()
+    ch_stats    = Channel.empty()
     ch_flagstat = Channel.empty()
     ch_idxstats = Channel.empty()
     ch_versions = Channel.empty()
@@ -33,13 +33,13 @@ workflow FASTQ_MAP_ALL {
             true,
             ch_ref      // channel: [ val(meta), fasta ]
         )
-        ch_bam = FASTQ_ALIGN_BWA.out.bam_orig
-        ch_bam_sorted = FASTQ_ALIGN_BWA.out.bam
-        ch_csi = FASTQ_ALIGN_BWA.out.csi
-        ch_stats = FASTQ_ALIGN_BWA.out.stats
-        ch_flagstat = FASTQ_ALIGN_BWA.out.flagstat
-        ch_idxstats = FASTQ_ALIGN_BWA.out.idxstats
-        ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
+        ch_bam          = FASTQ_ALIGN_BWA.out.bam_orig
+        ch_bam_sorted   = FASTQ_ALIGN_BWA.out.bam
+        ch_csi          = FASTQ_ALIGN_BWA.out.csi
+        ch_stats        = FASTQ_ALIGN_BWA.out.stats
+        ch_flagstat     = FASTQ_ALIGN_BWA.out.flagstat
+        ch_idxstats     = FASTQ_ALIGN_BWA.out.idxstats
+        ch_versions     = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     }
 
 
@@ -48,14 +48,14 @@ workflow FASTQ_MAP_ALL {
         ch_ref,
         [[], []]               // channel: [ val(meta), index ]
     )
-    ch_deduped_bam = PICARD_MARKDUPLICATES.out.bam
-    ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
+    ch_deduped_bam  = PICARD_MARKDUPLICATES.out.bam
+    ch_versions     = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
 
 
     emit:
-    bam               = ch_bam_sorted
-    deduped_bam       = ch_deduped_bam
-    versions          = ch_versions
+    bam           = ch_bam_sorted
+    deduped_bam   = ch_deduped_bam
+    versions      = ch_versions
 
 }
 
