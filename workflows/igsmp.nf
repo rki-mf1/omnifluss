@@ -56,8 +56,8 @@ workflow IGSMP {
         )
         .extracted_kraken2_reads
         | set {ch_reads}
-        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect{it[1]})
-        ch_versions = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions.first())
+        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
+        ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
     }
 
     //

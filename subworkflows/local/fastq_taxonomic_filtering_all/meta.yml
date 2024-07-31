@@ -12,6 +12,10 @@ components:
   - kraken2/kraken2
   - krakentools/extractkrakenreads
 input:
+  - tools:
+      type: string
+      description: |
+        Comma-separated list of activated tools
   - meta:
       type: map
       description: |
