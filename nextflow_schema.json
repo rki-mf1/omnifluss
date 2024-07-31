@@ -130,7 +130,7 @@
                     ],
                     "description": "Tool to use for primer clipping."
                 },
-                "varian_caller": {
+                "variant_caller": {
                     "type": "string",
                     "enum": [
                         "freebayes",
@@ -161,6 +161,19 @@
                 "skip_multiqc": {
                     "type": "boolean",
                     "description": "Skip MultiQC report generation"
+                }
+            }
+        },
+        "thresholds": {
+            "title": "Thresholds",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "cns_mincov": {
+                    "type": "integer",
+                    "description": "Minimum number of reads to call reference or alternate alleles",
+                    "minimum": 0
                 }
             }
         },
@@ -355,6 +368,9 @@
         },
         {
             "$ref": "#/definitions/tools_and-step-options"
+        },
+        {
+            "$ref": "#/definitions/thresholds"
         },
         {
             "$ref": "#/definitions/institutional_config_options"
