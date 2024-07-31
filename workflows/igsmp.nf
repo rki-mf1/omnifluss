@@ -94,14 +94,19 @@ workflow IGSMP {
     // ch_versions = ch_versions.mix(BAM_CLIP_PRIMER_ALL.out.versions)
     // }
 
-    //
-    // Variant calling
-    //
-    // BAM_CALL_VARIANT_ALL(
-    //
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(BAM_CALL_VARIANT_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
+        //
+        // Variant calling
+        //
+        // BAM_CALL_VARIANT_ALL(
+        //     params.varian_caller,
+        //     ch_mapping,
+        //     FASTA_SELECT_REFERENCE_ALL.out.ref,
+        //     FASTA_SELECT_REFERENCE_ALL.out.ref_index
+        // )
+        // ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
+
+        // ch_multiqc_files = ch_multiqc_files.mix(BAM_CALL_VARIANT_ALL.out.multiqc_files.collect())
+        // ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
     // Consensus calling
