@@ -1,0 +1,164 @@
+{
+    "sarscov2 - single_end - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        [
+                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "3": [
+                    "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
+                    "versions.yml:md5,acc04d7444d23c01bfa21ecabe6e054e",
+                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de"
+                ],
+                "bwa_index": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        [
+                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "fai_index": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "preped_ref": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
+                    "versions.yml:md5,acc04d7444d23c01bfa21ecabe6e054e",
+                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-01T13:44:06.794112053"
+    },
+    "sarscov2 - paired_end - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        [
+                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "3": [
+                    "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
+                    "versions.yml:md5,acc04d7444d23c01bfa21ecabe6e054e",
+                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de"
+                ],
+                "bwa_index": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        [
+                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        ]
+                    ]
+                ],
+                "fai_index": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "preped_ref": [
+                    [
+                        {
+                            "id": "dummy_file"
+                        },
+                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
+                    "versions.yml:md5,acc04d7444d23c01bfa21ecabe6e054e",
+                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-01T13:44:14.731196881"
+    }
+}

@@ -1,24 +1,18 @@
 nextflow_workflow {
 
-    name "Test Subworkflow FASTQ_MAP_ALL"
+    name "Test Subworkflow FASTA_PROCESS_REFERENCE_ALL"
     script "../main.nf"
     // Incude a nextflow.config for the test if needed
-    config "subworkflows/local/fastq_map_all/tests/nextflow.config"
-    workflow "FASTQ_MAP_ALL"
+    config "subworkflows/local/fasta_process_reference_all/tests/nextflow.config"
+    workflow "FASTA_PROCESS_REFERENCE_ALL"
 
     //  Add tags for the subworkflow
     tag "subworkflows"
     tag "subworkflows/local"
-    tag "subworkflows/fastq_map_all"
-    tag "fastq_map_all"
+    tag "subworkflows/fasta_process_reference_all"
+    tag "fasta_process_reference_all"
     // Add tags for all modules used within this subworkflow.
-    tag "bwa_index"
-    tag "bwa_mem"
-    tag "samtools_sort"
-    tag "samtools_index"
-    tag "samtools_flagstat"
-    tag "samtools_idxstats"
-    tag "samtools_stats"
+    tag "samtools_faidx"
 
     // Test name preferably indicating the test-data and file-format used
     test("sarscov2 - single_end - stub") {
@@ -29,19 +23,12 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = 'bwa'
+                input[0] = 'static'
                 input[1] = Channel.of([ 
                     [ id:'test', single_end:true ], // meta map
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true) ]
                     ])
-                input[2] = Channel.of([ 
-                    [id:'test_ref'], 
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
-                    ])
-                input[3] = Channel.value([
-                    [id:'index'], //meta map
-                    file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
-                ])
+                input[2] = "$projectDir/assets/dummy_file.txt"
                 """
             }
         }
@@ -62,20 +49,13 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = 'bwa'
+                input[0] = 'static'
                 input[1] = Channel.of([ 
                     [ id:'test', single_end:false ], // meta map
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
                     ])  
-                input[2] = Channel.of([ 
-                    [ id:'test_ref' ], 
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) 
-                    ])
-                input[3] = Channel.value([
-                    [id:'index'], //meta map
-                    file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
-                ])
+                input[2] = "$projectDir/assets/dummy_file.txt"
                 """
             }
         }

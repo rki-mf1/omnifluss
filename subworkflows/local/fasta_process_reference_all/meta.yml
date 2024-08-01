@@ -1,0 +1,51 @@
+name: "FASTA_PROCESS_REFERENCE_ALL"
+description: process and index a reference sequence
+keywords:
+  - fasta
+  - reference
+  - indexing
+components:
+  - samtools
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - reference_selection:
+      type: string
+      description: |
+        type of desired reference selection [options: mapping, static]
+  - ch_reads:
+      type: file
+      description: |
+        FASTQ file containing reads (only used and mandatory if reference_selection = mapping)
+      pattern: "*.{fastq}"
+  - ref_path:
+      type: string
+      description: |
+        path to the desired reference (only used and mandatory if reference_selection = static)
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1', single_end:false ]`
+  - preped_ref:
+      type: file
+      description: FASTA file containing the processed reference
+      pattern: "*.{fasta/fa}"
+  - fai:
+    type: file
+    description: FAI index file of the reference
+    pattern: "*.{fai}"
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+authors:
+  - "@DimitriTernovoj"
+maintainers:
+  - "@DimitriTernovoj"
