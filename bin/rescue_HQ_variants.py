@@ -36,7 +36,7 @@ with gzip.open(inVCF, 'rt') as file:
 
         # get relevant lines
         else:
-            if (int(line.split('\t')[QUAL]) > 9999) and (line.split('\t')[FILTER] != 'PASS'):
+            if (float(line.split('\t')[QUAL]) > 9999) and (line.split('\t')[FILTER] != 'PASS'):
                 hq_lines.append(line)
 
 
