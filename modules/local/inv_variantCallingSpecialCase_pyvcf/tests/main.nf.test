@@ -1,0 +1,84 @@
+nextflow_process {
+
+    name "Test Process RESCUE_VARIANTS"
+    script "../main.nf"
+    process "RESCUE_VARIANTS"
+    config "./nextflow.config"
+
+    tag "modules"
+    tag "modules_local"
+    tag "rescue_variants"
+
+    test("influenza - vcf") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id: params.testdata_id ],
+                    [ file('${projectDir}/' + params.testdata_vcf, checkIfExists: true) ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out.bed).match() },
+                { assert path(process.out.bed[0][1]).readLines().any{ it.contains("var1|B_/_H0N0|HA\t3\t4") } }
+            )
+        }
+    }
+
+
+    test("influenza - vcf - stub") {
+
+        tag "stub"
+        options '-stub'
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id: params.testdata_id ],
+                    [ file('${projectDir}/' + params.testdata_vcf, checkIfExists: true) ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out.bed).match() },
+                { assert path(process.out.bed[0][1]).readLines().size() == 0 }
+            )
+        }
+    }
+
+
+    test("sarscov2 - vcf") {
+
+        when {
+            process {
+                """
+                input[0] =  Channel.of([
+                                [ id:'test2' ],
+                                [ file(params.testdata_nfcore_base_path + 'genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true) ]
+                            ])
+                """
+            }
+        }
+
+        // the nf-core testdata should not contain such a special case
+        then {
+            assertAll (
+                { assert process.success },
+                { assert snapshot(process.out.bed).match() },
+                { assert path(process.out.bed[0][1]).readLines().size() == 0 }
+            )
+        }
+    }
+
+}
