@@ -73,7 +73,8 @@
                         "git_sha": "77decb880af3f0ea6d22b2383c3f1ed86aac4aa2",
                         "installed_by": [
                             "fastq_extract_kraken_krakentools"
-                        ]
+                        ],
+                        "patch": "modules/nf-core/krakentools/extractkrakenreads/krakentools-extractkrakenreads.diff"
                     },
                     "lofreq/callparallel": {
                         "branch": "master",
