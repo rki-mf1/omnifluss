@@ -1,44 +1,45 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
 name: "bam_special_variants_case_all"
-## TODO nf-core: Add a description of the subworkflow and list keywords
-description: Sort SAM/BAM/CRAM file
+description: Rescue high quality variants that were filtered due to lofreq's default settings.
 keywords:
-  - sort
   - bam
-  - sam
-  - cram
-## TODO nf-core: Add a list of the modules and/or subworkflows used in the subworkflow
+  - bai
+  - filter
+  - variants
 components:
-  - samtools/sort
-  - samtools/index
-## TODO nf-core: List all of the channels used as input with a description and their structure
+  - lofreq/callparallel
+  - lofreq/filter
 input:
-  - ch_bam:
-      type: file
+  - ch_iqbam:
+      type: map
       description: |
-        The input channel containing the BAM/CRAM/SAM files
+        Groovy Map containing sample's alignment file (BAM); in this special case coming from the INV lofreq variant calling subworkflow
         Structure: [ val(meta), path(bam) ]
-      pattern: "*.{bam/cram/sam}"
-## TODO nf-core: List all of the channels used as output with a descriptions and their structure
-output:
-  - bam:
-      type: file
-      description: |
-        Channel containing BAM files
-        Structure: [ val(meta), path(bam) ]
-      pattern: "*.bam"
   - bai:
-      type: file
+      type: map
       description: |
-        Channel containing indexed BAM (BAI) files
+        Groovy Map containing sample's alignment index (BAI)
         Structure: [ val(meta), path(bai) ]
-      pattern: "*.bai"
-  - csi:
-      type: file
+  - ch_ref:
+      type: map
       description: |
-        Channel containing CSI files
-        Structure: [ val(meta), path(csi) ]
-      pattern: "*.csi"
+        Groovy Map containing sample's reference sequence (FASTA/FA)
+        Structure: [ val(meta), path(fasta) ]
+  - ch_ref_index:
+      type: map
+      description: |
+        Groovy Map containing sample's reference index (FAI)
+        Structure: [ val(meta), path(fai) ]
+output:
+  - vcf:
+      type: map
+      description: |
+        Groovy Map containing sample's filtered variant calls (VCF) using a custom parameter set for the lofreq variant caller
+        Structure: [ val(meta), path(vcf) ]
+  - bed:
+      type: map
+      description: |
+        Groovy Map containing sample's rescued HQ variant calls (BED)
+        Structure: [ val(meta), path(vcf) ]
   - versions:
       type: file
       description: |
