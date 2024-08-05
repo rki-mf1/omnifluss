@@ -25,7 +25,8 @@ nextflow_process {
         then {
             assertAll (
                 { assert process.success },
-                { assert snapshot(process.out.bed).match() },
+                { assert snapshot(process.out.bed).match("Snapshot-BED") },
+                { assert snapshot(process.out.versions).match("Snapshot-VERSIONS") },
                 { assert path(process.out.bed[0][1]).readLines().any{ it.contains("var1|B_/_H0N0|HA\t3\t4") } }
             )
         }
@@ -51,7 +52,8 @@ nextflow_process {
         then {
             assertAll (
                 { assert process.success },
-                { assert snapshot(process.out.bed).match() },
+                { assert snapshot(process.out.bed).match("Snapshot-BED-stub") },
+                { assert snapshot(process.out.versions).match("Snapshot-VERSIONS-stub") },
                 { assert path(process.out.bed[0][1]).readLines().size() == 0 }
             )
         }

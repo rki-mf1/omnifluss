@@ -14,25 +14,23 @@ process RESCUE_VARIANTS {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def VERSION = '1.0.1'
     """
     python $projectDir/bin/rescue_HQ_variants.py $vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        rescue_HQ_variants.py: $VERSION
+        rescue_HQ_variants.py: \$(python $projectDir/bin/rescue_HQ_variants.py --version)
     END_VERSIONS
     """
     
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def VERSION = '1.0.1'
     """
     touch "${prefix}.special_case_variant_mask.bed"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        rescue_HQ_variants.py: $VERSION
+        rescue_HQ_variants.py: \$(python $projectDir/bin/rescue_HQ_variants.py --version)
     END_VERSIONS
     """
 }

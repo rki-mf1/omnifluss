@@ -1,4 +1,33 @@
 {
+    "Snapshot-BED-stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test.spec_case.filtered"
+                    },
+                    "test.spec_case.filtered.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-05T09:06:36.472976712"
+    },
+    "Snapshot-VERSIONS-stub": {
+        "content": [
+            [
+                "versions.yml:md5,b09afe3f73825810237894aeaab9c65c"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-05T09:19:17.152066441"
+    },
     "sarscov2 - vcf": {
         "content": [
             [
@@ -16,7 +45,7 @@
         },
         "timestamp": "2024-08-01T13:47:48.361394427"
     },
-    "influenza - vcf": {
+    "Snapshot-BED": {
         "content": [
             [
                 [
@@ -31,23 +60,18 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-01T13:47:38.759932808"
+        "timestamp": "2024-08-05T09:06:31.34079152"
     },
-    "influenza - vcf - stub": {
+    "Snapshot-VERSIONS": {
         "content": [
             [
-                [
-                    {
-                        "id": "test.spec_case.filtered"
-                    },
-                    "test.spec_case.filtered.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
-                ]
+                "versions.yml:md5,b09afe3f73825810237894aeaab9c65c"
             ]
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-01T13:47:43.216832968"
+        "timestamp": "2024-08-05T09:19:12.296023055"
     }
 }
