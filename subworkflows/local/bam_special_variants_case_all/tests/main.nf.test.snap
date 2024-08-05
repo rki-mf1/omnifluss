@@ -21,7 +21,7 @@
                 "2": [
                     "versions.yml:md5,0ec62ff385fc621e2b8c6797a951c9a9",
                     "versions.yml:md5,3f03ba9f662c89ac04cb9fefec09edca",
-                    "versions.yml:md5,8320c8ad4fe213e4b53e3d7f07d9667c"
+                    "versions.yml:md5,ca634c2bca1dbac72df58f2954450e74"
                 ],
                 "bed": [
                     [
@@ -42,7 +42,7 @@
                 "versions": [
                     "versions.yml:md5,0ec62ff385fc621e2b8c6797a951c9a9",
                     "versions.yml:md5,3f03ba9f662c89ac04cb9fefec09edca",
-                    "versions.yml:md5,8320c8ad4fe213e4b53e3d7f07d9667c"
+                    "versions.yml:md5,ca634c2bca1dbac72df58f2954450e74"
                 ]
             }
         ],
@@ -50,7 +50,7 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-01T10:35:11.850713343"
+        "timestamp": "2024-08-05T09:52:42.78866664"
     },
     "sarscov2 - bam": {
         "content": [
