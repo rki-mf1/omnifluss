@@ -68,9 +68,7 @@ workflow IGSMP {
     // Reference selection & processing
     //
     FASTA_PROCESS_REFERENCE_ALL(
-        params.reference_selection,          // string
-        ch_reads,                            // channel: [ val(meta), fastq ]
-        params.fasta                         // string
+        ref = tuple([id:file(params.fasta).getBaseName()], params.fasta) //TODO: Adapted to output from fasta_select_reference_all
     )
     ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
     ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index

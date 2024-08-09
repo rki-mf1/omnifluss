@@ -1,24 +1,14 @@
-include { PREPARE_REFERENCE } from '../../../modules/local/inv_consensus_biopython/main'
+include { PREPARE_REFERENCE } from '../../../modules/local/inv_reference_processing_biopython/main'
 include { SAMTOOLS_FAIDX    } from '../../../modules/nf-core/samtools/faidx/main'
 include { BWA_INDEX         } from '../../../modules/nf-core/bwa/index/main'
 
 
 workflow FASTA_PROCESS_REFERENCE_ALL {
     take:
-    reference_selection           // string
-    ch_reads                      // channel: [ val(meta), fastq ]
-    ref_path                      // channel: [ val(meta), fasta ]
+    ref                      // channel: [ val(meta), fasta ]
 
     main:
     ch_versions = Channel.empty()
-
-    if (reference_selection == "static") {
-        ref = tuple([id:ref_path.split("/")[-1].split("\\.")[0]], ref_path) // channel: [ val(meta), fasta ]
-    } else if (reference_selection == "mapping") {
-        //TODO
-    } else {
-        {exit 1, "invalid value supplied for variable 'reference_selection' !"}
-    }
 
     PREPARE_REFERENCE(
         ref
