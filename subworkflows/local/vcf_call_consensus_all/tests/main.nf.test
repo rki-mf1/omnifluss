@@ -10,7 +10,6 @@ nextflow_workflow {
     tag "subworkflows/vcf_call_consensus_all"
     tag "bedtools"
     tag "bcftools"
-    tag "biopython"
     tag "pyvcf"
 
 
@@ -22,7 +21,7 @@ nextflow_workflow {
                 input[0] = "bcftools"
                 input[1] = Channel.value([
                     [ id: "ref", single_end:false],
-                    [ file("$projectDir/assets/dummy_file.txt", checkIfExists: true) ]
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
                 ])
                 input[2] = Channel.of([ 
                     [ id:'test', single_end:false],

@@ -6,12 +6,22 @@ keywords:
   - indexing
 components:
   - samtools
+  - bwa
+  - biopython
 input:
   - meta:
       type: map
       description: |
         Groovy Map containing sample information
         e.g. [ id:'test', single_end:false ]
+  - tools:
+      type: string
+      description: |
+        Selection of used tools; options: [inv_prep_ref, samtools_faidx]
+  - aligner:
+      type: string
+      description: |
+        Chosen aligner. In case of bwa, an index file is generated
   - ref:
       type: file
       description: |
@@ -27,9 +37,9 @@ output:
       description: FASTA file containing the processed reference
       pattern: "*.{fasta/fa}"
   - fai:
-    type: file
-    description: FAI index file of the reference
-    pattern: "*.{fai}"
+      type: file
+      description: FAI index file of the reference
+      pattern: "*.{fai}"
   - versions:
       type: file
       description: |
