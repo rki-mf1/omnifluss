@@ -117,7 +117,8 @@
                 "aligner": {
                     "type": "string",
                     "enum": [
-                        "bwa"
+                        "bwa",
+                        "picard_remove_duplicates"
                     ],
                     "default": "bwa",
                     "description": "Tool to use for read aligment."
