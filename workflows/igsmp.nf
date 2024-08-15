@@ -79,9 +79,8 @@ workflow IGSMP {
         params.aligner,                                                               // string
         ch_reads,                                                                     // channel: [ val(meta), fastq ]
         tuple([id:params.fasta.split("/")[-1].split("\\.")[0]], params.fasta)         // channel: [ val(meta), fasta ]
-
     )
-    ch_mapping = FASTQ_MAP_ALL.out.deduped_bam
+    ch_mapping = FASTQ_MAP_ALL.out.bam
     ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
 
     //
