@@ -153,7 +153,8 @@
                 },
                 "skip_taxonomic_filtering": {
                     "type": "boolean",
-                    "description": "Skip the taxonomic classifiaction and filtering of reads"
+                    "description": "Skip the taxonomic classification and filtering of reads",
+                    "default": true
                 },
                 "skip_primer_clipping": {
                     "type": "boolean",
