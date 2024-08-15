@@ -12,6 +12,7 @@ nextflow_pipeline {
         when {
             params {
                 input = 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv'
+                fasta = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
 
                 // $outputDir is a global nf-test variable
                 // https://www.nf-test.com/docs/testcases/global_variables/
@@ -33,6 +34,7 @@ nextflow_pipeline {
         when {
             params {
                 input = 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv'
+                fasta = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
 
                 // $outputDir is a global nf-test variable
                 // https://www.nf-test.com/docs/testcases/global_variables/
