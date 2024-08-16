@@ -103,7 +103,7 @@
                         "kraken2"
                     ],
                     "default": "kraken2",
-                    "description": "Tool to use for taxonomic classifiacation and fltering."
+                    "description": "Tool to use for taxonomic classification and filtering."
                 },
                 "kraken2_db": {
                     "type": "string",
@@ -116,12 +116,9 @@
                 },
                 "aligner": {
                     "type": "string",
-                    "enum": [
-                        "bwa",
-                        "picard_remove_duplicates"
-                    ],
                     "default": "bwa",
-                    "description": "Tool to use for read aligment."
+                    "description": "Tool to use for read alignment.",
+                    "pattern": "^((bwa|picard_remove_duplicates)?,?)*(?<!,)$"
                 },
                 "primer_clipper": {
                     "type": "string",
