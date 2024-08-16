@@ -1,0 +1,68 @@
+{
+    "sarscov2 - paf": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "genome.paf_best_refs.txt:md5,3a9ea6d336e113a74d7fdca5e7b623fc"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,b206184401c7f38576e6037ffa8157df"
+                ],
+                "txt": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "genome.paf_best_refs.txt:md5,3a9ea6d336e113a74d7fdca5e7b623fc"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,b206184401c7f38576e6037ffa8157df"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-16T12:44:17.007945674"
+    },
+    "sarscov2 - paf - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "top5_best_refs.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,b206184401c7f38576e6037ffa8157df"
+                ],
+                "txt": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "top5_best_refs.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,b206184401c7f38576e6037ffa8157df"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-16T12:44:22.789137539"
+    }
+}
