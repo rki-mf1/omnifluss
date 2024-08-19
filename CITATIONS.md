@@ -18,6 +18,53 @@
 
   > Ewels P, Magnusson M, Lundin S, Käller M. MultiQC: summarize analysis results for multiple tools and samples in a single report. Bioinformatics. 2016 Oct 1;32(19):3047-8. doi: 10.1093/bioinformatics/btw354. Epub 2016 Jun 16. PubMed PMID: 27312411; PubMed Central PMCID: PMC5039924.
 
+- [BCFtools](https://pubmed.ncbi.nlm.nih.gov/33590861/)
+
+  > Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, Li H. Twelve years of SAMtools and BCFtools [Internet]. GigaScience. Oxford University Press (OUP); 2021. Available from: http://dx.doi.org/10.1093/gigascience/giab008
+
+- [bwa](https://arxiv.org/abs/1303.3997)
+
+  > Li H. Aligning sequence reads, clone sequences and assembly contigs with BWA-MEM [Internet]. arXiv; 2013. Available from: https://arxiv.org/abs/1303.3997 
+
+- [fastp](https://onlinelibrary.wiley.com/doi/10.1002/imt2.107)
+
+  > Chen S. Ultrafast one‐pass FASTQ data preprocessing, quality control, and deduplication using fastp [Internet]. iMeta. Wiley; 2023. Available from: http://dx.doi.org/10.1002/imt2.107
+
+- [kraken2](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-019-1891-0)
+
+  > Wood DE, Lu J, Langmead B. Improved metagenomic analysis with Kraken 2 [Internet]. Genome Biology. Springer Science and Business Media LLC; 2019. Available from: http://dx.doi.org/10.1186/s13059-019-1891-0 
+
+- [krakentools](https://www.nature.com/articles/s41596-022-00738-y)
+
+  > Lu J, Rincon N, Wood DE, Breitwieser FP, Pockrandt C, Langmead B, Salzberg SL, Steinegger M. Metagenome analysis using the Kraken software suite [Internet]. Nature Protocols. Springer Science and Business Media LLC; 2022. p. 2815–2839. Available from: http://dx.doi.org/10.1038/s41596-022-00738-y 
+
+- [lofreq](https://pubmed.ncbi.nlm.nih.gov/23066108/)
+
+  > Wilm A, Aw PPK, Bertrand D, Yeo GHT, Ong SH, Wong CH, Khor CC, Petric R, Hibberd ML, Nagarajan N. LoFreq: a sequence-quality aware, ultra-sensitive variant caller for uncovering cell-population heterogeneity from high-throughput sequencing datasets [Internet]. Nucleic Acids Research. Oxford University Press (OUP); 2012. p. 11189–11201. Available from: http://dx.doi.org/10.1093/nar/gks918 
+
+- [Picard](https://github.com/broadinstitute/picard)
+
+  > Picard toolkit [Internet], Broad Institute. Available from: https://github.com/broadinstitute/picard
+
+- [samtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722
+
+  > Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, Li H. Twelve years of SAMtools and BCFtools [Internet]. GigaScience. Oxford University Press (OUP); 2021. Available from: http://dx.doi.org/10.1093/gigascience/giab008 
+
+- [tabix](https://academic.oup.com/bioinformatics/article/27/5/718/262743)
+
+  > Li H. Tabix: fast retrieval of sequence features from generic TAB-delimited files [Internet]. Bioinformatics. Oxford University Press (OUP); 2011. p. 718–719. Available from: http://dx.doi.org/10.1093/bioinformatics/btq671 
+
+- [bedtools](https://academic.oup.com/bioinformatics/article/26/6/841/244688)
+
+  > Quinlan AR, Hall IM. BEDTools: a flexible suite of utilities for comparing genomic features [Internet]. Bioinformatics. Oxford University Press (OUP); 2010. p. 841–842. Available from: http://dx.doi.org/10.1093/bioinformatics/btq033 
+
+- [Biopython](https://academic.oup.com/bioinformatics/article/25/11/1422/330687)
+
+  > Cock PJA, Antao T, Chang JT, Chapman BA, Cox CJ, Dalke A, Friedberg I, Hamelryck T, Kauff F, Wilczynski B, de Hoon MJL. Biopython: freely available Python tools for computational molecular biology and bioinformatics [Internet]. Bioinformatics. Oxford University Press (OUP); 2009. p. 1422–1423. Available from: http://dx.doi.org/10.1093/bioinformatics/btp163 
+
+- [PyVCF](https://pyvcf.readthedocs.io/en/latest/)
+
+
 ## Software packaging/containerisation tools
 
 - [Anaconda](https://anaconda.com)
