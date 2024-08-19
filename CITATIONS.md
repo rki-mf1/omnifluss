@@ -46,7 +46,7 @@
 
   > Picard toolkit [Internet], Broad Institute. Available from: https://github.com/broadinstitute/picard
 
-- [samtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722
+- [samtools](https://academic.oup.com/gigascience/article/10/2/giab008/6137722)
 
   > Danecek P, Bonfield JK, Liddle J, Marshall J, Ohan V, Pollard MO, Whitwham A, Keane T, McCarthy SA, Davies RM, Li H. Twelve years of SAMtools and BCFtools [Internet]. GigaScience. Oxford University Press (OUP); 2021. Available from: http://dx.doi.org/10.1093/gigascience/giab008 
 
