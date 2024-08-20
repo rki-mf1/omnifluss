@@ -96,7 +96,7 @@ workflow IGSMP {
         ch_ref,                                                                       // channel: [ val(meta), fasta ]
         ch_bwa_index                                                                  // channel: [ val(meta), index ]
     )
-    ch_mapping = FASTQ_MAP_ALL.out.deduped_bam
+    ch_mapping = FASTQ_MAP_ALL.out.bam
     ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
 
     //

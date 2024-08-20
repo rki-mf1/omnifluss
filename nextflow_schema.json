@@ -103,7 +103,7 @@
                         "kraken2"
                     ],
                     "default": "kraken2",
-                    "description": "Tool to use for taxonomic classifiacation and fltering."
+                    "description": "Tool to use for taxonomic classification and filtering."
                 },
                 "kraken2_db": {
                     "type": "string",
@@ -116,11 +116,9 @@
                 },
                 "aligner": {
                     "type": "string",
-                    "enum": [
-                        "bwa"
-                    ],
                     "default": "bwa",
-                    "description": "Tool to use for read aligment."
+                    "description": "Tool to use for read alignment.",
+                    "pattern": "^((bwa|picard_remove_duplicates)?,?)*(?<!,)$"
                 },
                 "primer_clipper": {
                     "type": "string",
@@ -130,7 +128,7 @@
                     ],
                     "description": "Tool to use for primer clipping."
                 },
-                "varian_caller": {
+                "variant_caller": {
                     "type": "string",
                     "enum": [
                         "freebayes",
@@ -152,7 +150,8 @@
                 },
                 "skip_taxonomic_filtering": {
                     "type": "boolean",
-                    "description": "Skip the taxonomic classifiaction and filtering of reads"
+                    "description": "Skip the taxonomic classification and filtering of reads",
+                    "default": true
                 },
                 "skip_primer_clipping": {
                     "type": "boolean",
@@ -161,6 +160,19 @@
                 "skip_multiqc": {
                     "type": "boolean",
                     "description": "Skip MultiQC report generation"
+                }
+            }
+        },
+        "thresholds": {
+            "title": "Thresholds",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "cns_mincov": {
+                    "type": "integer",
+                    "description": "Minimum number of reads to call reference or alternate alleles",
+                    "minimum": 0
                 }
             }
         },
@@ -355,6 +367,9 @@
         },
         {
             "$ref": "#/definitions/tools_and-step-options"
+        },
+        {
+            "$ref": "#/definitions/thresholds"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

@@ -8,32 +8,14 @@
                             "id": "test",
                             "single_end": true
                         },
-                        "test.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "2": [
+                "1": [
                     "versions.yml:md5,585288ee8fa3e54c7f72bf3c65c02f57",
                     "versions.yml:md5,e49394ff09c39f6655da3d6181d9e8bd"
                 ],
                 "bam": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "deduped_bam": [
                     [
                         {
                             "id": "test",
@@ -52,7 +34,7 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-01T13:42:09.408731857"
+        "timestamp": "2024-08-13T13:30:49.561647719"
     },
     "sarscov2 - paired_end - stub": {
         "content": [
@@ -63,32 +45,14 @@
                             "id": "test",
                             "single_end": false
                         },
-                        "test.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": false
-                        },
                         "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
-                "2": [
+                "1": [
                     "versions.yml:md5,585288ee8fa3e54c7f72bf3c65c02f57",
                     "versions.yml:md5,e49394ff09c39f6655da3d6181d9e8bd"
                 ],
                 "bam": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": false
-                        },
-                        "test.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "deduped_bam": [
                     [
                         {
                             "id": "test",
@@ -107,6 +71,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-01T13:42:20.628450826"
+        "timestamp": "2024-08-13T13:31:01.515325102"
     }
 }
