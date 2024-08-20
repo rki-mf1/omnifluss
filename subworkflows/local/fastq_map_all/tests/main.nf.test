@@ -29,13 +29,13 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = 'bwa'
-                input[1] = Channel.of([ 
+                input[0] = 'bwa,picard_remove_duplicates'
+                input[1] = Channel.of([
                     [ id:'test', single_end:true ], // meta map
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true) ]
                     ])
-                input[2] = Channel.of([ 
-                    [id:'test_ref'], 
+                input[2] = Channel.of([
+                    [id:'test_ref'],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
                 """
@@ -58,15 +58,15 @@ nextflow_workflow {
         when {
             workflow {
                 """
-                input[0] = 'bwa'
-                input[1] = Channel.of([ 
+                input[0] = 'bwa,picard_remove_duplicates'
+                input[1] = Channel.of([
                     [ id:'test', single_end:false ], // meta map
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
-                    ])  
-                input[2] = Channel.of([ 
-                    [ id:'test_ref' ], 
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) 
+                    ])
+                input[2] = Channel.of([
+                    [ id:'test_ref' ],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
                 """
             }

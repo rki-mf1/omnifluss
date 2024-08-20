@@ -103,7 +103,7 @@
                         "kraken2"
                     ],
                     "default": "kraken2",
-                    "description": "Tool to use for taxonomic classifiacation and fltering."
+                    "description": "Tool to use for taxonomic classification and filtering."
                 },
                 "kraken2_db": {
                     "type": "string",
@@ -116,11 +116,9 @@
                 },
                 "aligner": {
                     "type": "string",
-                    "enum": [
-                        "bwa"
-                    ],
                     "default": "bwa",
-                    "description": "Tool to use for read aligment."
+                    "description": "Tool to use for read alignment.",
+                    "pattern": "^((bwa|picard_remove_duplicates)?,?)*(?<!,)$"
                 },
                 "primer_clipper": {
                     "type": "string",
@@ -152,7 +150,8 @@
                 },
                 "skip_taxonomic_filtering": {
                     "type": "boolean",
-                    "description": "Skip the taxonomic classifiaction and filtering of reads"
+                    "description": "Skip the taxonomic classification and filtering of reads",
+                    "default": true
                 },
                 "skip_primer_clipping": {
                     "type": "boolean",
