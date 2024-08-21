@@ -38,6 +38,10 @@ nextflow_workflow {
                     [id:'test_ref'],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
+                input[3] = Channel.value([
+                    [id:'index'], //meta map
+                    file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
+                ])
                 """
             }
         }
@@ -68,6 +72,10 @@ nextflow_workflow {
                     [ id:'test_ref' ],
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
                     ])
+                input[3] = Channel.value([
+                    [id:'index'], //meta map
+                    file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
+                ])
                 """
             }
         }

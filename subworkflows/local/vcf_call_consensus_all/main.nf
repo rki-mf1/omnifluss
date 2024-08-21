@@ -1,4 +1,3 @@
-include { PREPARE_REFERENCE                          } from '../../../modules/local/inv_consensus_biopython/main'
 include { BCFTOOLS_FILTER                            } from '../../../modules/nf-core/bcftools/filter/main'
 include { ADJUST_DELETION_CONSENSUS                  } from '../../../modules/local/inv_consensus_pyvcf/main'
 include { ADJUST_GT_CONSENSUS                        } from '../../../modules/local/inv_consensus_bcftools/main'
@@ -9,20 +8,15 @@ include { BCFTOOLS_CONSENSUS                         } from '../../../modules/nf
 workflow VCF_CALL_CONSENSUS_ALL {
     take:
     tools                       // string
-    ch_vcf                      // channel: [ val(meta), vcf ]
-    ch_bam                      // channel: [ val(meta), bam ]
-    ch_rescued_variants         // channel: [ val(meta), bed ]
+    ch_ref                      // channel: [ val(meta), fasta ]
+    ch_vcf                      // channel: [ val(meta), vcf   ]
+    ch_bam                      // channel: [ val(meta), bam   ]
+    ch_rescued_variants         // channel: [ val(meta), bed   ]
 
     main:
     ch_versions                 = Channel.empty()
 
     if (tools.split(',').contains('bcftools')) {
-        PREPARE_REFERENCE(
-            tuple([id:params.fasta.split("/")[-1].split("\\.")[0]], params.fasta) // channel: [ val(meta), fasta ]
-        ).preped_ref
-        | set {preped_ref}
-
-        ch_versions = ch_versions.mix(PREPARE_REFERENCE.out.versions.first())
 
         BCFTOOLS_FILTER(
             ch_vcf                      // channel: [ val(meta), vcf ]
@@ -67,7 +61,7 @@ workflow VCF_CALL_CONSENSUS_ALL {
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions.first())
 
         consensus_input = ch_final_vcf.join(ch_final_vcf_tbi, by:[0])
-        consensus_input = consensus_input.combine( preped_ref.map{ it[1] } )
+        consensus_input = consensus_input.combine( ch_ref.map{ it[1] } )
         consensus_input = consensus_input.join(ch_final_bed, by:[0])
 
         BCFTOOLS_CONSENSUS(

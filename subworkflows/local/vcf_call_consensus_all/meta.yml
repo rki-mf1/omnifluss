@@ -22,6 +22,10 @@ input:
     type: string
     description: |
       comma-separated list of tool names that are used for this task
+  - ch_ref:
+    type: file
+    descirption: FASTA file of the reference
+    pattern: "*.{fasta/fa}"
   - ch_vcf:
       type: file
       description: VCF file

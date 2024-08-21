@@ -13,7 +13,6 @@
                 ],
                 "1": [
                     "versions.yml:md5,585288ee8fa3e54c7f72bf3c65c02f57",
-                    "versions.yml:md5,933be4be4d8d02453390a5cf32fb569f",
                     "versions.yml:md5,e49394ff09c39f6655da3d6181d9e8bd"
                 ],
                 "bam": [
@@ -27,7 +26,6 @@
                 ],
                 "versions": [
                     "versions.yml:md5,585288ee8fa3e54c7f72bf3c65c02f57",
-                    "versions.yml:md5,933be4be4d8d02453390a5cf32fb569f",
                     "versions.yml:md5,e49394ff09c39f6655da3d6181d9e8bd"
                 ]
             }
@@ -52,7 +50,6 @@
                 ],
                 "1": [
                     "versions.yml:md5,585288ee8fa3e54c7f72bf3c65c02f57",
-                    "versions.yml:md5,933be4be4d8d02453390a5cf32fb569f",
                     "versions.yml:md5,e49394ff09c39f6655da3d6181d9e8bd"
                 ],
                 "bam": [
@@ -66,7 +63,6 @@
                 ],
                 "versions": [
                     "versions.yml:md5,585288ee8fa3e54c7f72bf3c65c02f57",
-                    "versions.yml:md5,933be4be4d8d02453390a5cf32fb569f",
                     "versions.yml:md5,e49394ff09c39f6655da3d6181d9e8bd"
                 ]
             }

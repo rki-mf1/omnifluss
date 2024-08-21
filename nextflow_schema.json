@@ -56,8 +56,8 @@
                 "reference_selection": {
                     "type": "string",
                     "enum": [
-                        "fixed",
-                        "dynamic"
+                        "static",
+                        "mapping"
                     ]
                 },
                 "fasta": {

@@ -1,4 +1,4 @@
-process PREPARE_REFERENCE {
+process INV_PREPARE_REFERENCE {
     tag "$meta.id"
     label 'process_medium'
 
