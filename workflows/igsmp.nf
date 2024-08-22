@@ -7,6 +7,7 @@ include { FASTQ_QC_TRIMMING_ALL               } from '../subworkflows/local/fast
 include { FASTQ_TAXONOMIC_FILTERING_ALL       } from '../subworkflows/local/fastq_taxonomic_filtering_all'
 include { FASTA_PROCESS_REFERENCE_ALL         } from '../subworkflows/local/fasta_process_reference_all'
 include { FASTQ_MAP_ALL                       } from '../subworkflows/local/fastq_map_all'
+include { BAM_CALL_VARIANT_ALL                } from '../subworkflows/local/bam_call_variant_all'
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
@@ -84,7 +85,6 @@ workflow IGSMP {
     ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
     ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
     ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
-
     ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
 
     //
@@ -100,7 +100,7 @@ workflow IGSMP {
     ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
 
     //
-    // Primer clipping
+    // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
     //
     // if (! params.skip_primer_clipping) {
     // BAM_CLIP_PRIMER_ALL(
@@ -110,19 +110,17 @@ workflow IGSMP {
     // ch_versions = ch_versions.mix(BAM_CLIP_PRIMER_ALL.out.versions)
     // }
 
-        //
-        // Variant calling
-        //
-        // BAM_CALL_VARIANT_ALL(
-        //     params.varian_caller,
-        //     ch_mapping,
-        //     FASTA_SELECT_REFERENCE_ALL.out.ref,
-        //     FASTA_SELECT_REFERENCE_ALL.out.ref_index
-        // )
-        // ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
-
-        // ch_multiqc_files = ch_multiqc_files.mix(BAM_CALL_VARIANT_ALL.out.multiqc_files.collect())
-        // ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
+    //
+    // Variant calling
+    //
+    BAM_CALL_VARIANT_ALL(
+        params.variant_caller,
+        ch_mapping,
+        ch_ref,
+        ch_fai_index
+    )
+    ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
+    ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
     // Consensus calling
