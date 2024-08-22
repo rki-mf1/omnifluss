@@ -114,6 +114,11 @@
                     "description": "List of taxids to filter from the Kraken2 results.",
                     "help_text": "Multiple taxids separated with commas."
                 },
+                "reference_processing": {
+                    "type": "string",
+                    "default": "samtools_faidx",
+                    "pattern": "^((inv_prep_ref|samtools_faidx)?,?)*(?<!,)$"
+                },
                 "aligner": {
                     "type": "string",
                     "default": "bwa",
