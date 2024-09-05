@@ -1,0 +1,52 @@
+name: "bam_special_variants_case_all"
+description: Rescue high quality variants that were filtered due to lofreq's default settings.
+keywords:
+  - bam
+  - bai
+  - filter
+  - variants
+components:
+  - lofreq/callparallel
+  - lofreq/filter
+input:
+  - ch_iqbam:
+      type: map
+      description: |
+        Groovy Map containing sample's alignment file (BAM); in this special case coming from the INV lofreq variant calling subworkflow
+        Structure: [ val(meta), path(bam) ]
+  - bai:
+      type: map
+      description: |
+        Groovy Map containing sample's alignment index (BAI)
+        Structure: [ val(meta), path(bai) ]
+  - ch_ref:
+      type: map
+      description: |
+        Groovy Map containing sample's reference sequence (FASTA/FA)
+        Structure: [ val(meta), path(fasta) ]
+  - ch_ref_index:
+      type: map
+      description: |
+        Groovy Map containing sample's reference index (FAI)
+        Structure: [ val(meta), path(fai) ]
+output:
+  - vcf:
+      type: map
+      description: |
+        Groovy Map containing sample's filtered variant calls (VCF) using a custom parameter set for the lofreq variant caller
+        Structure: [ val(meta), path(vcf) ]
+  - bed:
+      type: map
+      description: |
+        Groovy Map containing sample's rescued HQ variant calls (BED)
+        Structure: [ val(meta), path(vcf) ]
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+authors:
+  - "@Krannich479"
+maintainers:
+  - "@Krannich479"

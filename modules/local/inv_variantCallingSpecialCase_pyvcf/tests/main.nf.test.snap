@@ -1,0 +1,77 @@
+{
+    "Snapshot-BED-stub": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test.spec_case.filtered"
+                    },
+                    "test.spec_case.filtered.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-05T09:06:36.472976712"
+    },
+    "Snapshot-VERSIONS-stub": {
+        "content": [
+            [
+                "versions.yml:md5,b09afe3f73825810237894aeaab9c65c"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-05T09:19:17.152066441"
+    },
+    "sarscov2 - vcf": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test2"
+                    },
+                    "test2.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-01T13:47:48.361394427"
+    },
+    "Snapshot-BED": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test.spec_case.filtered"
+                    },
+                    "test.special_case_variant_mask.bed:md5,bdd89429997e007414772c250cd704de"
+                ]
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-05T09:06:31.34079152"
+    },
+    "Snapshot-VERSIONS": {
+        "content": [
+            [
+                "versions.yml:md5,b09afe3f73825810237894aeaab9c65c"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-05T09:19:12.296023055"
+    }
+}

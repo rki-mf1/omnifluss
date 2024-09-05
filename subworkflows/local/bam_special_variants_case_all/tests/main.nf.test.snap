@@ -1,0 +1,72 @@
+{
+    "sarscov2 - bam - stub ": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.filtered.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,0ec62ff385fc621e2b8c6797a951c9a9",
+                    "versions.yml:md5,3f03ba9f662c89ac04cb9fefec09edca",
+                    "versions.yml:md5,ca634c2bca1dbac72df58f2954450e74"
+                ],
+                "bed": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.filtered.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,0ec62ff385fc621e2b8c6797a951c9a9",
+                    "versions.yml:md5,3f03ba9f662c89ac04cb9fefec09edca",
+                    "versions.yml:md5,ca634c2bca1dbac72df58f2954450e74"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-05T09:52:42.78866664"
+    },
+    "sarscov2 - bam": {
+        "content": [
+            [
+                [
+                    {
+                        "id": "test"
+                    },
+                    "test.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-08-01T10:35:02.146362427"
+    }
+}
