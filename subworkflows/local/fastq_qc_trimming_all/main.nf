@@ -3,8 +3,9 @@ include { FASTP                  } from '../../../modules/nf-core/fastp/main'
 
 workflow FASTQ_QC_TRIMMING_ALL {
     take:
-    tools     // string
-    ch_reads  // channel: [ val(meta), fastq ]
+    tools               // string
+    ch_reads            // channel: [ val(meta), fastq ]
+    fastp_adapter_fasta // path
 
     main:
     ch_trimmed_reads  = Channel.empty()
@@ -24,7 +25,7 @@ workflow FASTQ_QC_TRIMMING_ALL {
     if (tools.split(',').contains('fastp')) {
         FASTP(
             ch_reads,
-            [],
+            fastp_adapter_fasta,
             false,
             false,
             false

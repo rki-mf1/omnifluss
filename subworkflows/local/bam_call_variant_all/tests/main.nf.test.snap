@@ -1,0 +1,125 @@
+{
+    "sarscov2 - bam - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.indelqual.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.indelqual.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "2": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.normed.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.normed.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "4": [
+                    "versions.yml:md5,03d3f12fc45600a49531ffdca6340ec6",
+                    "versions.yml:md5,2bbb3ad61356fe366ce767350d36b299",
+                    "versions.yml:md5,3ee8176c6b98480d5a06b8d0e5fc2f37",
+                    "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
+                    "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
+                    "versions.yml:md5,ddbf5164dc5b4349c6f71618b3bf24f9"
+                ],
+                "bai": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.indelqual.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "bam": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.indelqual.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "tbi": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.normed.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "vcf": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.normed.vcf.gz:md5,68b329da9893e34099c7d8ad5cb9c940"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,03d3f12fc45600a49531ffdca6340ec6",
+                    "versions.yml:md5,2bbb3ad61356fe366ce767350d36b299",
+                    "versions.yml:md5,3ee8176c6b98480d5a06b8d0e5fc2f37",
+                    "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
+                    "versions.yml:md5,a3aef5bda80ccafb31e8aad82ae46fb5",
+                    "versions.yml:md5,ddbf5164dc5b4349c6f71618b3bf24f9"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-07-31T11:10:46.19393397"
+    },
+    "sarscov2 - bam": {
+        "content": [
+            [
+                "##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Raw Depth\">",
+                "##INFO=<ID=AF,Number=1,Type=Float,Description=\"Allele Frequency\">",
+                "##INFO=<ID=SB,Number=1,Type=Integer,Description=\"Phred-scaled strand bias at this position\">",
+                "##INFO=<ID=DP4,Number=4,Type=Integer,Description=\"Counts for ref-forward bases, ref-reverse, alt-forward and alt-reverse bases\">",
+                "##INFO=<ID=INDEL,Number=0,Type=Flag,Description=\"Indicates that the variant is an INDEL.\">",
+                "##INFO=<ID=CONSVAR,Number=0,Type=Flag,Description=\"Indicates that the variant is a consensus variant (as opposed to a low frequency variant).\">",
+                "##INFO=<ID=HRUN,Number=1,Type=Integer,Description=\"Homopolymer length to the right of report indel position\">",
+                "##FILTER=<ID=min_snvqual_31,Description=\"Minimum SNV Quality (Phred) 31\">",
+                "##FILTER=<ID=min_indelqual_20,Description=\"Minimum Indel Quality (Phred) 20\">",
+                "##FILTER=<ID=min_dp_10,Description=\"Minimum Coverage 10\">",
+                "##FILTER=<ID=sb_fdr,Description=\"Strand-Bias Multiple Testing Correction: fdr corr. pvalue > 0.001000\">",
+                "##FILTER=<ID=min_snvqual_43,Description=\"Minimum SNV Quality (Phred) 43\">",
+                "##bcftools_normVersion=1.20+htslib-1.20"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-07-31T11:10:21.300536264"
+    }
+}

@@ -3,13 +3,18 @@
     IMPORT MODULES / SUBWORKFLOWS / FUNCTIONS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
+include { FASTQ_QC_TRIMMING_ALL               } from '../subworkflows/local/fastq_qc_trimming_all'
+include { FASTQ_TAXONOMIC_FILTERING_ALL       } from '../subworkflows/local/fastq_taxonomic_filtering_all'
+include { FASTA_PROCESS_REFERENCE_ALL         } from '../subworkflows/local/fasta_process_reference_all'
+include { FASTQ_MAP_ALL                       } from '../subworkflows/local/fastq_map_all'
+include { BAM_CALL_VARIANT_ALL                } from '../subworkflows/local/bam_call_variant_all'
+include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
+include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
-include { FASTQ_QC_TRIMMING_ALL  } from '../subworkflows/local/fastq_qc_trimming_all'
-include { MULTIQC                } from '../modules/nf-core/multiqc/main'
-include { paramsSummaryMap       } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc   } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
+include { paramsSummaryMap                    } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML              } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText              } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +38,8 @@ workflow IGSMP {
     if (! params.skip_read_qc) {
         FASTQ_QC_TRIMMING_ALL(
             params.read_qc,
-            ch_reads
+            ch_reads,
+            params.fastp_adapter_fasta ? file(params.fastp_adapter_fasta, checkIfExists:true) : []
         )
         .trimmed_reads
         | set {ch_reads}
@@ -45,18 +51,19 @@ workflow IGSMP {
     //
     // Taxonomic classification
     //
-    // if (! params.skip_taxonomic_filtering) {
-    //     FASTQ_TAXONOMIC_FILTERING_ALL(
-    //         params.taxonomic_classifier,
-    //         params.kraken2_db,
-    //         params.kraken2_taxid_filter_list,
-    //         ch_reads
-    //     )
-    //     .filtered_reads
-    //     | set {ch_reads}
-    //     ch_multiqc_files = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
-    //     ch_versions = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
-    // }
+    if (! params.skip_taxonomic_filtering) {
+        FASTQ_TAXONOMIC_FILTERING_ALL(
+            params.taxonomic_classifier,                // string
+            ch_reads,                                   // channel: [ val(meta), fastq ]
+            params.kraken2_db,                          // string
+            params.kraken2_taxid_filter_list            // string
+        )
+        .extracted_kraken2_reads
+        | set {ch_reads}
+
+        ch_multiqc_files  = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
+        ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
+    }
 
     //
     // Reference selection
@@ -68,16 +75,32 @@ workflow IGSMP {
     // ch_versions = ch_versions.mix(FASTA_SELECT_REFERENCE_ALL.out.versions)
 
     //
-    // Mapping
+    // Reference processing
     //
-    // FASTP_MAP_ALL(
-    //
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTP_MAP_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(FASTP_MAP_ALL.out.versions)
+    FASTA_PROCESS_REFERENCE_ALL(
+        params.reference_processing,
+        params.aligner,
+        ref = tuple([id:file(params.fasta).getBaseName()], params.fasta) //TODO: Adapted to output from fasta_select_reference_all
+    )
+    ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
+    ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
+    ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
+    ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
 
     //
-    // Primer clipping
+    // Mapping
+    //
+    FASTQ_MAP_ALL(
+        params.aligner,                                                               // string
+        ch_reads,                                                                     // channel: [ val(meta), fastq ]
+        ch_ref,                                                                       // channel: [ val(meta), fasta ]
+        ch_bwa_index                                                                  // channel: [ val(meta), index ]
+    )
+    ch_mapping = FASTQ_MAP_ALL.out.bam
+    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+
+    //
+    // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
     //
     // if (! params.skip_primer_clipping) {
     // BAM_CLIP_PRIMER_ALL(
@@ -90,20 +113,29 @@ workflow IGSMP {
     //
     // Variant calling
     //
-    // BAM_CALL_VARIANT_ALL(
-    //
-    // )
-    // ch_multiqc_files = ch_multiqc_files.mix(BAM_CALL_VARIANT_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
+    BAM_CALL_VARIANT_ALL(
+        params.variant_caller,
+        ch_mapping,
+        ch_ref,
+        ch_fai_index
+    )
+    ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
+    ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
     // Consensus calling
     //
     // VCF_CALL_CONSENSUS_ALL(
-    //
+    //     params.consensus_caller,
+    //     ch_ref,                             // channel: [ val(meta), fasta ]
+    //     BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
+    //     BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
+    //     []                                  // channel: [ val(meta), bed   ] (output from R_filter_variants_special_variant_case)
     // )
-    // ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+
+    //  ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
+    //  ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+
 
     //
     // Genome QC
@@ -167,6 +199,11 @@ workflow IGSMP {
             )
         )
 
+
+        // ch_multiqc_files.view()
+        // ch_multiqc_config.view()
+        // ch_multiqc_custom_config.view()
+        // ch_multiqc_logo.view()
         MULTIQC (
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),

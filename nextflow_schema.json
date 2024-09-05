@@ -56,8 +56,8 @@
                 "reference_selection": {
                     "type": "string",
                     "enum": [
-                        "fixed",
-                        "dynamic"
+                        "static",
+                        "mapping"
                     ]
                 },
                 "fasta": {
@@ -93,13 +93,17 @@
                     "description": "Tools to use for read QC.",
                     "help_text": "Multiple tools separated with commas."
                 },
+                "fastp_adapter_fasta": {
+                    "type": "string",
+                    "description": "Path to a custom adapter FASTA file for fastp."
+                },
                 "taxonomic_classifier": {
                     "type": "string",
                     "enum": [
                         "kraken2"
                     ],
                     "default": "kraken2",
-                    "description": "Tool to use for taxonomic classifiacation and fltering."
+                    "description": "Tool to use for taxonomic classification and filtering."
                 },
                 "kraken2_db": {
                     "type": "string",
@@ -110,13 +114,16 @@
                     "description": "List of taxids to filter from the Kraken2 results.",
                     "help_text": "Multiple taxids separated with commas."
                 },
+                "reference_processing": {
+                    "type": "string",
+                    "default": "samtools_faidx",
+                    "pattern": "^((inv_prep_ref|samtools_faidx)?,?)*(?<!,)$"
+                },
                 "aligner": {
                     "type": "string",
-                    "enum": [
-                        "bwa"
-                    ],
                     "default": "bwa",
-                    "description": "Tool to use for read aligment."
+                    "description": "Tool to use for read alignment.",
+                    "pattern": "^((bwa|picard_remove_duplicates)?,?)*(?<!,)$"
                 },
                 "primer_clipper": {
                     "type": "string",
@@ -126,13 +133,14 @@
                     ],
                     "description": "Tool to use for primer clipping."
                 },
-                "varian_caller": {
+                "variant_caller": {
                     "type": "string",
                     "enum": [
                         "freebayes",
                         "lofreq"
                     ],
-                    "description": "Tool to use for variant detection."
+                    "description": "Tool to use for variant detection.",
+                    "default": "lofreq"
                 },
                 "consensus_caller": {
                     "type": "string",
@@ -148,7 +156,8 @@
                 },
                 "skip_taxonomic_filtering": {
                     "type": "boolean",
-                    "description": "Skip the taxonomic classifiaction and filtering of reads"
+                    "description": "Skip the taxonomic classification and filtering of reads",
+                    "default": true
                 },
                 "skip_primer_clipping": {
                     "type": "boolean",
@@ -157,6 +166,19 @@
                 "skip_multiqc": {
                     "type": "boolean",
                     "description": "Skip MultiQC report generation"
+                }
+            }
+        },
+        "thresholds": {
+            "title": "Thresholds",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "cns_mincov": {
+                    "type": "integer",
+                    "description": "Minimum number of reads to call reference or alternate alleles",
+                    "minimum": 0
                 }
             }
         },
@@ -351,6 +373,9 @@
         },
         {
             "$ref": "#/definitions/tools_and-step-options"
+        },
+        {
+            "$ref": "#/definitions/thresholds"
         },
         {
             "$ref": "#/definitions/institutional_config_options"

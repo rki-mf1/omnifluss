@@ -18,6 +18,7 @@ nextflow_workflow {
 
     // Test name preferably indicating the test-data and file-format used
     test("sarscov2 - single_end - stub") {
+        tag "stub"
 
         // Activate the stub mode for nextflow
         options '-stub'
@@ -26,9 +27,11 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = 'fastqc,fastp'
-                input[1] = [ [ id:'test', single_end:true ], // meta map
-                            [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true) ]
-                        ]
+                input[1] = Channel.of([
+                    [ id:'test', single_end:true ], // meta map
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true) ]
+                ])
+                input[2] = []
                 """
             }
         }
@@ -42,6 +45,7 @@ nextflow_workflow {
     }
 
     test("sarscov2 - paired_end - stub") {
+        tag "stub"
 
         // Activate the stub mode for nextflow
         options '-stub'
@@ -50,10 +54,12 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = 'fastqc,fastp'
-                input[1] = [ [ id:'test', single_end:false ], // meta map
-                            [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
-                            file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
-                        ]
+                input[1] = Channel.of([
+                    [ id:'test', single_end:false ], // meta map
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
+                ])
+                input[2] = []
                 """
             }
         }
