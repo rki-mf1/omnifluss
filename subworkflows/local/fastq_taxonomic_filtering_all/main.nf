@@ -21,7 +21,7 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         )
         ch_kraken2_report          = FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.kraken2_report
         ch_extracted_kraken2_reads = FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.extracted_kraken2_reads
-        ch_multiqc_files           = ch_multiqc_files.mix(FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.multiqc_files.collect{it[1]})
+        ch_multiqc_files           = ch_multiqc_files.mix(FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.multiqc_files.collect())
         ch_versions                = ch_versions.mix(FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.versions)
     }
     emit:
