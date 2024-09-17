@@ -1,5 +1,6 @@
 include { MINIMAP2_ALIGN as MINIMAP2_SEGMENT_DB }   from '../../../modules/nf-core/minimap2/align/main'
 include { TOP5_REFERENCES }                         from '../../../modules/local/inv_top5references_r/main'
+include { SEQKIT_GREP }                             from '../../../modules/nf-core/seqkit/grep/main'
 
 
 workflow FASTA_REFERENCE_SELECTION_ALL {
@@ -23,6 +24,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
 
     } else if (reference_selection == "mapping") {
 
+        // ********** STEP 1: Align reads to Ref DB **********
         if (tools.split(',').contains('minimap2')) {
             MINIMAP2_SEGMENT_DB(
                 ch_reads,
@@ -36,9 +38,19 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             ch_paf      = MINIMAP2_SEGMENT_DB.out.paf
         }
 
+        // ********** STEP 2: Get top5 reference IDs **********
         TOP5_REFERENCES(ch_paf)
-        ch_versions = ch_versions.mix(TOP5_REFERENCES.out.versions.first())
-        ch_top5_txt = TOP5_REFERENCES.out.txt
+        ch_versions     = ch_versions.mix(TOP5_REFERENCES.out.versions.first())
+        ch_top5_txt     = TOP5_REFERENCES.out.txt
+        top5_file_str   = ch_top5_txt.map{ it[1] }  // string; required by nf-core SEQKIT_GREP
+
+        // ********** STEP 3: Get top5 reference sequences by ID **********
+        SEQKIT_GREP(
+            ch_segment_db,
+            top5_file_str
+        )
+        ch_versions     = ch_versions.mix(SEQKIT_GREP.out.versions.first())
+        ch_top5_fasta   = SEQKIT_GREP.out.filter
 
     } else {
 

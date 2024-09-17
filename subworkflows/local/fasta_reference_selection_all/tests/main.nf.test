@@ -42,5 +42,7 @@ nextflow_workflow {
                 { assert snapshot(workflow.out).match()}
             )
         }
+
+        // TODO: stub
     }
 }

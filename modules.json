@@ -116,6 +116,11 @@
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["bam_stats_samtools"]
                     },
+                    "seqkit/grep": {
+                        "branch": "master",
+                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "installed_by": ["modules"]
+                    },
                     "tabix/tabix": {
                         "branch": "master",
                         "git_sha": "9502adb23c0b97ed8e616bbbdfa73b4585aec9a1",
