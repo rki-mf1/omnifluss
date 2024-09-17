@@ -1,32 +1,54 @@
-include { MINIMAP2_ALIGN as MINIMAP2_SEGMENT_DB } from '../../../modules/nf-core/minimap2/align/main'
+include { MINIMAP2_ALIGN as MINIMAP2_SEGMENT_DB }   from '../../../modules/nf-core/minimap2/align/main'
+include { TOP5_REFERENCES }                         from '../../../modules/local/inv_top5references_r/main'
+
 
 workflow FASTA_REFERENCE_SELECTION_ALL {
 
     take:
-    tools           // String
-    ch_reads        // channel: [ val(meta), [ fastq ] ]
-    ch_segment_db   // channel: [ val(meta), [ fasta ] ]
+    tools                   // String
+    reference_selection     // String
+    ch_reads                // channel: [ val(meta), [ fastq ] ]
+    ch_segment_db           // channel: [ val(meta), [ fasta ] ]
 
 
     main:
     ch_versions = Channel.empty()
     ch_paf      = Channel.empty()
+    ch_top5_txt = Channel.empty()
 
-    if (tools.split(',').contains('minimap2')) {
-        MINIMAP2_SEGMENT_DB(
-            ch_reads,
-            ch_segment_db,
-            false,
-            [],
-            false,
-            false
-        )
-        ch_versions = ch_versions.mix(MINIMAP2_SEGMENT_DB.out.versions.first())
-        ch_paf      = MINIMAP2_SEGMENT_DB.out.paf
+    if (reference_selection == "static") {
+
+        // TODO
+        //ref = tuple([id:file(params.fasta).getBaseName()], ref_path) // channel: [ val(meta), fasta ]
+
+    } else if (reference_selection == "mapping") {
+
+        if (tools.split(',').contains('minimap2')) {
+            MINIMAP2_SEGMENT_DB(
+                ch_reads,
+                ch_segment_db,
+                false,
+                [],
+                false,
+                false
+            )
+            ch_versions = ch_versions.mix(MINIMAP2_SEGMENT_DB.out.versions.first())
+            ch_paf      = MINIMAP2_SEGMENT_DB.out.paf
+        }
+
+        TOP5_REFERENCES(ch_paf)
+        ch_versions = ch_versions.mix(TOP5_REFERENCES.out.versions.first())
+        ch_top5_txt = TOP5_REFERENCES.out.txt
+
+    } else {
+
+        {exit 1, "invalid value supplied for variable 'reference_selection' !"}
+
     }
 
     emit:
     paf         = ch_paf            // channel: [ val(meta), [paf] ]
+    txt         = ch_top5_txt       // channel: [ val(meta), [txt] ]
     versions    = ch_versions       // channel: [ versions.yml ]
 }
 

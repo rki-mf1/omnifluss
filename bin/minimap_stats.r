@@ -9,7 +9,10 @@
 #   Read a sample's minimap2 PAF file (sample-segmentDB alignment) and return the five best references in terms of number of residue matches
 ###################
 
-library(data.table)
+if (!require(data.table)) {
+  install.packages("data.table")
+  library(data.table)
+}
 setDTthreads(threads = 10)
 
 # I/O
@@ -43,7 +46,7 @@ read_minimap_output <- function(sample){
 }
 
 if (args[1] == "--version"){
-  cat("0.1.1\n")
+  cat("0.2.0\n")
 } else {
   read_minimap_output(sample_in)
 }

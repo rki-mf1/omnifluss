@@ -4,8 +4,8 @@ process TOP5_REFERENCES {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/r-base:4.2.1' :
-        'biocontainers/r-base:4.2.1' }"
+        'docker.io/rkimf1/r-covpipe:89835bd--c37db5b' :
+        'docker.io/rkimf1/r-covpipe:89835bd--c37db5b' }"
 
     input:
     tuple val(meta), path(paf)

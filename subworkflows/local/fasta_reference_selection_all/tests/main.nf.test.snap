@@ -1,0 +1,57 @@
+{
+    "sarscov2 - fastq.gz - paired_end": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "genome.fasta.test.minimap.paf:md5,88e9f7ce9c8e5a1992aac49e6552f528"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "genome.fasta.test_best_refs.txt:md5,3a9ea6d336e113a74d7fdca5e7b623fc"
+                    ]
+                ],
+                "2": [
+                    "versions.yml:md5,64b5fde35f6b151ada57e3c171059f54",
+                    "versions.yml:md5,d74eecfc1cfd0169300a82cc831135b6"
+                ],
+                "paf": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "genome.fasta.test.minimap.paf:md5,88e9f7ce9c8e5a1992aac49e6552f528"
+                    ]
+                ],
+                "txt": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "genome.fasta.test_best_refs.txt:md5,3a9ea6d336e113a74d7fdca5e7b623fc"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,64b5fde35f6b151ada57e3c171059f54",
+                    "versions.yml:md5,d74eecfc1cfd0169300a82cc831135b6"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2024-09-17T12:28:25.066722454"
+    }
+}
