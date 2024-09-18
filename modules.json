@@ -45,6 +45,11 @@
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["modules"]
                     },
+                    "gunzip": {
+                        "branch": "master",
+                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "installed_by": ["modules"]
+                    },
                     "kraken2/kraken2": {
                         "branch": "master",
                         "git_sha": "ca87ad032a62f025f0c373facacef2df0c5411b2",
@@ -84,6 +89,11 @@
                     "picard/markduplicates": {
                         "branch": "master",
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
+                        "installed_by": ["modules"]
+                    },
+                    "samtools/coverage": {
+                        "branch": "master",
+                        "git_sha": "763d4b5c05ffda3ac1ac969dc67f7458cfb2eb1d",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {

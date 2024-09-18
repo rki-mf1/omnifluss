@@ -11,16 +11,81 @@
                     ]
                 ],
                 "1": [
-                    
+                    [
+                        {
+                            "id": "test_ref"
+                        },
+                        "test_ref.top5References.fa.fai:md5,956209e62136b643e308822026bce50e"
+                    ]
                 ],
                 "2": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.minimap.top5.bam:md5,29a0fe45458d22f78fdd5c392d9826fa"
+                    ]
+                ],
+                "3": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.minimap.top5.bam.bai:md5,388d3a18964a2293f8ff9e78e38d4a7a"
+                    ]
+                ],
+                "4": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.coverage.txt:md5,a25ee958a3018a70beddb4da464ef348"
+                    ]
+                ],
+                "5": [
+                    "versions.yml:md5,19cd29541bacb9270d4df659fc64902f",
                     "versions.yml:md5,2322aa59dd1bb77c5c24ddd6165ccc76",
                     "versions.yml:md5,3aea2ae5beeed299998d4b8b9e384928",
                     "versions.yml:md5,64b5fde35f6b151ada57e3c171059f54",
                     "versions.yml:md5,d74eecfc1cfd0169300a82cc831135b6"
                 ],
+                "coverage_txt": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.coverage.txt:md5,a25ee958a3018a70beddb4da464ef348"
+                    ]
+                ],
+                "top5bai": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.minimap.top5.bam.bai:md5,388d3a18964a2293f8ff9e78e38d4a7a"
+                    ]
+                ],
                 "top5bam": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.minimap.top5.bam:md5,29a0fe45458d22f78fdd5c392d9826fa"
+                    ]
+                ],
+                "top5fai": [
+                    [
+                        {
+                            "id": "test_ref"
+                        },
+                        "test_ref.top5References.fa.fai:md5,956209e62136b643e308822026bce50e"
+                    ]
                 ],
                 "top5fasta": [
                     [
@@ -31,6 +96,7 @@
                     ]
                 ],
                 "versions": [
+                    "versions.yml:md5,19cd29541bacb9270d4df659fc64902f",
                     "versions.yml:md5,2322aa59dd1bb77c5c24ddd6165ccc76",
                     "versions.yml:md5,3aea2ae5beeed299998d4b8b9e384928",
                     "versions.yml:md5,64b5fde35f6b151ada57e3c171059f54",
@@ -42,6 +108,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-09-18T14:08:29.722175463"
+        "timestamp": "2024-09-18T18:20:24.287525029"
     }
 }
