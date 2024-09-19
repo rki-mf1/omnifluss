@@ -46,10 +46,20 @@
                     ]
                 ],
                 "5": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.depth.tsv:md5,122381298ce5c7d5ccf3b570d4b0f2b1"
+                    ]
+                ],
+                "6": [
                     "versions.yml:md5,19cd29541bacb9270d4df659fc64902f",
                     "versions.yml:md5,2322aa59dd1bb77c5c24ddd6165ccc76",
                     "versions.yml:md5,3aea2ae5beeed299998d4b8b9e384928",
                     "versions.yml:md5,64b5fde35f6b151ada57e3c171059f54",
+                    "versions.yml:md5,924028c59b10a806e2ffd118f9cbdcd8",
                     "versions.yml:md5,d74eecfc1cfd0169300a82cc831135b6"
                 ],
                 "coverage_txt": [
@@ -59,6 +69,15 @@
                             "single_end": false
                         },
                         "test.coverage.txt:md5,a25ee958a3018a70beddb4da464ef348"
+                    ]
+                ],
+                "depth_tsv": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.depth.tsv:md5,122381298ce5c7d5ccf3b570d4b0f2b1"
                     ]
                 ],
                 "top5bai": [
@@ -100,6 +119,7 @@
                     "versions.yml:md5,2322aa59dd1bb77c5c24ddd6165ccc76",
                     "versions.yml:md5,3aea2ae5beeed299998d4b8b9e384928",
                     "versions.yml:md5,64b5fde35f6b151ada57e3c171059f54",
+                    "versions.yml:md5,924028c59b10a806e2ffd118f9cbdcd8",
                     "versions.yml:md5,d74eecfc1cfd0169300a82cc831135b6"
                 ]
             }
@@ -108,6 +128,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-09-18T18:20:24.287525029"
+        "timestamp": "2024-09-19T10:28:47.89371633"
     }
 }

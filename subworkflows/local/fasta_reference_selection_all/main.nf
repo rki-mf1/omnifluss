@@ -5,6 +5,7 @@ include { MINIMAP2_ALIGN as MINIMAP2_SEGMENT_TOP5 } from '../../../modules/nf-co
 include { GUNZIP }                                  from '../../../modules/nf-core/gunzip/main'
 include { SAMTOOLS_FAIDX }                          from '../../../modules/nf-core/samtools/faidx/main'
 include { SAMTOOLS_COVERAGE }                       from '../../../modules/nf-core/samtools/coverage/main'
+include { SAMTOOLS_DEPTH }                          from '../../../modules/nf-core/samtools/depth/main'
 
 workflow FASTA_REFERENCE_SELECTION_ALL {
 
@@ -23,6 +24,8 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
     ch_top5_fai     = Channel.empty()
     ch_top5_bam     = Channel.empty()
     ch_top5_bai     = Channel.empty()
+    ch_coverage_txt = Channel.empty()
+    ch_depth_tsv    = Channel.empty()
 
     if (reference_selection == "static") {
 
@@ -85,7 +88,6 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
                     .join(ch_top5_bai)
                     .map{ it -> [ it[0], it[1], it[2] ] }
                              // [ val(meta), [bam], [bai] ]
-        ch_tmp_bambai.view()
         SAMTOOLS_COVERAGE(
             ch_tmp_bambai,
             ch_top5_fasta,
@@ -93,6 +95,14 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         )
         ch_versions     = ch_versions.mix(SAMTOOLS_COVERAGE.out.versions.first())
         ch_coverage_txt = SAMTOOLS_COVERAGE.out.coverage
+
+        // ********** STEP 5.3 Depth stats **********
+        SAMTOOLS_DEPTH(
+            ch_top5_bam,
+            [[],[]]
+        )
+        ch_versions     = ch_versions.mix(SAMTOOLS_DEPTH.out.versions.first())
+        ch_depth_tsv    = SAMTOOLS_DEPTH.out.tsv
 
     } else {
 
@@ -108,6 +118,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
     top5bam         = ch_top5_bam       // channel: [ val(meta), [bam] ]
     top5bai         = ch_top5_bai       // channel: [ val(meta), [bai] ]
     coverage_txt    = ch_coverage_txt   // channel: [ val(meta), [txt] ]
+    depth_tsv       = ch_depth_tsv      // channel: [ val(meta), [tsv] ]
     versions        = ch_versions       // channel: [ versions.yml ]
 }
 
