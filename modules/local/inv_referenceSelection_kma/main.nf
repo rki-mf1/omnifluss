@@ -25,15 +25,16 @@ process KMA {
     task.ext.when == null || task.ext.when
 
     script:
-    def args        = task.ext.args ?: ''
-    def prefix      = task.ext.prefix ?: "${meta.id}.kma"
-    def input_style = interleaved ? "-int ${reads}" : "-ipe ${reads}"
-    def create_mat  = mat_format ? "-matrix" : ''
+    def args            = task.ext.args ?: ''
+    def prefix          = task.ext.prefix ?: "${meta.id}.kma"
+    def index_prefix    = task.ext.index_prefix ?: "${meta2.id}.db"
+    def input_style     = interleaved ? "-int ${reads}" : "-ipe ${reads}"
+    def create_mat      = mat_format ? "-matrix" : ''
     """
     kma \\
         ${input_style} \\
         -o ${prefix} \\
-        -t_db ${index} \\
+        -t_db ${index_prefix} \\
         ${create_mat} \\
         $args
 
