@@ -11,8 +11,8 @@ process KMA_INDEX {
     tuple val(meta),  path(fasta)
 
     output:
-    tuple val(meta), path("*.db"),  emit: db
-    path "versions.yml",            emit: versions
+    tuple val(meta), path("${meta.id}.db.*"),   emit: db
+    path "versions.yml",                        emit: versions
 
     when:
     task.ext.when == null || task.ext.when
