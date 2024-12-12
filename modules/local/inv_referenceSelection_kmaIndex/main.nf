@@ -36,7 +36,10 @@ process KMA_INDEX {
     stub:
     def prefix  = task.ext.prefix ?: "${meta.id}.db"
     """
-    touch ${prefix}
+    touch ${prefix}.comp.b
+    touch ${prefix}.length.b
+    touch ${prefix}.name
+    touch ${prefix}.seq.b
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
