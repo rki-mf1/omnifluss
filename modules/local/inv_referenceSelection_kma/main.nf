@@ -1,6 +1,6 @@
 process KMA {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_low'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -14,11 +14,12 @@ process KMA {
     val mat_format
 
     output:
-    tuple val(meta), path("*.res"),     emit: res
-    tuple val(meta), path("*.fsa"),     emit: fsa
-    tuple val(meta), path("*.aln"),     emit: aln
-    tuple val(meta), path("*.frag.gz"), emit: frag
-    tuple val(meta), path("*.mat.gz"),  optional: true, emit: mat
+    tuple val(meta), path("*.res"),     optional: true, emit: res
+    tuple val(meta), path("*.fsa"),     optional: true, emit: fsa
+    tuple val(meta), path("*.aln"),     optional: true, emit: aln
+    tuple val(meta), path("*.frag.gz"), optional: true, emit: frag
+    tuple val(meta), path("*.mat.gz"),  optional: true, emit: mat   // if mat_format == true
+    tuple val(meta), path("*.spa"),     optional: true, emit: spa   // if ext.args = '-Sparse' (only output in this case)
     path "versions.yml"               , emit: versions
 
     when:
@@ -26,15 +27,16 @@ process KMA {
 
     script:
     def args            = task.ext.args ?: ''
-    def prefix          = task.ext.prefix ?: "${meta.id}.kma"
-    def index_prefix    = task.ext.index_prefix ?: "${meta2.id}.db"
+    def prefix          = task.ext.prefix ?: "${meta.id}.${meta2.id}.kma"
     def input_style     = interleaved ? "-int ${reads}" : "-ipe ${reads}"
     def create_mat      = mat_format ? "-matrix" : ''
     """
+    INDEX=`find -L ./ -name "*.name" | sed 's/\\.name\$//'`
+
     kma \\
         ${input_style} \\
         -o ${prefix} \\
-        -t_db ${index_prefix} \\
+        -t_db \$INDEX \\
         ${create_mat} \\
         $args
 
@@ -45,7 +47,7 @@ process KMA {
     """
 
     stub:
-    def prefix = task.ext.prefix ?: "${meta.id}.kma"
+    def prefix      = task.ext.prefix ?: "${meta.id}.${meta2.id}.kma"
     def create_mat  = mat_format ? "touch ${prefix}.mat.gz" : ''
     """
     touch ${prefix}.res \\
