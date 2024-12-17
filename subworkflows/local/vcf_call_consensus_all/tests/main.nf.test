@@ -10,7 +10,6 @@ nextflow_workflow {
     tag "subworkflows/vcf_call_consensus_all"
     tag "bedtools"
     tag "bcftools"
-    tag "biopython"
     tag "pyvcf"
 
 
@@ -20,15 +19,19 @@ nextflow_workflow {
             workflow {
                 """
                 input[0] = "bcftools"
-                input[1] = Channel.of([ 
+                input[1] = Channel.value([
+                    [ id: "ref", single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
+                ])
+                input[2] = Channel.of([ 
                     [ id:'test', single_end:false],
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true) ]
                 ]  )         
-                input[2] = Channel.of([ 
+                input[3] = Channel.of([ 
                     [ id:'test', single_end:false],
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.bam', checkIfExists: true) ]
                 ])
-                input[3] = Channel.of([ 
+                input[4] = Channel.of([ 
                     [ id:'test', single_end:false],
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bedgraph/test.bedgraph', checkIfExists: true) ]
                 ])

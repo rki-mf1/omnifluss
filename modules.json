@@ -7,7 +7,7 @@
                 "nf-core": {
                     "bcftools/consensus": {
                         "branch": "master",
-                        "git_sha": "682f789f93070bd047868300dd018faf3d434e7c",
+                        "git_sha": "7f0ad5e597d8f3567d191d9b24098f1595f3cc70",
                         "installed_by": ["modules"]
                     },
                     "bcftools/filter": {
@@ -69,6 +69,11 @@
                     "lofreq/callparallel": {
                         "branch": "master",
                         "git_sha": "94e871f884efe963381a04e173f21924c9e9aba2",
+                        "installed_by": ["modules"]
+                    },
+                    "lofreq/filter": {
+                        "branch": "master",
+                        "git_sha": "5f94b4ab56234d47814df6aa8e7df6a4bd139b44",
                         "installed_by": ["modules"]
                     },
                     "lofreq/indelqual": {
