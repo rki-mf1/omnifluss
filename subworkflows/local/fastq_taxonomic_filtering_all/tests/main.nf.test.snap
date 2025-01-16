@@ -21,7 +21,9 @@
                     ]
                 ],
                 "2": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    [
+                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "3": [
                     "versions.yml:md5,069d28ae8ba2c11ddb0fa5e3ec81abde",
@@ -46,7 +48,9 @@
                     ]
                 ],
                 "multiqc_files": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    [
+                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "versions": [
                     "versions.yml:md5,069d28ae8ba2c11ddb0fa5e3ec81abde",
@@ -58,7 +62,7 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-05T10:51:28.700025021"
+        "timestamp": "2024-09-03T12:16:40.793014699"
     },
     "sarscov2 - paired_end - stub": {
         "content": [
@@ -85,7 +89,9 @@
                     ]
                 ],
                 "2": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    [
+                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "3": [
                     "versions.yml:md5,069d28ae8ba2c11ddb0fa5e3ec81abde",
@@ -113,7 +119,9 @@
                     ]
                 ],
                 "multiqc_files": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    [
+                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "versions": [
                     "versions.yml:md5,069d28ae8ba2c11ddb0fa5e3ec81abde",
@@ -125,6 +133,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-05T10:51:36.29297866"
+        "timestamp": "2024-09-03T12:16:48.995338786"
     }
 }

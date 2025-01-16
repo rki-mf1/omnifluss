@@ -1,14 +1,12 @@
 name: "FASTQ_MAP_ALL"
-description: Index a reference, map the reads against it and sort the resulting bam file
+description: Map the reads against the reference and sort the resulting bam file
 keywords:
   - fastq
-  - indexing
   - mapping
   - sorting
   - bwa
   - samtools
 components:
-  - bwa_index
   - fastq_align_bwa
 input:
   - meta:
@@ -28,6 +26,9 @@ input:
   - reference:
       type: file
       description: (Multi) Fasta file used as the reference
+  - index:
+      type: directory
+      description: results from bwa index
 output:
   - meta:
       type: map
