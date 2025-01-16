@@ -1,5 +1,14 @@
 #!/usr/bin/env Rscript
 
+################### Note: This legacy code is not used anomore!
+################### It was used when reference selection was done with Minimap2.
+
+ #        #######    ###       #      ##### #     #
+ #        #        #          # #    #       #   # 
+ #        ###     #   ####   #####   #        # #  
+ #        #        #    #   #     #  #         #   
+ ######## #######   ####   #       #  #####    #   
+
 ###################
 # Maintainer
 #   @krannich479
