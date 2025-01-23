@@ -12,6 +12,7 @@ workflow FASTQ_MAP_ALL {
 
     main:
     ch_bam      = Channel.empty()
+    ch_bai      = Channel.empty()
     ch_versions = Channel.empty()
 
     if (tools.split(',').contains('bwa')) {
@@ -23,6 +24,7 @@ workflow FASTQ_MAP_ALL {
             ch_ref          // channel: [ val(meta), fasta ]
         )
         ch_bam          = FASTQ_ALIGN_BWA.out.bam
+        ch_bai          = FASTQ_ALIGN_BWA.out.bai
         ch_versions     = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     }
 
@@ -38,6 +40,7 @@ workflow FASTQ_MAP_ALL {
 
     emit:
     bam           = ch_bam
+    bai           = ch_bai
     versions      = ch_versions
 
 }
