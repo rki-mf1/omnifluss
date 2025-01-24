@@ -175,7 +175,7 @@
             "description": "",
             "default": "20",
             "properties": {
-                "cns_mincov": {
+                "consensus_mincov": {
                     "type": "integer",
                     "description": "Minimum number of reads to call reference or alternate alleles",
                     "minimum": 0
