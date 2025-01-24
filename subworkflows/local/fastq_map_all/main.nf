@@ -1,7 +1,7 @@
 
 include { FASTQ_ALIGN_BWA        } from '../../nf-core/fastq_align_bwa/main'
 include { SAMTOOLS_FAIDX         } from '../../../modules/nf-core/samtools/faidx/main'
-include { PICARD_MARKDUPLICATES  } from '../../../modules/nf-core/picard/markduplicates/main'
+include { BAM_MARKDUPLICATES_PICARD } from '../../nf-core/bam_markduplicates_picard/main'
 
 workflow FASTQ_MAP_ALL {
     take:
@@ -29,13 +29,14 @@ workflow FASTQ_MAP_ALL {
     }
 
     if (tools.split(',').contains('picard_remove_duplicates')) {
-        PICARD_MARKDUPLICATES(
+        BAM_MARKDUPLICATES_PICARD(
             ch_bam,         // channel: [ val(meta), bam ]
             [[], []],
-            [[], []]        // channel: [ val(meta), index ]
+            [[], []]
         )
-        ch_bam      = PICARD_MARKDUPLICATES.out.bam
-        ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
+        ch_bam      = BAM_MARKDUPLICATES_PICARD.out.bam
+        ch_bai      = BAM_MARKDUPLICATES_PICARD.out.bai
+        ch_versions = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions.first())
     }
 
     emit:
