@@ -1,44 +1,104 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
 name: "fasta_reference_selection_all"
-## TODO nf-core: Add a description of the subworkflow and list keywords
-description: Sort SAM/BAM/CRAM file
+description: This subworkflow provides a reference genome to the main workflow. A reference genome can either be provided by user input or automatically determined from a set of genomes.
 keywords:
-  - sort
-  - bam
-  - sam
-  - cram
-## TODO nf-core: Add a list of the modules and/or subworkflows used in the subworkflow
+  - fasta
+  - reference
+  - selection
+  - kma
 components:
-  - samtools/sort
-  - samtools/index
-## TODO nf-core: List all of the channels used as input with a description and their structure
+  - kma/index
+  - kma/kma
+  - seqkit/grep
+  - cat/cat
 input:
-  - ch_bam:
+  - tools:
+      type: string
+      description: |
+        Comma-separated list of tool names that are used for this task
+  - reference_selection:
+      type: string
+      description: |
+        Mode for reference selection.
+      pattern: "{auto/static}"
+  - reference_db_path:
+      type: string
+      description: |
+        Path to the directory of referernce (multi-)FASTA files.
+        There are two types of multiplicity that can be used in this directory:
+        (1) A FASTA file in the directory can have multiple genome sequences. In that case,
+            the "auto" reference selection mode will determine one genome sequence with
+            the highest similarity score compared to the provided reads. This highest scoring
+            reference sequence is used for the downstream workflow.
+        (2) The directory can contain multiple FASTA files. Some species have their genome
+            partitioned into chromosomes or segments. In this case, the subworkflow expects
+            one FASTA file per chromosome/segment. Each FASTA file again can contain multiple
+            sequences and is then subject to the selection process of (1).
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - ch_reads:
       type: file
       description: |
-        The input channel containing the BAM/CRAM/SAM files
-        Structure: [ val(meta), path(bam) ]
-      pattern: "*.{bam/cram/sam}"
+        List of two input FastQ files for paired-end NGS data.
 ## TODO nf-core: List all of the channels used as output with a descriptions and their structure
 output:
-  - bam:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the reference sequence identifier. Might be a genome, chromosome, or segment.
+        e.g. [ id:'Chr1' ]
+  - index:
+      type: list
+      description: |
+        List of index files per chromosome/segment.
+        Structure: [ val(meta), path(index) ]
+      pattern: "*.{comp.b,length.b,name,seq.b}"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the sample identifier.
+        e.g. [ id: 'NA12878' ]
+  - kma:
       type: file
       description: |
-        Channel containing BAM files
-        Structure: [ val(meta), path(bam) ]
-      pattern: "*.bam"
-  - bai:
+        File containing the ranking of top matching references.
+        Structure: [ val(meta), path(spa) ]
+      pattern: "*.kma.spa"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the sample identifier.
+        e.g. [ id: 'NA12878' ]
+  - top1ids:
       type: file
       description: |
-        Channel containing indexed BAM (BAI) files
-        Structure: [ val(meta), path(bai) ]
-      pattern: "*.bai"
-  - csi:
+        File containing the top ranked genome ID or top ranked ID per segment.
+        Structure: [ val(meta), path(txt) ]
+      pattern: "*.txt"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the reference sequence identifier. Might be a genome, chromosome, or segment.
+        e.g. [ id: 'Chr1' ]
+  - reference_fastas:
       type: file
       description: |
-        Channel containing CSI files
-        Structure: [ val(meta), path(csi) ]
-      pattern: "*.csi"
+        File containing the genome or segment sequences.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fasta"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the sample identifier.
+        e.g. [ id: 'NA12878' ]
+  - final_topRefs:
+      type: file
+      description: |
+        File containing the sequence of the top-reanked genome or segments.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fa.gz"
   - versions:
       type: file
       description: |
