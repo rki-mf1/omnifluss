@@ -161,7 +161,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
                 }
                 .set { ch_reference_fastas }
 
-            pattern = ch_top1ids.map { meta, file -> return file }      // need only the file here for SEQKIT_GREP
+            pattern = ch_top1ids.map { _meta, file -> return file }      // need only the file here for SEQKIT_GREP
             SEQKIT_GREP(
                 ch_reference_fastas,
                 pattern
