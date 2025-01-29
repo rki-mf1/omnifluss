@@ -8,6 +8,7 @@ include { FASTQ_TAXONOMIC_FILTERING_ALL       } from '../subworkflows/local/fast
 include { FASTA_PROCESS_REFERENCE_ALL         } from '../subworkflows/local/fasta_process_reference_all'
 include { FASTQ_MAP_ALL                       } from '../subworkflows/local/fastq_map_all'
 include { BAM_CALL_VARIANT_ALL                } from '../subworkflows/local/bam_call_variant_all'
+include { BAM_SPECIAL_VARIANTS_CASE_ALL       } from '../subworkflows/local/bam_special_variants_case_all'
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
@@ -97,7 +98,9 @@ workflow IGSMP {
         ch_bwa_index                                                                  // channel: [ val(meta), index ]
     )
     ch_mapping = FASTQ_MAP_ALL.out.bam
+    ch_mapping_index = FASTQ_MAP_ALL.out.bai
     ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+    // ch_multiqc_files mark duplicates, samtools stats?
 
     //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
@@ -123,18 +126,32 @@ workflow IGSMP {
     ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
+    // Special INV variant calling
+    //
+    ch_rescued_variants = Channel.empty()
+    if (workflow.profile.contains("INV")) {
+        BAM_SPECIAL_VARIANTS_CASE_ALL(
+            ch_mapping,
+            ch_mapping_index,
+            ch_ref,
+            ch_fai_index
+        )
+        ch_rescued_variants = BAM_SPECIAL_VARIANTS_CASE_ALL.out.bed
+    }
+
+    //
     // Consensus calling
     //
-    // VCF_CALL_CONSENSUS_ALL(
-    //     params.consensus_caller,
-    //     ch_ref,                             // channel: [ val(meta), fasta ]
-    //     BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
-    //     BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
-    //     []                                  // channel: [ val(meta), bed   ] (output from R_filter_variants_special_variant_case)
-    // )
+    VCF_CALL_CONSENSUS_ALL(
+        params.consensus_caller,
+        ch_ref,                             // channel: [ val(meta), fasta ]
+        BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
+        BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
+        ch_rescued_variants                 // channel: [ val(meta), bed   ]
+    )
 
-    //  ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
-    //  ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+    // ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
 
 
     //
