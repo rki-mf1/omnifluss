@@ -144,6 +144,7 @@ workflow IGSMP {
     //
     VCF_CALL_CONSENSUS_ALL(
         params.consensus_caller,
+        params.consensus_mincov,
         ch_ref,                             // channel: [ val(meta), fasta ]
         BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
         BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
