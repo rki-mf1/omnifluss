@@ -1,6 +1,6 @@
 include { KMA_INDEX }           from '../../../modules/local/inv_referenceSelection_kmaIndex/main'
 include { KMA }                 from '../../../modules/local/inv_referenceSelection_kma/main'
-include { TOP1_REFERENCE }      from '../../../modules/local/inv_referenceSelection_grep/main'
+include { GREP_TOP1_REFERENCE } from '../../../modules/local/inv_referenceSelection_grep/main'
 include { CAT_CAT as CAT_CAT1}  from '../../../modules/nf-core/cat/cat/main'
 include { CAT_CAT as CAT_CAT2}  from '../../../modules/nf-core/cat/cat/main'
 include { SEQKIT_GREP }         from '../../../modules/nf-core/seqkit/grep/main.nf'
@@ -117,11 +117,11 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             /****************************************************************/
             /* STEP 2: Get ID of Top1 refrence(s)                           */
             /****************************************************************/
-            TOP1_REFERENCE(
+            GREP_TOP1_REFERENCE(
                 ch_kma
             )
-            ch_versions = ch_versions.mix(TOP1_REFERENCE.out.versions.first())
-            ch_top1ids  = ch_top1ids.mix(TOP1_REFERENCE.out.txt)
+            ch_versions = ch_versions.mix(GREP_TOP1_REFERENCE.out.versions.first())
+            ch_top1ids  = ch_top1ids.mix(GREP_TOP1_REFERENCE.out.txt)
 
             // Generate a nf-core style input channel:
             //      tuple val(meta), path(txt)

@@ -1,4 +1,4 @@
-process TOP1_REFERENCE {
+process GREP_TOP1_REFERENCE {
     tag "$meta.id"
 
     conda "${moduleDir}/environment.yml"
