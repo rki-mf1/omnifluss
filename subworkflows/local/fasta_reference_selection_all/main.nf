@@ -49,7 +49,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
 
         // ch_final_topRefs = tuple([id: ch_reads[0].id + '.staticRef'], reference_db_path)     // channel: [ val(meta), fasta ]
 
-    } else if (reference_selection == "mapping") {
+    } else if (reference_selection == "auto") {
         println "Automated reference selection."
 
         if (tools.split(',').contains('kma')) {
