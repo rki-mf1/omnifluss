@@ -14,8 +14,7 @@ include { SEQKIT_GREP }         from '../../../modules/nf-core/seqkit/grep/main.
             - Every reference file is not empty
     Output:
         - ch_final_topRefs:
-            - This is the most important output Channel. It contains the closest reference(s)
-              per sample (i.e. readpair in ch_reads).
+            - This is the most important output Channel. It contains the closest reference(s) per sample (i.e. readpair in ch_reads).
 */
 
 
@@ -50,7 +49,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         // ch_final_topRefs = tuple([id: ch_reads[0].id + '.staticRef'], reference_db_path)     // channel: [ val(meta), fasta ]
 
     } else if (reference_selection == "auto") {
-        println "Automated reference selection."
+        //[DEBUG] println "Automated reference selection."
 
         if (tools.split(',').contains('kma')) {
         
@@ -64,13 +63,13 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
 
             // Check that list of input files is not empty and every file is non-zero bytes
             if (kma_index_files && kma_index_files.every { file -> file.exists() && file.size() > 0 }) {
-                println "Index files found."
+                //[DEBUG] println "Index files found."
 
                 // Generate the ch_kma_index channel from kma_index_files
-                ch_segment_files    = Channel.fromPath(kma_index_files, checkIfExists: true)
-                ch_segment_files
+                Channel
+                    .fromPath(kma_index_files, checkIfExists: true)
                     .map { file ->
-                        def prefix = file.name.tokenize('.')[0]     // Extract prefix before the first "."
+                        def prefix = file.simpleName                // Extract prefix before the first "."
                         return [prefix, file]                       // Return a tuple with prefix and file
                     }
                     .groupTuple()                                   // Group by the first element (prefix)
@@ -78,21 +77,18 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
                         return [[id: prefix], files]                // Create the nf-core meta map format
                     }
                     .set { ch_kma_index }
-                ch_kma_index.view()
-
             }
             else {
-                println "Generating index files."
+                //[DEBUG] println "Generating index files."
                 
                 // Build channel of references
-                ch_segment_files    = Channel.fromPath(reference_db_path + '**.{fasta,fa}', checkIfExists: true)
-                ch_segment_files
+                Channel
+                    .fromPath(reference_db_path + '**.{fasta,fa}', checkIfExists: true)
                     .map { file ->
-                        def prefix = file.name.tokenize('.')[0]
+                        def prefix = file.simpleName
                         return [ [ id: prefix], file]
                         }
                     .set { ch_segment_db }
-                ch_segment_db.view()
 
                 // Building KMA index
                 KMA_INDEX(
