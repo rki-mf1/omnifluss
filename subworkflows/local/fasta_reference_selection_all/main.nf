@@ -23,13 +23,11 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
     take:
     tools                   // String
     reference_selection     // String
-    reference_db_path       // String
-    ch_reads                // channel: [ val(meta), [ fastq ] ]        // nf-core style
-
+    ch_reads                // channel: [ val(meta), [ fastq ] ]
+    ch_kma_index            // channel: [ val(meta), [ kma_index ] ]
 
     main:
     ch_versions         = Channel.empty()
-    ch_kma_index        = Channel.empty()
     ch_kma              = Channel.empty()
     ch_top1ids          = Channel.empty()
     ch_reference_fastas = Channel.empty()
@@ -46,57 +44,12 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
                         reference_db_path to be one (multi-)FASTA file.
         */
 
+        // OLD
         // ch_final_topRefs = tuple([id: ch_reads[0].id + '.staticRef'], reference_db_path)     // channel: [ val(meta), fasta ]
 
     } else if (reference_selection == "auto") {
-        //[DEBUG] println "Automated reference selection."
 
         if (tools.split(',').contains('kma')) {
-        
-            /****************************************************************/
-            /* STEP 0:  Check if KMA index files exist.                     */
-            /*          If true, load the index files                       */
-            /*          If false, compute the KMA index                     */
-            /****************************************************************/
-
-            kma_index_files = file(reference_db_path + '*.{comp.b,length.b,name,seq.b}')
-
-            // Check that list of input files is not empty and every file is non-zero bytes
-            if (kma_index_files && kma_index_files.every { file -> file.exists() && file.size() > 0 }) {
-                //[DEBUG] println "Index files found."
-
-                // Generate the ch_kma_index channel from kma_index_files
-                Channel
-                    .fromPath(kma_index_files, checkIfExists: true)
-                    .map { file ->
-                        def prefix = file.simpleName                // Extract prefix before the first "."
-                        return [prefix, file]                       // Return a tuple with prefix and file
-                    }
-                    .groupTuple()                                   // Group by the first element (prefix)
-                    .map { prefix, files ->
-                        return [[id: prefix], files]                // Create the nf-core meta map format
-                    }
-                    .set { ch_kma_index }
-            }
-            else {
-                //[DEBUG] println "Generating index files."
-                
-                // Build channel of references
-                Channel
-                    .fromPath(reference_db_path + '**.{fasta,fa}', checkIfExists: true)
-                    .map { file ->
-                        def prefix = file.simpleName
-                        return [ [ id: prefix], file]
-                        }
-                    .set { ch_segment_db }
-
-                // Building KMA index
-                KMA_INDEX(
-                    ch_segment_db
-                )
-                ch_versions     = ch_versions.mix(KMA_INDEX.out.versions.first())
-                ch_kma_index    = KMA_INDEX.out.db
-            }
 
             /****************************************************************/
             /* STEP 1: Compute KMA alignment and ref ranking                */
@@ -141,19 +94,15 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             /****************************************************************/
             /* STEP 3: Get FASTA of Top1 refrence(s)                        */
             /****************************************************************/
-            Channel
-                .fromPath(
-                    reference_db_path + '*.{fa,fasta}',
-                    checkIfExists: true,
-                    hidden: false,
-                    followLinks: true)
-                .map { fasta ->
-                    def prefix = fasta.name.tokenize('.')[0]
-                    return [prefix, fasta]
-                }
-                .groupTuple()
-                .map{ prefix, fastas ->
-                    return [[id: prefix], fastas]
+            ch_kma_index
+                .map { meta, index_files ->
+                    def fasta = index_files.findAll {
+                        it.toString().endsWith(".fa") ||
+                        it.toString().endsWith(".fasta") ||
+                        it.toString().endsWith(".fa.gz") ||
+                        it.toString().endsWith(".fasta.gz")
+                    }
+                    return [meta, fasta]
                 }
                 .set { ch_reference_fastas }
 
@@ -197,11 +146,9 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
     }
 
     emit:
-    index               = ch_kma_index          // channel: [ val(meta), [db] ]             // nf-core style
     kma                 = ch_kma                // channel: [ val(meta), file(spa) ]        // nf-core style
     top1ids             = ch_top1ids            // channel: [ val(meta), file(txt) ]        // nf-core style
     reference_fastas    = ch_reference_fastas   // channel: [ val(meta), file(fasta) ]      // nf-core style
-    //top1fastas          = ch_top1fastas         // channel: [ val(meta), [fasta] ]          // nf-core style
     final_topRefs       = ch_final_topRefs      // channel: [ val(meta), fasta ]            // nf-core style
     versions            = ch_versions           // channel: [ versions.yml ]
 }

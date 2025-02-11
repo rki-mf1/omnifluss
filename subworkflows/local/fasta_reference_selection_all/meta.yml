@@ -10,51 +10,40 @@ components:
   - kma/kma
   - seqkit/grep
   - cat/cat
+
 input:
   - tools:
       type: string
       description: |
         Comma-separated list of tool names that are used for this task
+      pattern: "kma"
   - reference_selection:
       type: string
       description: |
         Mode for reference selection.
       pattern: "{auto/static}"
-  - reference_db_path:
-      type: string
-      description: |
-        Path to the directory of referernce (multi-)FASTA files.
-        There are two types of multiplicity that can be used in this directory:
-        (1) A FASTA file in the directory can have multiple genome sequences. In that case,
-            the "auto" reference selection mode will determine one genome sequence with
-            the highest similarity score compared to the provided reads. This highest scoring
-            reference sequence is used for the downstream workflow.
-        (2) The directory can contain multiple FASTA files. Some species have their genome
-            partitioned into chromosomes or segments. In this case, the subworkflow expects
-            one FASTA file per chromosome/segment. Each FASTA file again can contain multiple
-            sequences and is then subject to the selection process of (1).
   - meta:
       type: map
       description: |
         Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
+        e.g. [ id:'mySample', single_end:false ]
   - ch_reads:
       type: file
       description: |
         List of two input FastQ files for paired-end NGS data.
-## TODO nf-core: List all of the channels used as output with a descriptions and their structure
-output:
   - meta:
       type: map
       description: |
-        Groovy Map containing the reference sequence identifier. Might be a genome, chromosome, or segment.
-        e.g. [ id:'Chr1' ]
-  - index:
+        Groovy Map containing reference genome/chromosome/segment information.
+        e.g. [ id:'myReference', single_end:false ]
+  - ch_kma_index:
       type: list
       description: |
         List of index files per chromosome/segment.
         Structure: [ val(meta), path(index) ]
-      pattern: "*.{comp.b,length.b,name,seq.b}"
+      pattern: "*.{comp.b,length.b,name,seq.b,fa,fasta,fa.gz,fasta.gz}"
+
+output:
   - meta:
       type: map
       description: |
@@ -85,9 +74,9 @@ output:
   - reference_fastas:
       type: file
       description: |
-        File containing the genome or segment sequences.
+        File containing the genome or segment sequences. Subset of index channel.
         Structure: [ val(meta), path(fasta) ]
-      pattern: "*.fasta"
+      pattern: "*.{fa,fasta,fa.gz,fasta.gz}"
   - meta:
       type: map
       description: |
@@ -105,6 +94,7 @@ output:
         File containing software versions
         Structure: [ path(versions.yml) ]
       pattern: "versions.yml"
+
 authors:
   - "@krannich479"
 maintainers:
