@@ -35,10 +35,14 @@ output:
       description: |
         Groovy Map containing sample information
         e.g. `[ id:'sample1', single_end:false ]`
-  - mapping_results:
+  - bam:
       type: file
       description: |
         sorted bam file from mapping the reads against
+  - bai:
+      type: file
+      description: |
+        bam file index
   - versions:
       type: file
       description: |

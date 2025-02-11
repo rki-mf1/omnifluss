@@ -19,10 +19,10 @@ process ADJUST_GT_CONSENSUS {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    bash add_fake_gt.sh  -i ${vcf} -g 1 -o ${prefix}.gt_adjust.vcf.gz.tmp
-    bcftools index ${prefix}.gt_adjust.vcf.gz.tmp
-    bcftools +setGT ${prefix}.gt_adjust.vcf.gz.tmp -- -t q -i 'GT="1" && INFO/AF < 0.9' -n 'c:0/1' | bcftools +setGT -o ${prefix}.gt_adjust.vcf.gz -- -t q -i 'GT="1" && INFO/AF >= 0.9' -n 'c:1/1' 
-    bcftools index ${prefix}.gt_adjust.vcf.gz
+    bash add_fake_gt.sh  -i ${vcf} -g 1 -o ${prefix}.vcf.gz.tmp
+    bcftools index ${prefix}.vcf.gz.tmp
+    bcftools +setGT ${prefix}.vcf.gz.tmp -- -t q -i 'GT="1" && INFO/AF < 0.9' -n 'c:0/1' | bcftools +setGT -o ${prefix}.vcf.gz -- -t q -i 'GT="1" && INFO/AF >= 0.9' -n 'c:1/1'
+    bcftools index ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -34,8 +34,8 @@ process ADJUST_GT_CONSENSUS {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.gt_adjust.vcf.gz
-    
+    touch ${prefix}.vcf.gz
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         add_fake_gt.sh: \$(head -n 1 version.tmp)
