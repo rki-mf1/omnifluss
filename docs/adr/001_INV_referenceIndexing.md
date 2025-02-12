@@ -9,8 +9,8 @@ Present, the check for existence and creation of the KMA index is excluded from 
 Generating the KMA index will be subject to another separate subworkflow.
 
 ## Status
-- [x] proposed
-- [ ] accepted
+- [ ] proposed
+- [x] accepted
 - [ ] deprecated
 - [ ] superseded (via ADR#)
 
