@@ -1,5 +1,5 @@
 # Architectural Decision Record
-The goal of an Architectural Decision Record (ADR) is to document an individual decision that has led to the current software architecture.
+The goal of an [Architectural Decision Record](https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions) (ADR) is to document an individual decision that has led to the current software architecture.
 ADRs record architectural decisions in
 - plain markdown text files
 - its own file per dision
