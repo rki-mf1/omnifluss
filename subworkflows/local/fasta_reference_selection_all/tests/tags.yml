@@ -1,2 +1,0 @@
-subworkflows/fasta_reference_selection_all:
-  - subworkflows/local/fasta_reference_selection_all/**
