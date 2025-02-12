@@ -17,7 +17,7 @@ process ADJUST_DELETION_CONSENSUS {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    adjust_dels.py --name ${prefix} --vcf ${vcf}
+    adjust_dels.py --vcf ${vcf} --out ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -28,7 +28,7 @@ process ADJUST_DELETION_CONSENSUS {
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    touch ${prefix}.del_adjust.vcf
+    touch ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -8,7 +8,7 @@ process CREATE_MASK_CONSENSUS {
         'biocontainers/bedtools:2.31.1--hf5e1c6e_0' }"
 
     input:
-    val cns_mincov
+    val consensus_mincov
     tuple val(meta), path(vcf)
     tuple val(meta2), path(bam)
     tuple val(meta3), path(special_var)
@@ -23,7 +23,7 @@ process CREATE_MASK_CONSENSUS {
     def prefix = task.ext.prefix ?: "${meta.id}"
 
     """
-    bedtools genomecov -bga -ibam ${bam} | awk '\$4 < ${cns_mincov}' | bedtools merge > ${prefix}.tmp_bed
+    bedtools genomecov -bga -ibam ${bam} | awk '\$4 < ${consensus_mincov}' | bedtools merge > ${prefix}.tmp_bed
     bedtools subtract -a ${prefix}.tmp_bed -b ${vcf} > ${prefix}.lowcov.bed
     cat ${prefix}.lowcov.bed ${special_var} > ${prefix}.final.bed
 

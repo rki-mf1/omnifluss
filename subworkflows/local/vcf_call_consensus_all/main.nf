@@ -3,11 +3,12 @@ include { ADJUST_DELETION_CONSENSUS                  } from '../../../modules/lo
 include { ADJUST_GT_CONSENSUS                        } from '../../../modules/local/inv_consensus_bcftools/main'
 include { CREATE_MASK_CONSENSUS                      } from '../../../modules/local/inv_consensus_bedtools/main'
 include { TABIX_TABIX                                } from '../../../modules/nf-core/tabix/tabix/main'
-include { BCFTOOLS_CONSENSUS                         } from '../../../modules/nf-core/bcftools/consensus/main' 
+include { BCFTOOLS_CONSENSUS                         } from '../../../modules/nf-core/bcftools/consensus/main'
 
 workflow VCF_CALL_CONSENSUS_ALL {
     take:
     tools                       // string
+    val_consensus_mincov        // integer
     ch_ref                      // channel: [ val(meta), fasta ]
     ch_vcf                      // channel: [ val(meta), vcf   ]
     ch_bam                      // channel: [ val(meta), bam   ]
@@ -36,7 +37,7 @@ workflow VCF_CALL_CONSENSUS_ALL {
 
         // comprised createMaskConsensus & createMaskConsensus_special_variant_case in this module
         CREATE_MASK_CONSENSUS(
-            params.cns_mincov,          // integer
+            val_consensus_mincov,       // integer
             ch_del_adjusted_vcf,        // channel: [ val(meta), vcf ]
             ch_bam,                     // channel: [ val(meta), bam ]
             ch_rescued_variants         // channel: [ val(meta), bed ]

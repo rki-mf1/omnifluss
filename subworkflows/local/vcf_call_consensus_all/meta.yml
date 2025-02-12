@@ -18,6 +18,10 @@ input:
       description: |
         Groovy Map containing sample information
         e.g. [ id:'test', single_end:false ]
+  - val_consensus_mincov:
+    type: int
+    descirption: |
+      threshold value below a position in the consensus sequence is masked with N
   - tools:
     type: string
     description: |
