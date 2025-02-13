@@ -7,7 +7,7 @@ nextflow_process {
 
     tag "modules"
     tag "modules_local"
-    tag "INV_RESCUE_VARIANTS_PYTHON"
+    tag "inv_rescue_variants_python"
 
     test("influenza - vcf") {
 
