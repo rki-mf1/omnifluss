@@ -49,7 +49,7 @@ output:
       description: |
         Groovy Map containing the sample identifier.
         e.g. [ id: 'NA12878' ]
-  - kma:
+  - spa:
       type: file
       description: |
         File containing the ranking of top matching references.
@@ -74,7 +74,7 @@ output:
   - reference_fastas:
       type: file
       description: |
-        File containing the genome or segment sequences. Subset of index channel.
+        File containing the genome or segment sequences.
         Structure: [ val(meta), path(fasta) ]
       pattern: "*.{fa,fasta,fa.gz,fasta.gz}"
   - meta:
