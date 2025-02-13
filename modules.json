@@ -67,7 +67,6 @@
                     "krakentools/extractkrakenreads": {
                         "branch": "master",
                         "git_sha": "263cd590ca57a58a5c36271126ef86e51337f703",
-                        "patch": "modules/nf-core/krakentools/extractkrakenreads/krakentools-extractkrakenreads.diff"
                         "installed_by": [
                             "fastq_extract_kraken_krakentools"
                         ]
