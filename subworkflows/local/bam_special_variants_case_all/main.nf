@@ -1,7 +1,7 @@
 
 include { LOFREQ_CALLPARALLEL as LOFREQ_CALLPARALLEL_SPEC_CASE }    from '../../../modules/nf-core/lofreq/callparallel/main'
 include { LOFREQ_FILTER }                                           from '../../../modules/nf-core/lofreq/filter/main'
-include { INV_RESCUE_VARIANTS_PYTHON }                                         from '../../../modules/local/inv_rescue_variants_python/main'
+include { INV_RESCUE_VARIANTS_PYTHON }                              from '../../../modules/local/inv_rescue_variants_python/main'
 
 
 workflow BAM_SPECIAL_VARIANTS_CASE_ALL {
