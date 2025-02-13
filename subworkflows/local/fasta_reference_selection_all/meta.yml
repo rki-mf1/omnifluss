@@ -35,11 +35,11 @@ input:
       type: map
       description: |
         Groovy Map containing reference genome/chromosome/segment information.
-        e.g. [ id:'myReference', single_end:false ]
+        e.g. [ id:'myReference' ]
   - ch_kma_index:
       type: list
       description: |
-        List of index files per chromosome/segment.
+        List of genome/chromosome/segment sequences (FASTA) and corresponding index files (from KMA_INDEX).
         Structure: [ val(meta), path(index) ]
       pattern: "*.{comp.b,length.b,name,seq.b,fa,fasta,fa.gz,fasta.gz}"
 
