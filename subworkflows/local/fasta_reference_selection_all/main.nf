@@ -28,7 +28,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
 
     main:
     ch_versions         = Channel.empty()
-    ch_kma              = Channel.empty()
+    ch_kma_spa          = Channel.empty()
     ch_top1ids          = Channel.empty()
     ch_reference_fastas = Channel.empty()
     ch_top1fastas       = Channel.empty()
@@ -61,13 +61,13 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
                 false
             )
             ch_versions = ch_versions.mix(KMA.out.versions.first())
-            ch_kma      = ch_kma.mix(KMA.out.spa)
+            ch_kma_spa  = ch_kma_spa.mix(KMA.out.spa)
 
             /****************************************************************/
             /* STEP 2: Get ID of Top1 refrence(s)                           */
             /****************************************************************/
             GREP_TOP1_REFERENCE(
-                ch_kma
+                ch_kma_spa
             )
             ch_versions = ch_versions.mix(GREP_TOP1_REFERENCE.out.versions.first())
             ch_top1ids  = ch_top1ids.mix(GREP_TOP1_REFERENCE.out.txt)
@@ -146,7 +146,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
     }
 
     emit:
-    kma                 = ch_kma                // channel: [ val(meta), file(spa) ]        // nf-core style
+    spa                 = ch_kma_spa            // channel: [ val(meta), file(spa) ]        // nf-core style
     top1ids             = ch_top1ids            // channel: [ val(meta), file(txt) ]        // nf-core style
     reference_fastas    = ch_reference_fastas   // channel: [ val(meta), file(fasta) ]      // nf-core style
     final_topRefs       = ch_final_topRefs      // channel: [ val(meta), fasta ]            // nf-core style
