@@ -1,4 +1,4 @@
-name: "inv_referenceSelection_grep"
+name: "inv_get_top1_reference_grep"
 channels:
   - conda-forge
   - bioconda
