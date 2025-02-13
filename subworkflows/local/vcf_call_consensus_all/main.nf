@@ -1,5 +1,5 @@
 include { BCFTOOLS_FILTER                            } from '../../../modules/nf-core/bcftools/filter/main'
-include { ADJUST_DELETION_CONSENSUS                  } from '../../../modules/local/inv_consensus_pyvcf/main'
+include { INV_GET_DELETIONS_PYVCF                  } from '../../../modules/local/inv_get_deletions_pyvcf/main'
 include { ADJUST_GT_CONSENSUS                        } from '../../../modules/local/inv_consensus_bcftools/main'
 include { CREATE_MASK_CONSENSUS                      } from '../../../modules/local/inv_consensus_bedtools/main'
 include { TABIX_TABIX                                } from '../../../modules/nf-core/tabix/tabix/main'
@@ -28,7 +28,7 @@ workflow VCF_CALL_CONSENSUS_ALL {
         ch_versions = ch_versions.mix(BCFTOOLS_FILTER.out.versions.first())
 
         // mask
-        ADJUST_DELETION_CONSENSUS(
+        INV_GET_DELETIONS_PYVCF(
             ch_filtered_vcf             // channel: [ val(meta), vcf ]
         )
         .del_vcf
