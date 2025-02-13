@@ -1,9 +1,9 @@
-include { KMA_INDEX }           from '../../../modules/local/inv_referenceSelection_kmaIndex/main'
-include { KMA }                 from '../../../modules/local/inv_referenceSelection_kma/main'
-include { GREP_TOP1_REFERENCE } from '../../../modules/local/inv_referenceSelection_grep/main'
-include { CAT_CAT as CAT_CAT1}  from '../../../modules/nf-core/cat/cat/main'
-include { CAT_CAT as CAT_CAT2}  from '../../../modules/nf-core/cat/cat/main'
-include { SEQKIT_GREP }         from '../../../modules/nf-core/seqkit/grep/main.nf'
+include { KMA_INDEX }                   from '../../../modules/local/inv_referenceSelection_kmaIndex/main'
+include { KMA }                         from '../../../modules/local/inv_referenceSelection_kma/main'
+include { INV_GET_TOP1_REFERENCE_GREP } from '../../../modules/local/inv_reference_selection_grep/main'
+include { CAT_CAT as CAT_CAT1}          from '../../../modules/nf-core/cat/cat/main'
+include { CAT_CAT as CAT_CAT2}          from '../../../modules/nf-core/cat/cat/main'
+include { SEQKIT_GREP }                 from '../../../modules/nf-core/seqkit/grep/main.nf'
 
 /*
     INFO
@@ -66,11 +66,11 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             /****************************************************************/
             /* STEP 2: Get ID of Top1 refrence(s)                           */
             /****************************************************************/
-            GREP_TOP1_REFERENCE(
+            INV_GET_TOP1_REFERENCE_GREP(
                 ch_kma_spa
             )
-            ch_versions = ch_versions.mix(GREP_TOP1_REFERENCE.out.versions.first())
-            ch_top1ids  = ch_top1ids.mix(GREP_TOP1_REFERENCE.out.txt)
+            ch_versions = ch_versions.mix(INV_GET_TOP1_REFERENCE_GREP.out.versions.first())
+            ch_top1ids  = ch_top1ids.mix(INV_GET_TOP1_REFERENCE_GREP.out.txt)
 
             // Generate a nf-core style input channel:
             //      tuple val(meta), path(txt)
