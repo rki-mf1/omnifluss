@@ -1,4 +1,4 @@
-name: "TOP1_REFERENCE"
+name: "GREP_TOP1_REFERENCE"
 description: Read a SPA file (as returned from 'kma -Sparse') and return the ID of the single best reference
 keywords:
   - reference
