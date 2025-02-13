@@ -1,4 +1,4 @@
-name: rescue_variants
+name: INV_RESCUE_VARIANTS_PYTHON
 description: Get variants with good qualities that failed the variant filtering due to the lofreq strand bias filter.
 keywords:
   - variants

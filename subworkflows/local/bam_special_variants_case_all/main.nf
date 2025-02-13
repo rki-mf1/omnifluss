@@ -1,7 +1,7 @@
 
 include { LOFREQ_CALLPARALLEL as LOFREQ_CALLPARALLEL_SPEC_CASE }    from '../../../modules/nf-core/lofreq/callparallel/main'
 include { LOFREQ_FILTER }                                           from '../../../modules/nf-core/lofreq/filter/main'
-include { RESCUE_VARIANTS }                                         from '../../../modules/local/inv_variantCallingSpecialCase_pyvcf/main'
+include { INV_RESCUE_VARIANTS_PYTHON }                                         from '../../../modules/local/inv_rescue_variants_python/main'
 
 
 workflow BAM_SPECIAL_VARIANTS_CASE_ALL {
@@ -39,12 +39,12 @@ workflow BAM_SPECIAL_VARIANTS_CASE_ALL {
     ch_vcf      = LOFREQ_FILTER.out.vcf
     ch_versions = ch_versions.mix(LOFREQ_FILTER.out.versions.first())
 
-    // RESCUE_VARIANTS is a custom python script that generates a bed file with HQ variant sites to be masked in the consensus
-    RESCUE_VARIANTS (
+    // INV_RESCUE_VARIANTS_PYTHON is a custom python script that generates a bed file with HQ variant sites to be masked in the consensus
+    INV_RESCUE_VARIANTS_PYTHON (
         ch_vcf
     )
-    ch_bed      = RESCUE_VARIANTS.out.bed
-    ch_versions = ch_versions.mix(RESCUE_VARIANTS.out.versions.first())
+    ch_bed      = INV_RESCUE_VARIANTS_PYTHON.out.bed
+    ch_versions = ch_versions.mix(INV_RESCUE_VARIANTS_PYTHON.out.versions.first())
 
 
     emit:
