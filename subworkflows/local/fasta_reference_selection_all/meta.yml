@@ -17,11 +17,6 @@ input:
       description: |
         Comma-separated list of tool names that are used for this task
       pattern: "kma"
-  - reference_selection:
-      type: string
-      description: |
-        Mode for reference selection.
-      pattern: "{auto/static}"
   - meta:
       type: map
       description: |
@@ -36,12 +31,23 @@ input:
       description: |
         Groovy Map containing reference genome/chromosome/segment information.
         e.g. [ id:'myReference' ]
+  - ch_reference_db_fastas:
+      type: list
+      description: |
+        List of genome/chromosome/segment sequences (FASTA).
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.{fa,fasta,fa.gz,fasta.gz}"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing reference genome/chromosome/segment information.
+        e.g. [ id:'myReference' ]
   - ch_kma_index:
       type: list
       description: |
-        List of genome/chromosome/segment sequences (FASTA) and corresponding index files (from KMA_INDEX).
-        Structure: [ val(meta), path(index) ]
-      pattern: "*.{comp.b,length.b,name,seq.b,fa,fasta,fa.gz,fasta.gz}"
+        List of index files (from KMA_INDEX).
+        Structure: [ val(meta), path(kma_index) ]
+      pattern: "*.{comp.b,length.b,name,seq.b}"
 
 output:
   - meta:
@@ -66,17 +72,6 @@ output:
         File containing the top ranked genome ID or top ranked ID per segment.
         Structure: [ val(meta), path(txt) ]
       pattern: "*.txt"
-  - meta:
-      type: map
-      description: |
-        Groovy Map containing the reference sequence identifier. Might be a genome, chromosome, or segment.
-        e.g. [ id: 'Chr1' ]
-  - reference_fastas:
-      type: file
-      description: |
-        File containing the genome or segment sequences.
-        Structure: [ val(meta), path(fasta) ]
-      pattern: "*.{fa,fasta,fa.gz,fasta.gz}"
   - meta:
       type: map
       description: |
