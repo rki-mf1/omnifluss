@@ -10,7 +10,7 @@ A corresponding set of index files (ch_kma_index) is created if in _auto_ mode.
 Present, the creation of the channel of valid FASTA files (ch_fasta_references) is done prior to any functional subworkflow involved in reference selection.
 The creation of the channel for the index files (ch_kma_index) is done via a dedicated subworkflow.
 The _ch_index_kma_ only exists in _auto_ mode.
-![ReferenceSelectionNextflowChannels](igsmp/docs/images/ref_selection_channels.png)
+![ReferenceSelectionNextflowChannels](docs/images/ref_selection_channels.png)
 
 ## Status
 - [x] proposed
