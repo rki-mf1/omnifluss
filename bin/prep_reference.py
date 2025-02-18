@@ -33,7 +33,7 @@ def prepare_reference(fasta,length,out):
 			if not all(i in valid_letters for i in seq):
 				sys.exit("error: sequence '" + header + "' in " + fasta + " conatins non-IUPAC characters.")
 			#replace any non standard characters - otherwise problems with lofreq and bcltools consensus
-			seq = seq.replace(".", "").replace("-", "").replace("U", "T").replace("W", "A").replace("S", "C").replace("M", "A").replace("K", "G").replace("R", "A").replace("Y", "C").replace("B", "C").replace("D", "A").replace("H", "A").replace("V", "A").replace("N", "A")
+			#seq = seq.replace(".", "").replace("-", "").replace("U", "T").replace("W", "A").replace("S", "C").replace("M", "A").replace("K", "G").replace("R", "A").replace("Y", "C").replace("B", "C").replace("D", "A").replace("H", "A").replace("V", "A").replace("N", "A")
 			if length > 0:
 				seq = textwrap.fill(seq, width=length)
 				print(seq)
