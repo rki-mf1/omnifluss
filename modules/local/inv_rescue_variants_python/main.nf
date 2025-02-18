@@ -1,4 +1,4 @@
-process RESCUE_VARIANTS {
+process INV_RESCUE_VARIANTS_PYTHON {
     tag "$meta.id"
 
     conda "${moduleDir}/environment.yml"
@@ -20,14 +20,14 @@ process RESCUE_VARIANTS {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    python $projectDir/bin/rescue_HQ_variants.py $vcf
+    python $projectDir/bin/rescue_variants.py $vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        rescue_HQ_variants.py: \$(python $projectDir/bin/rescue_HQ_variants.py --version)
+        rescue_variants.py: \$(python $projectDir/bin/rescue_variants.py --version)
     END_VERSIONS
     """
-    
+
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
@@ -35,7 +35,7 @@ process RESCUE_VARIANTS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        rescue_HQ_variants.py: \$(python $projectDir/bin/rescue_HQ_variants.py --version)
+        rescue_variants.py: \$(python $projectDir/bin/rescue_variants.py --version)
     END_VERSIONS
     """
 }
