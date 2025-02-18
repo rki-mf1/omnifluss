@@ -13,6 +13,7 @@ nextflow_workflow {
     tag "tabix/tabix"
     tag "bcftools/consensus"
     tag "pyvcf"
+    tag "inv_set_gt_bcftools"
 
 
     test("vcf_call_consensus_all") {
