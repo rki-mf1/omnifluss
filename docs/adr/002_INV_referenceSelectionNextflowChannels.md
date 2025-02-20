@@ -17,10 +17,10 @@ The index files for all FASTA files in the database are stored in a separate cha
 ![ReferenceSelectionNextflowChannels](docs/images/ref_selection_channels.png)
 
 ## Status
-- [x] proposed
+- [ ] proposed
 - [ ] accepted
 - [ ] deprecated
-- [ ] superseded (via ADR#)
+- [x] superseded (via ADR#003)
 
 ## Consequences
 - Pro:
