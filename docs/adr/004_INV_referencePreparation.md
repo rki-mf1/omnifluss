@@ -8,23 +8,25 @@ Since this seems unintuitive and potentially could introduce differences in the 
 Removing this step entirely resulted in problems with our variant caller lofreq, which produced VCF files with byte errors in them. This led to crashes in subsequent processes.
 According to a comment in the original script, not only lofreq, but also bcftools consensus can't handle IUPAC characters.
 
-Next we accessed whether we introduce some bias when replacing characters with static bases.
-For this we randomized the replacement and ran 5 runs with different seeds for our 3 internal samples.
-We observed changes in the VCF files due to different interpretations of the IUPAC characters. We noticed that especially N's are problematic, since these positions don't appear in the VCF files and seem to be conserved in the consensus sequence. In cases however where a nucleotide is chosen, it appears in the VCF files and can later be corrected by the reads that map at that position for the consensus sequence. After removing the option of replacing IUPAC characters with N's, we observed identical md5sums of the consensus sequences across all runs for all samples respectively.
+Next, we assessed whether replacing IUPAC characters with statically defined bases introduces a downstream bias.
+Therefore, we generated five distinct copies of the same reference genome where the IUPAC and 'N' characters were randomly replaced with unambiguous nucleotide characters. Each copy was used as a reference for genome reconstruction of three real data samples (5*3 experiments).
+We observed changes in the VCF files due to different interpretations of the IUPAC characters. We noticed that especially N's are problematic, since these positions don't appear in the VCF files and seem to be conserved in the consensus sequence. However, in the case that an 'N' is replaced by an unambiguous nucleotide character, the position is considered for the variant calling. Subsequently, if the unambiguous nucleotide character in the reference genome differs from the majority allele among the aligned reads it will be replaced during the consensus generation. After removing the option of replacing IUPAC characters with N's, we observed identical md5sums of the consensus sequences across all runs for all samples respectively.
 
 ## Decision
-We found out that N's and IUPAC characters are problematic, but once they are replaced by nucleotides, these can be corrected throughout the workflow.
-For reproducibility purposes we therefore decided to replace all IUPAC characters and N's with static nucleotides.
+We found that 'N's and IUPUC characters cause issues with internal software (lofreq).
+However, replacing those characters with unambiguous nucleotide characters showed no downstream effect on the generated consensus sequences.
+For the purpose of reproducibility, we decide to define static replacements of all IUPAC and 'N' characters into unambiguous nucleotide characters.
 
 ## Status
-- [x] proposed
-- [ ] accepted
+- [ ] proposed
+- [x] accepted
 - [ ] deprecated
 - [ ] superseded (via ADR#)
 
 ## Consequences
 - Pro:
-- - no randomness, good reproducibility
-- - positions have the chance to be corrected and to appear in the consensus sequence
+  - no randomness, good reproducibility
+  - both IUPAC and 'N' character positions in the reference genome are now considered for variant calling and consensus generation
 - Con:
-- - seems unintuitive and error-prone at first
+  - seems unintuitive and error-prone at first
+  - an extremely high ratio of characters in the reference genome being replaced by the proposed method might causes alignment artifacts. However, within the scope of our assessment we observed this effect as minor/ not present.
