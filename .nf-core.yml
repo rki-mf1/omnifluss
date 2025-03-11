@@ -30,13 +30,19 @@ lint:
     - custom_config
   readme:
     - nextflow_badge
-nf_core_version: 2.14.1
+nf_core_version: 3.2.0
 repository_type: pipeline
 template:
-  prefix: rki-mf1
+  author: me
   description: GR for viruses
-  skip:
+  force: false
+  is_nfcore: false
+  name: igsmp
+  org: rki-mf1
+  outdir: .
+  skip_features:
     - ci
     - github_badges
     - igenomes
     - nf_core_configs
+  version: 1.0dev
