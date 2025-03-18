@@ -35,6 +35,13 @@
                         "git_sha": "4f5274c3de0c9521f5033893ff61057a74c45ba9",
                         "installed_by": ["fastq_align_bwa"]
                     },
+                    "cat/cat": {
+                        "branch": "master",
+                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
                     "fastp": {
                         "branch": "master",
                         "git_sha": "b90b5cd93149a1b3be263d916c7234fe0708a71c",
@@ -44,6 +51,13 @@
                         "branch": "master",
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["modules"]
+                    },
+                    "gunzip": {
+                        "branch": "master",
+                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "kraken2/kraken2": {
                         "branch": "master",
@@ -85,6 +99,13 @@
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["bam_markduplicates_picard", "modules"]
                     },
+                    "samtools/depth": {
+                        "branch": "master",
+                        "git_sha": "763d4b5c05ffda3ac1ac969dc67f7458cfb2eb1d",
+                        "installed_by": [
+                            "bam_markduplicates_picard"
+                        ]
+                    },
                     "samtools/faidx": {
                         "branch": "master",
                         "git_sha": "04fbbc7c43cebc0b95d5b126f6d9fe4effa33519",
@@ -114,6 +135,13 @@
                         "branch": "master",
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["bam_stats_samtools"]
+                    },
+                    "seqkit/grep": {
+                        "branch": "master",
+                        "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "installed_by": [
+                            "modules"
+                        ]
                     },
                     "tabix/tabix": {
                         "branch": "master",
