@@ -69,9 +69,24 @@ workflow IGSMP {
     //
     // Reference selection
     //
-    // FASTA_SELECT_REFERENCE_ALL(
-    //
-    // )
+    ref = ""
+    if (params.reference_selection == "auto") {        // <- should this become an reference_selection_mode? And reference_selection='kma' string parameter?
+                                                    // Or are we making it a flag? params.skip_automatic_reference_election ? 
+        // if segment DB is indexed
+        // TODO
+
+        FASTA_SELECT_REFERENCE_ALL(
+            "kma",
+            ch_reads,
+            // ch_segment_db,
+            // ch_segment_db_kma_index
+        )        
+    }
+    else if (params.reference_selection == "static") {
+        ref = tuple([id:file(params.fasta).getBaseName()], params.fasta)
+    }
+    
+
     // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
     // ch_versions = ch_versions.mix(FASTA_SELECT_REFERENCE_ALL.out.versions)
 
@@ -81,7 +96,7 @@ workflow IGSMP {
     FASTA_PROCESS_REFERENCE_ALL(
         params.reference_processing,
         params.aligner,
-        ref = tuple([id:file(params.fasta).getBaseName()], params.fasta) //TODO: Adapted to output from fasta_select_reference_all
+        ref
     )
     ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
     ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
