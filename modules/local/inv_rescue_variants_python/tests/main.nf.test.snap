@@ -19,14 +19,14 @@
     "Snapshot-VERSIONS-stub": {
         "content": [
             [
-                "versions.yml:md5,b09afe3f73825810237894aeaab9c65c"
+                "versions.yml:md5,542aebb26490259942157e100eba7c8b"
             ]
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-05T09:19:17.152066441"
+        "timestamp": "2025-02-13T16:35:17.094699981"
     },
     "sarscov2 - vcf": {
         "content": [
@@ -65,13 +65,13 @@
     "Snapshot-VERSIONS": {
         "content": [
             [
-                "versions.yml:md5,b09afe3f73825810237894aeaab9c65c"
+                "versions.yml:md5,542aebb26490259942157e100eba7c8b"
             ]
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-05T09:19:12.296023055"
+        "timestamp": "2025-02-13T16:35:12.139841764"
     }
 }

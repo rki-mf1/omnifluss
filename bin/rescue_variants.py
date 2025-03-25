@@ -58,7 +58,7 @@ def main():
                 af = float(info_fields[1][3:])
                 if af < 0.9:
                     continue
-                
+
                 var_name    = hq_line_list[0]
                 # Start is POS - 1 for VCF to BED file index shift
                 start_pos   = str(int(hq_line_list[1]) - 1)
@@ -71,7 +71,7 @@ def main():
 
 if __name__ == "__main__":
     if (sys.argv[1] == "--help") or (sys.argv[1] == "-h"):
-        print("SYNOPSIS: python rescue_HQ_variants.py <myVariants>.vcf [-h|--help|--version]\n")
+        print("SYNOPSIS: python rescue_variants.py <myVariants>.vcf [-h|--help|--version]\n")
         exit(0)
 
     if (sys.argv[1] == "--version"):
