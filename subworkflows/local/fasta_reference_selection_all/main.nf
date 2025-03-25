@@ -43,9 +43,14 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         /****************************************************************/
         /* STEP 1: Compute KMA alignment and ref ranking                */
         /****************************************************************/
+        ch_crossp = ch_reads.combine(ch_kma_index)
+            .map{meta_sample, reads, meta_segments, index ->
+                def newMeta = meta_sample + [segment: meta_segments.id]
+                return [newMeta, reads, index]
+            }
+
         KMA(
-            ch_reads,
-            ch_kma_index,
+            ch_crossp,
             false,
             false
         )
@@ -64,15 +69,9 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         // Generate a nf-core style input channel:
         //      tuple val(meta), path(txt)
         // where meta contains the map of ch_reads and path(txt) is a list of all top1id txt files.
-        ch_top1ids.map { tuple ->
-            def txtfile = tuple[1]
-            return txtfile
-        }
-        .collect()
-        .map { top1ids ->
-            [ch_reads[0], top1ids]
-        }
-        .set{ ch_top1ids }
+        ch_top1ids
+            .groupTuple()
+            .set{ ch_top1ids }
 
         CAT_CAT1(
             ch_top1ids
@@ -83,19 +82,6 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         /****************************************************************/
         /* STEP 3: Get FASTA of Top1 refrence(s)                        */
         /****************************************************************/
-        /*
-        ch_kma_index
-            .map { meta, index_files ->
-                def fasta = index_files.findAll {
-                    it.toString().endsWith(".fa") ||
-                    it.toString().endsWith(".fasta") ||
-                    it.toString().endsWith(".fa.gz") ||
-                    it.toString().endsWith(".fasta.gz")
-                }
-                return [meta, fasta]
-            }
-            .set { ch_reference_db_fastas }
-        */
 
         pattern = ch_top1ids.map { _meta, file -> return file }      // need only the file here for SEQKIT_GREP
         SEQKIT_GREP(

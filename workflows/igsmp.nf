@@ -16,6 +16,7 @@ include { paramsSummaryMap                    } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML              } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText              } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
+include { FASTA_REFERENCE_SELECTION_ALL } from '../subworkflows/local/fasta_reference_selection_all/main.nf'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,23 +70,33 @@ workflow IGSMP {
     //
     // Reference selection
     //
-    ref = ""
-    if (params.reference_selection == "auto") {        // <- should this become an reference_selection_mode? And reference_selection='kma' string parameter?
-                                                    // Or are we making it a flag? params.skip_automatic_reference_election ? 
-        // if segment DB is indexed
-        // TODO
+    ch_reference_db_fastas = Channel.fromPath("${params.reference_selection_db}/*.fasta")
+        .map{fasta -> 
+            def id = fasta.getName().tokenize('.')[0]
+            return tuple([id: id], fasta)
+        }
 
-        FASTA_SELECT_REFERENCE_ALL(
-            "kma",
-            ch_reads,
-            // ch_segment_db,
-            // ch_segment_db_kma_index
-        )        
-    }
-    else if (params.reference_selection == "static") {
-        ref = tuple([id:file(params.fasta).getBaseName()], params.fasta)
-    }
-    
+    ch_reference_db_index = Channel.fromPath("${params.reference_selection_db}/*.{length.b,seq.b,comp.b,name}")
+        .map{indexfile -> 
+            def id = indexfile.getName().tokenize('.')[0]
+            return [id, indexfile]
+        }
+        .groupTuple()
+        .map{
+            id, files ->
+            return [[id:id], files]
+        }
+
+    FASTA_REFERENCE_SELECTION_ALL(
+        params.reference_selection,
+        ch_reads,
+        ch_reference_db_fastas,
+        ch_reference_db_index
+    )
+
+    // else if (params.reference_selection == "static") {
+    //     ref = tuple([id:file(params.fasta).getBaseName()], params.fasta)
+    // }
 
     // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
     // ch_versions = ch_versions.mix(FASTA_SELECT_REFERENCE_ALL.out.versions)
@@ -93,28 +104,29 @@ workflow IGSMP {
     //
     // Reference processing
     //
-    FASTA_PROCESS_REFERENCE_ALL(
-        params.reference_processing,
-        params.aligner,
-        ref
-    )
-    ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
-    ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
-    ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
-    ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
+    // FASTA_PROCESS_REFERENCE_ALL(
+    //     params.reference_processing,
+    //     params.aligner,
+    //     ref
+    // )
+    // ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
+    // ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
+    // ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
+    // ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
 
     //
     // Mapping
     //
-    FASTQ_MAP_ALL(
-        params.aligner,                                                               // string
-        ch_reads,                                                                     // channel: [ val(meta), fastq ]
-        ch_ref,                                                                       // channel: [ val(meta), fasta ]
-        ch_bwa_index                                                                  // channel: [ val(meta), index ]
-    )
-    ch_mapping = FASTQ_MAP_ALL.out.bam
-    ch_mapping_index = FASTQ_MAP_ALL.out.bai
-    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+    // FASTQ_MAP_ALL(
+    //     params.aligner,                                                               // string
+    //     ch_reads,                                                                     // channel: [ val(meta), fastq ]
+    //     ch_ref,                                                                       // channel: [ val(meta), fasta ]
+    //     ch_bwa_index                                                                  // channel: [ val(meta), index ]
+    // )
+    // ch_mapping = FASTQ_MAP_ALL.out.bam
+    // ch_mapping_index = FASTQ_MAP_ALL.out.bai
+    // ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+
     // ch_multiqc_files mark duplicates, samtools stats?
 
     //
@@ -131,42 +143,42 @@ workflow IGSMP {
     //
     // Variant calling
     //
-    BAM_CALL_VARIANT_ALL(
-        params.variant_caller,
-        ch_mapping,
-        ch_ref,
-        ch_fai_index
-    )
-    ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
-    ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
+    // BAM_CALL_VARIANT_ALL(
+    //     params.variant_caller,
+    //     ch_mapping,
+    //     ch_ref,
+    //     ch_fai_index
+    // )
+    // ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
+    // ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
     // Special INV variant calling
     //
-    ch_rescued_variants = Channel.empty()
-    if (workflow.profile.contains("INV")) {
-        BAM_SPECIAL_VARIANTS_CASE_ALL(
-            ch_mapping,
-            ch_mapping_index,
-            ch_ref,
-            ch_fai_index
-        )
-        ch_rescued_variants = BAM_SPECIAL_VARIANTS_CASE_ALL.out.bed
-    }
+    // ch_rescued_variants = Channel.empty()
+    // if (workflow.profile.contains("INV")) {
+    //     BAM_SPECIAL_VARIANTS_CASE_ALL(
+    //         ch_mapping,
+    //         ch_mapping_index,
+    //         ch_ref,
+    //         ch_fai_index
+    //     )
+    //     ch_rescued_variants = BAM_SPECIAL_VARIANTS_CASE_ALL.out.bed
+    // }
 
     //
     // Consensus calling
     //
-    VCF_CALL_CONSENSUS_ALL(
-        params.consensus_caller,
-        params.consensus_mincov,
-        ch_ref,                             // channel: [ val(meta), fasta ]
-        BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
-        BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
-        ch_rescued_variants                 // channel: [ val(meta), bed   ]
-    )
+    // VCF_CALL_CONSENSUS_ALL(
+    //     params.consensus_caller,
+    //     params.consensus_mincov,
+    //     ch_ref,                             // channel: [ val(meta), fasta ]
+    //     BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
+    //     BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
+    //     ch_rescued_variants                 // channel: [ val(meta), bed   ]
+    // )
+    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
-    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
     // ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
 
 
@@ -237,6 +249,7 @@ workflow IGSMP {
         // ch_multiqc_config.view()
         // ch_multiqc_custom_config.view()
         // ch_multiqc_logo.view()
+
         MULTIQC (
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),

@@ -8,8 +8,7 @@ process KMA {
         'biocontainers/kma:1.4.15--he4a0461_0' }"
 
     input:
-    tuple val(meta) , path(reads)
-    tuple val(meta2), path(index)
+    tuple val(meta) , path(reads), path(index)
     val interleaved
     val mat_format
 
@@ -27,7 +26,7 @@ process KMA {
 
     script:
     def args            = task.ext.args ?: ''
-    def prefix          = task.ext.prefix ?: "${meta.id}.${meta2.id}.kma"
+    def prefix          = task.ext.prefix ?: "${meta.id}.kma"
     def input_style     = interleaved ? "-int ${reads}" : "-ipe ${reads}"
     def create_mat      = mat_format ? "-matrix" : ''
     """
@@ -47,7 +46,7 @@ process KMA {
     """
 
     stub:
-    def prefix      = task.ext.prefix ?: "${meta.id}.${meta2.id}.kma"
+    def prefix      = task.ext.prefix ?: "${meta.id}.kma"
     def create_mat  = mat_format ? "touch ${prefix}.mat.gz" : ''
     """
     touch ${prefix}.res \\
