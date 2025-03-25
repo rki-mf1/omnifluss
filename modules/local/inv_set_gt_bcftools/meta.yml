@@ -1,4 +1,4 @@
-name: ADJUST_GT_CONSENSUS
+name: INV_SET_GT_BCFTOOLS
 description: Add and adjust Genotypes, index the vcf
 keywords:
   - vcf
