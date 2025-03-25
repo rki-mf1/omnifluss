@@ -13,8 +13,8 @@
                 ],
                 "1": [
                     "versions.yml:md5,0686151f8904a178e94d7b45febf55fa",
-                    "versions.yml:md5,4b863f593f80aaf04f25682c02c04049",
                     "versions.yml:md5,cf768fa7291476ee3a6ae7f5f9d413a9",
+                    "versions.yml:md5,c67aca182679fd8da255d49bbdb4e078",
                     "versions.yml:md5,d90f50b56cb7bff2ecda7ef3bba5d74a"
                 ],
                 "consensus_calls": [
@@ -28,8 +28,8 @@
                 ],
                 "versions": [
                     "versions.yml:md5,0686151f8904a178e94d7b45febf55fa",
-                    "versions.yml:md5,4b863f593f80aaf04f25682c02c04049",
                     "versions.yml:md5,cf768fa7291476ee3a6ae7f5f9d413a9",
+                    "versions.yml:md5,c67aca182679fd8da255d49bbdb4e078",
                     "versions.yml:md5,d90f50b56cb7bff2ecda7ef3bba5d74a"
                 ]
             }

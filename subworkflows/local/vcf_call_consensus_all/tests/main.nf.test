@@ -14,6 +14,7 @@ nextflow_workflow {
     tag "bcftools/consensus"
     tag "pyvcf"
     tag "inv_create_consensus_mask_bedtools"
+    tag "inv_set_gt_bcftools"
 
 
     test("vcf_call_consensus_all") {

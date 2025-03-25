@@ -1,13 +1,13 @@
 nextflow_process {
 
-    name "Test Process RESCUE_VARIANTS"
+    name "Test Process INV_RESCUE_VARIANTS_PYTHON"
     script "../main.nf"
-    process "RESCUE_VARIANTS"
+    process "INV_RESCUE_VARIANTS_PYTHON"
     config "./nextflow.config"
 
     tag "modules"
     tag "modules_local"
-    tag "rescue_variants"
+    tag "inv_rescue_variants_python"
 
     test("influenza - vcf") {
 
