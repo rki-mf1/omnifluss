@@ -42,14 +42,16 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         /****************************************************************/
         /* STEP 1: Compute KMA alignment and ref ranking                */
         /****************************************************************/
-        ch_crossp = ch_reads.combine(ch_kma_index)
-            .map{meta_sample, reads, meta_segments, index ->
+        ch_kma_input = ch_reads.combine(ch_kma_index)
+            .multiMap{meta_sample, reads, meta_segments, index ->
                 def newMeta = meta_sample + [segment: meta_segments.id]
-                return [newMeta, reads, index]
+                ch_reads: [ newMeta, reads ]
+                ch_kma_index: [ meta_segments, index ]
             }
 
         KMA(
-            ch_crossp,
+            ch_kma_input.ch_reads,
+            ch_kma_input.ch_kma_index,
             false,
             false
         )
@@ -87,19 +89,18 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_top1ids_cpy = ch_top1ids
             .map{ meta, top1txt -> return [meta.segment, meta, top1txt] }
 
-        ch_reference_db_fastas_cpy.cross(ch_top1ids_cpy)
+        ch_seqkit_grep_input = ch_reference_db_fastas_cpy.cross(ch_top1ids_cpy)
             .multiMap{fasta_list, sample_list ->
                 ch_segment: [ sample_list[1], fasta_list[2] ]
                 pattern: sample_list[2]
             }
-            .set{ ch_crossp }
 
         SEQKIT_GREP(
-            ch_crossp.ch_segment,
-            ch_crossp.pattern
+            ch_seqkit_grep_input.ch_segment,
+            ch_seqkit_grep_input.pattern
         )
         ch_versions     = ch_versions.mix(SEQKIT_GREP.out.versions.first())
-        ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter)
+        ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter).view()
 
         /****************************************************************/
         /* STEP 4: Concat FASTAs of Top1 refrences                      */
@@ -126,7 +127,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             ch_top1fastas
         )
         ch_versions         = ch_versions.mix(CAT_CAT.out.versions.first())
-        ch_final_topRefs    = CAT_CAT.out.file_out
+        ch_final_topRefs    = CAT_CAT.out.file_out.view()
 
     } else {
 

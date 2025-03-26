@@ -14,6 +14,11 @@ input:
       type: file
       description: FASTQ file
       pattern: "*.{fastq,fq}"
+  - meta2:
+      type: map
+      description: |
+        Groovy Map containing reference index information. Requires 'id' key to be present if no custom prefix parameter is specified.
+        e.g. [ id:'sample' ]
   - index:
       type: file
       description: kma database file generated via kma_index
