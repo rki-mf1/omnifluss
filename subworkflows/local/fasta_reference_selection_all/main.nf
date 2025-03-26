@@ -1,7 +1,6 @@
 include { KMA }                         from '../../../modules/local/inv_referenceSelection_kma/main'
 include { INV_GET_TOP1_REFERENCE_GREP } from '../../../modules/local/inv_reference_selection_grep/main'
-include { CAT_CAT as CAT_CAT1}          from '../../../modules/nf-core/cat/cat/main'
-include { CAT_CAT as CAT_CAT2}          from '../../../modules/nf-core/cat/cat/main'
+include { CAT_CAT }                     from '../../../modules/nf-core/cat/cat/main'
 include { SEQKIT_GREP }                 from '../../../modules/nf-core/seqkit/grep/main.nf'
 
 /*
@@ -58,7 +57,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_kma_spa  = ch_kma_spa.mix(KMA.out.spa)
 
         /****************************************************************/
-        /* STEP 2: Get ID of Top1 refrence(s)                           */
+        /* STEP 2: Get ID of Top1 refrences                             */
         /****************************************************************/
         INV_GET_TOP1_REFERENCE_GREP(
             ch_kma_spa
@@ -69,45 +68,62 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         // Generate a nf-core style input channel:
         //      tuple val(meta), path(txt)
         // where meta contains the map of ch_reads and path(txt) is a list of all top1id txt files.
-        ch_top1ids
-            .groupTuple()
-            .set{ ch_top1ids }
+        // ch_top1ids
+        //     .groupTuple()
+        //     .set{ ch_top1ids }
 
-        CAT_CAT1(
-            ch_top1ids
-        )
-        ch_versions = ch_versions.mix(CAT_CAT1.out.versions.first())
-        ch_top1ids  = CAT_CAT1.out.file_out
+        // CAT_CAT1(
+        //     ch_top1ids
+        // )
+        // ch_versions = ch_versions.mix(CAT_CAT1.out.versions.first())
+        // ch_top1ids  = CAT_CAT1.out.file_out
 
         /****************************************************************/
-        /* STEP 3: Get FASTA of Top1 refrence(s)                        */
+        /* STEP 3: Get FASTA of Top1 refrences                          */
         /****************************************************************/
+        ch_reference_db_fastas_cpy = ch_reference_db_fastas
+            .map{ meta, fasta -> return [meta.id, meta, fasta] }
 
-        pattern = ch_top1ids.map { _meta, file -> return file }      // need only the file here for SEQKIT_GREP
+        ch_top1ids_cpy = ch_top1ids
+            .map{ meta, top1txt -> return [meta.segment, meta, top1txt] }
+
+        ch_reference_db_fastas_cpy.cross(ch_top1ids_cpy)
+            .map{ fasta_list, sample_list -> return [[sample_list[1], fasta_list[2]], sample_list[2]] }
+            .set{ ch_crossp }
+
         SEQKIT_GREP(
-            ch_reference_db_fastas,
-            pattern
+            ch_crossp.map{ ch_segment, _pattern -> return ch_segment },
+            ch_crossp.map{ _ch_segment, pattern -> return pattern }
         )
         ch_versions     = ch_versions.mix(SEQKIT_GREP.out.versions.first())
         ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter)
 
+        /****************************************************************/
+        /* STEP 4: Concat FASTAs of Top1 refrences                      */
+        /****************************************************************/
+        ch_top1fastas
+            .map{ meta, fasta -> return [[id:meta.id, single_end:meta.single_end], fasta] }
+            .groupTuple()
+            .set{ ch_top1fastas }
+
         // Generate a nf-core style input channel:
         //      tuple val(meta), path(fasta)
         // where meta contains the map of ch_reads and path(fasta) is a list of all top1-sequence fasta files.
-        ch_top1fastas.map { tuple ->
-            def fasta = tuple[1]
-            return fasta
-        }
-        .collect()
-        .map { top1fastas ->
-            [[id: ch_reads[0].id + '.topRef' ], top1fastas]
-        }
-        .set{ ch_top1fastas }
+        // ch_top1fastas.map { tuple ->
+        //     def fasta = tuple[1]
+        //     return fasta
+        // }
+        // .collect()
+        // .map { top1fastas ->
+        //     [[id: ch_reads[0].id + '.topRef' ], top1fastas]
+        // }
+        // .set{ ch_top1fastas }
 
-        CAT_CAT2(
+        CAT_CAT(
             ch_top1fastas
         )
-        ch_final_topRefs  = CAT_CAT2.out.file_out
+        ch_versions         = ch_versions.mix(CAT_CAT.out.versions.first())
+        ch_final_topRefs    = CAT_CAT.out.file_out
 
     } else {
 
