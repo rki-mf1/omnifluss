@@ -88,12 +88,15 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             .map{ meta, top1txt -> return [meta.segment, meta, top1txt] }
 
         ch_reference_db_fastas_cpy.cross(ch_top1ids_cpy)
-            .map{ fasta_list, sample_list -> return [[sample_list[1], fasta_list[2]], sample_list[2]] }
+            .multiMap{fasta_list, sample_list ->
+                ch_segment: [ sample_list[1], fasta_list[2] ]
+                pattern: sample_list[2]
+            }
             .set{ ch_crossp }
 
         SEQKIT_GREP(
-            ch_crossp.map{ ch_segment, _pattern -> return ch_segment },
-            ch_crossp.map{ _ch_segment, pattern -> return pattern }
+            ch_crossp.ch_segment,
+            ch_crossp.pattern
         )
         ch_versions     = ch_versions.mix(SEQKIT_GREP.out.versions.first())
         ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter)
