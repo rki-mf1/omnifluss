@@ -87,7 +87,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             ch_seqkit_grep_input.pattern
         )
         ch_versions     = ch_versions.mix(SEQKIT_GREP.out.versions.first())
-        ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter).view()
+        ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter)
 
         /****************************************************************/
         /* STEP 4: Concat FASTAs of Top1 refrences                      */
@@ -101,7 +101,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             ch_top1fastas
         )
         ch_versions         = ch_versions.mix(CAT_CAT.out.versions.first())
-        ch_final_topRefs    = CAT_CAT.out.file_out.view()
+        ch_final_topRefs    = CAT_CAT.out.file_out
 
     } else {
 
