@@ -1,4 +1,4 @@
-name: ADJUST_DELETION_CONSENSUS
+name: INV_GET_DELETIONS_PYVCF
 description: writes entries containing deletions into a vcf
 keywords:
   - vcf
@@ -9,7 +9,7 @@ tools:
         write entries to a file where the length of REF is > length of ALT
       homepage: https://github.com/jdoughertyii/PyVCF
       documentation: https://pyvcf.readthedocs.io/en/latest/API.html
-      doi: 
+      doi:
       licence: ["MIT"]
 input:
   - meta:
