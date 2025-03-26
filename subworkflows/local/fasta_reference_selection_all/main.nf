@@ -67,19 +67,6 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_versions = ch_versions.mix(INV_GET_TOP1_REFERENCE_GREP.out.versions.first())
         ch_top1ids  = ch_top1ids.mix(INV_GET_TOP1_REFERENCE_GREP.out.txt)
 
-        // Generate a nf-core style input channel:
-        //      tuple val(meta), path(txt)
-        // where meta contains the map of ch_reads and path(txt) is a list of all top1id txt files.
-        // ch_top1ids
-        //     .groupTuple()
-        //     .set{ ch_top1ids }
-
-        // CAT_CAT1(
-        //     ch_top1ids
-        // )
-        // ch_versions = ch_versions.mix(CAT_CAT1.out.versions.first())
-        // ch_top1ids  = CAT_CAT1.out.file_out
-
         /****************************************************************/
         /* STEP 3: Get FASTA of Top1 refrences                          */
         /****************************************************************/
@@ -109,19 +96,6 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
             .map{ meta, fasta -> return [[id:meta.id, single_end:meta.single_end], fasta] }
             .groupTuple()
             .set{ ch_top1fastas }
-
-        // Generate a nf-core style input channel:
-        //      tuple val(meta), path(fasta)
-        // where meta contains the map of ch_reads and path(fasta) is a list of all top1-sequence fasta files.
-        // ch_top1fastas.map { tuple ->
-        //     def fasta = tuple[1]
-        //     return fasta
-        // }
-        // .collect()
-        // .map { top1fastas ->
-        //     [[id: ch_reads[0].id + '.topRef' ], top1fastas]
-        // }
-        // .set{ ch_top1fastas }
 
         CAT_CAT(
             ch_top1fastas
