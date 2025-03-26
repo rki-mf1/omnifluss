@@ -21,7 +21,7 @@ process INV_GET_DELETIONS_PYVCF {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        get_deletions.py: \$(head -n 1 version.tmp)
+        get_deletions.py: \$(python get_deletions.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 
@@ -32,7 +32,7 @@ process INV_GET_DELETIONS_PYVCF {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        get_deletions.py: '1.0.0'
+        get_deletions.py: \$(python get_deletions.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 }
