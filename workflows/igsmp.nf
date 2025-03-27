@@ -93,26 +93,23 @@ workflow IGSMP {
         ch_reference_db_fastas,
         ch_reference_db_index
     )
-
-    // else if (params.reference_selection == "static") {
-    //     ref = tuple([id:file(params.fasta).getBaseName()], params.fasta)
-    // }
-
+    ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa             // channel: [ val(meta), [file(spa)] ]      // nf-core style
+    ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs   // channel: [ val(meta), fasta ]            // nf-core style
+    ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
     // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
-    // ch_versions = ch_versions.mix(FASTA_SELECT_REFERENCE_ALL.out.versions)
 
     //
     // Reference processing
     //
-    // FASTA_PROCESS_REFERENCE_ALL(
-    //     params.reference_processing,
-    //     params.aligner,
-    //     ref
-    // )
-    // ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
-    // ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
-    // ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
-    // ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
+    FASTA_PROCESS_REFERENCE_ALL(
+        params.reference_processing,
+        params.aligner,
+        ch_final_topRefs
+    )
+    ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
+    ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
+    ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
+    ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
 
     //
     // Mapping
