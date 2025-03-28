@@ -73,7 +73,7 @@ workflow IGSMP {
     // Reference selection
     //
     if (params.reference_selection == "static"){
-        ch_final_topRefs = tuple([id:file(params.reference).getSimpleName()], params.reference) 
+        ch_final_topRefs = Channel.of( tuple([id:file(params.reference).getSimpleName()], params.reference) )
     }
     else {
         ch_reference_db_fastas = Channel.fromPath("${params.reference_selection_db}/*.fasta")
