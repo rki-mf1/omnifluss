@@ -44,7 +44,7 @@ def prepare_reference(fasta,length,out):
 				header = header.replace(":", "_").replace(" ", "_").replace("(", "_").replace(")", "_").replace("'", "_").replace(".", "_").replace("[", "_").replace("]", "_")
 				seq = str(record.seq).upper()
 				if not all(i in valid_letters for i in seq):
-					sys.exit("error: sequence '" + header + "' in " + fasta + " conatins non-IUPAC characters.")
+					sys.exit("error: sequence '" + header + "' in " + fasta + " contains non-IUPAC characters.")
 				#replace any non standard characters - otherwise problems with lofreq and bcltools consensus
 				seq = seq.replace(".", "").replace("-", "").replace("U", "T").replace("W", "A").replace("S", "C").replace("M", "A").replace("K", "G").replace("R", "A").replace("Y", "C").replace("B", "C").replace("D", "A").replace("H", "A").replace("V", "A").replace("N", "A")
 				if length > 0:
