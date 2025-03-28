@@ -30,9 +30,11 @@ workflow IGSMP {
     ch_samplesheet                       // channel: [ meta, fastq ]
 
     main:
-    ch_reads = ch_samplesheet
-    ch_versions = Channel.empty()
-    ch_multiqc_files = Channel.empty()
+    ch_reads            = ch_samplesheet
+    ch_versions         = Channel.empty()
+    ch_multiqc_files    = Channel.empty()
+    ch_final_topRefs    = Channel.empty()
+    ch_spa              = Channel.empty()
 
     //
     // Read QC
@@ -70,33 +72,38 @@ workflow IGSMP {
     //
     // Reference selection
     //
-    ch_reference_db_fastas = Channel.fromPath("${params.reference_selection_db}/*.fasta")
-        .map{fasta -> 
-            def id = fasta.getName().tokenize('.')[0]
-            return tuple([id: id], fasta)
-        }
+    if (params.reference_selection == "static"){
+        ch_final_topRefs = tuple([id:file(params.reference).getSimpleName()], params.reference) 
+    }
+    else {
+        ch_reference_db_fastas = Channel.fromPath("${params.reference_selection_db}/*.fasta")
+            .map{fasta -> 
+                def id = fasta.getName().tokenize('.')[0]
+                return tuple([id: id], fasta)
+            }
 
-    ch_reference_db_index = Channel.fromPath("${params.reference_selection_db}/*.{length.b,seq.b,comp.b,name}")
-        .map{indexfile -> 
-            def id = indexfile.getName().tokenize('.')[0]
-            return [id, indexfile]
-        }
-        .groupTuple()
-        .map{
-            id, files ->
-            return [[id:id], files]
-        }
+        ch_reference_db_index = Channel.fromPath("${params.reference_selection_db}/*.{length.b,seq.b,comp.b,name}")
+            .map{indexfile -> 
+                def id = indexfile.getName().tokenize('.')[0]
+                return [id, indexfile]
+            }
+            .groupTuple()
+            .map{
+                id, files ->
+                return [[id:id], files]
+            }
 
-    FASTA_REFERENCE_SELECTION_ALL(
-        params.reference_selection,
-        ch_reads,
-        ch_reference_db_fastas,
-        ch_reference_db_index
-    )
-    ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa             // channel: [ val(meta), [file(spa)] ]      // nf-core style
-    ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs   // channel: [ val(meta), fasta ]            // nf-core style
-    ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
-    // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
+        FASTA_REFERENCE_SELECTION_ALL(
+            params.reference_selection,
+            ch_reads,
+            ch_reference_db_fastas,
+            ch_reference_db_index
+        )
+        ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa             // channel: [ val(meta), [file(spa)] ]      // nf-core style
+        ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs   // channel: [ val(meta), fasta ]            // nf-core style
+        ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
+        // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
+    }
 
     //
     // Reference processing
