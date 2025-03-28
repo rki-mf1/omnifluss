@@ -39,7 +39,7 @@ def prepare_reference(fasta,length,out):
 		with open_func(fasta, mode) as in_handle:
 			for record in SeqIO.parse(in_handle, "fasta"):
 				header = str(record.description)
-				print(header)
+				#print(header)
 				#remove colon and spaces in header for subsequent tools to work
 				header = header.replace(":", "_").replace(" ", "_").replace("(", "_").replace(")", "_").replace("'", "_").replace(".", "_").replace("[", "_").replace("]", "_")
 				seq = str(record.seq).upper()
@@ -49,7 +49,7 @@ def prepare_reference(fasta,length,out):
 				seq = seq.replace(".", "").replace("-", "").replace("U", "T").replace("W", "A").replace("S", "C").replace("M", "A").replace("K", "G").replace("R", "A").replace("Y", "C").replace("B", "C").replace("D", "A").replace("H", "A").replace("V", "A").replace("N", "A")
 				if length > 0:
 					seq = textwrap.fill(seq, width=length)
-					print(seq)
+					#print(seq)
 				out_handle.write(">" + header + "\n" + seq + "\n")
 
 def write_version():
