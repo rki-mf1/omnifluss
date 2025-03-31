@@ -25,6 +25,11 @@
                         "git_sha": "33ef773a7ea36e88323902f63662aa53c9b88988",
                         "installed_by": ["modules"]
                     },
+                    "bedtools/genomecov": {
+                        "branch": "master",
+                        "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+                        "installed_by": ["modules"]
+                    },
                     "bwa/index": {
                         "branch": "master",
                         "git_sha": "e0ff65e1fb313677de09f5f477ae3da30ce19b7b",
@@ -84,6 +89,11 @@
                         "branch": "master",
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["bam_markduplicates_picard", "modules"]
+                    },
+                    "samtools/coverage": {
+                        "branch": "master",
+                        "git_sha": "2d20463181b1c38981a02e90d3084b5f9fa8d540",
+                        "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
                         "branch": "master",

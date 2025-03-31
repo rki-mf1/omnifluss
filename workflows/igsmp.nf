@@ -7,9 +7,12 @@ include { FASTQ_QC_TRIMMING_ALL               } from '../subworkflows/local/fast
 include { FASTQ_TAXONOMIC_FILTERING_ALL       } from '../subworkflows/local/fastq_taxonomic_filtering_all'
 include { FASTA_PROCESS_REFERENCE_ALL         } from '../subworkflows/local/fasta_process_reference_all'
 include { FASTQ_MAP_ALL                       } from '../subworkflows/local/fastq_map_all'
+include { BAM_GENOMECOV_ALL                   } from '../subworkflows/local/bam_genomecov_all'
 include { BAM_CALL_VARIANT_ALL                } from '../subworkflows/local/bam_call_variant_all'
 include { BAM_SPECIAL_VARIANTS_CASE_ALL       } from '../subworkflows/local/bam_special_variants_case_all'
+include { BAM_SAMTOOLS_STATS_ALL              } from '../subworkflows/local/bam_samtools_stats_all'
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
+include { INV_REPORTING_ALL                   } from '../subworkflows/local/inv_reporting_all'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
 include { paramsSummaryMap                    } from 'plugin/nf-validation'
@@ -103,6 +106,16 @@ workflow IGSMP {
     // ch_multiqc_files mark duplicates, samtools stats?
 
     //
+    // Collecting Data for Report (1/2)
+    //
+    BAM_GENOMECOV_ALL(
+        ch_mapping,
+        [],
+        "coverage.tsv",
+        true
+    )
+
+    //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
     //
     // if (! params.skip_primer_clipping) {
@@ -122,8 +135,19 @@ workflow IGSMP {
         ch_ref,
         ch_fai_index
     )
+    ch_bam           = BAM_CALL_VARIANT_ALL.out.bam
+    ch_bai           = BAM_CALL_VARIANT_ALL.out.bai
     ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
     ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
+
+    //
+    // Collecting Data for Report (2/2)
+    //
+    BAM_SAMTOOLS_STATS_ALL(
+        ch_bam,
+        ch_ref,
+        ch_fai_index
+    )
 
     //
     // Special INV variant calling
@@ -131,8 +155,8 @@ workflow IGSMP {
     ch_rescued_variants = Channel.empty()
     if (workflow.profile.contains("INV")) {
         BAM_SPECIAL_VARIANTS_CASE_ALL(
-            ch_mapping,
-            ch_mapping_index,
+            ch_bam,         //old version: ch_mapping
+            ch_bai,         //old version: ch_mapping_index
             ch_ref,
             ch_fai_index
         )
@@ -150,10 +174,31 @@ workflow IGSMP {
         BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
         ch_rescued_variants                 // channel: [ val(meta), bed   ]
     )
-
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
     // ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
 
+    //collect files for report
+    ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
+    ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
+    ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]}
+    ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
+    ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
+    ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
+    ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
+
+    //
+    // Reporting
+    //
+    INV_REPORTING_ALL(
+        params.reporting_script,
+        ch_fastp_jsons,
+        ch_kraken_reports,
+        ch_markduplicates_metrics,
+        ch_bedtools_genomecov,
+        ch_samtools_coverage,
+        ch_samtools_flagstat,
+        ch_consensus_calls
+    )
 
     //
     // Genome QC

@@ -36,13 +36,15 @@ workflow FASTQ_MAP_ALL {
         )
         ch_bam      = BAM_MARKDUPLICATES_PICARD.out.bam
         ch_bai      = BAM_MARKDUPLICATES_PICARD.out.bai
+        ch_markduplicates_metrics     = BAM_MARKDUPLICATES_PICARD.out.metrics
         ch_versions = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions.first())
     }
 
     emit:
-    bam           = ch_bam
-    bai           = ch_bai
-    versions      = ch_versions
+    bam                          = ch_bam
+    bai                          = ch_bai
+    markduplicates_metrics       = ch_markduplicates_metrics
+    versions                     = ch_versions
 
 }
 
