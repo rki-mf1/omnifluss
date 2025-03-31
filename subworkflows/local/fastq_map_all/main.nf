@@ -45,7 +45,7 @@ workflow FASTQ_MAP_ALL {
         ch_samtools_idxstats = BAM_MARKDUPLICATES_PICARD.out.idxstats.map{it[1]}
         ch_picard_markduplicate_metrics = BAM_MARKDUPLICATES_PICARD.out.metrics.map{it[1]}
         //combining channels
-        ch_multiqc_files = ch_samtools_stats.mix(ch_samtools_flagstat,ch_samtools_idxstats,ch_picard_markduplicate_metrics).view()
+        ch_multiqc_files = ch_samtools_stats.mix(ch_samtools_flagstat,ch_samtools_idxstats,ch_picard_markduplicate_metrics)
     }
 
     emit:
