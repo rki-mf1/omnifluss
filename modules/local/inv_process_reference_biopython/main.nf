@@ -21,7 +21,7 @@ process INV_PREPARE_REFERENCE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        prep_reference.py: \$(python prep_reference.py --version | cut -d ' ' -f 2)
+        prep_reference.py: \$(prep_reference.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 
@@ -32,7 +32,7 @@ process INV_PREPARE_REFERENCE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        prep_reference.py: \$(python prep_reference.py --version | cut -d ' ' -f 2)
+        prep_reference.py: \$(prep_reference.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 }
