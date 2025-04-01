@@ -21,14 +21,25 @@ workflow FASTQ_ALIGN_BWA {
 
     BWA_MEM ( ch_reads, ch_index, ch_fasta, val_sort_bam )
     ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
+    /// test
+    ch_bam_sort_stats_samtools_input = BWA_MEM.out.bam.join(ch_fasta)
+    .multiMap{meta, bam, reference ->
+        ch_bam: [ meta, bam ]
+        ch_ref: [ meta, reference ]
+        }
 
+
+    BAM_SORT_STATS_SAMTOOLS ( ch_bam_sort_stats_samtools_input.ch_bam, ch_bam_sort_stats_samtools_input.ch_ref )
+    ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
+    /// test end
+    /// comment this in
     //
     // Sort, index BAM file and run samtools stats, flagstat and idxstats
     //
 
-    BAM_SORT_STATS_SAMTOOLS ( BWA_MEM.out.bam, ch_fasta )
-    ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
-
+    // BAM_SORT_STATS_SAMTOOLS ( BWA_MEM.out.bam, ch_fasta )
+    // ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
+    /// comment this in
     emit:
     bam_orig = BWA_MEM.out.bam                      // channel: [ val(meta), path(bam) ]
 

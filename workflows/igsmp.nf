@@ -118,18 +118,26 @@ workflow IGSMP {
     ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
     ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
 
+    //"sort" channels
+    ch_fastq_map_all_input = ch_reads.join(ch_ref).join(ch_bwa_index)
+        .multiMap{meta, reads, reference, index ->
+            ch_reads: [ meta, reads ]
+            ch_ref: [ meta, reference ]
+            ch_bwa_index: [ meta, index ]
+            }
+
     //
     // Mapping
     //
-    // FASTQ_MAP_ALL(
-    //     params.aligner,                                                               // string
-    //     ch_reads,                                                                     // channel: [ val(meta), fastq ]
-    //     ch_ref,                                                                       // channel: [ val(meta), fasta ]
-    //     ch_bwa_index                                                                  // channel: [ val(meta), index ]
-    // )
-    // ch_mapping = FASTQ_MAP_ALL.out.bam
-    // ch_mapping_index = FASTQ_MAP_ALL.out.bai
-    // ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+    FASTQ_MAP_ALL(
+        params.aligner,                         // string
+        ch_fastq_map_all_input.ch_reads,        // channel: [ val(meta), fastq ]
+        ch_fastq_map_all_input.ch_ref,          // channel: [ val(meta), fasta ]
+        ch_fastq_map_all_input.ch_bwa_index     // channel: [ val(meta), index ]
+    )
+    ch_mapping = FASTQ_MAP_ALL.out.bam
+    ch_mapping_index = FASTQ_MAP_ALL.out.bai
+    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
 
     // ch_multiqc_files mark duplicates, samtools stats?
 
