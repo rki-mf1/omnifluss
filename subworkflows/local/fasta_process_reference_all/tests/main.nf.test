@@ -15,30 +15,7 @@ nextflow_workflow {
     tag "bwa_index"
 
     // Test name preferably indicating the test-data and file-format used
-    test("sarscov2 - single_end - stub") {
-
-        // Activate the stub mode for nextflow
-        options '-stub'
-
-        when {
-            workflow {
-                """
-                input[0] = "inv_prep_ref,samtools_faidx"
-                input[1] = "bwa"
-                input[2] = Channel.value([[id:"dummy_file"],"$projectDir/assets/dummy_file.txt"])
-                """
-            }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.success},
-                { assert snapshot(workflow.out).match()}
-            )
-        }
-    }
-
-    test("sarscov2 - paired_end - stub") {
+    test("dummy input - stub") {
 
         // Activate the stub mode for nextflow
         options '-stub'
