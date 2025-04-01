@@ -1,4 +1,4 @@
-process CREATE_MASK_CONSENSUS {
+process INV_CREATE_CONSENSUS_MASK_BEDTOOLS {
     tag "$meta.id"
     label 'process_medium'
 

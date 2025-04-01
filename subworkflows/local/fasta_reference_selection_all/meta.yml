@@ -1,0 +1,96 @@
+name: "fasta_reference_selection_all"
+description: This subworkflow provides a reference genome to the main workflow. A reference genome can either be provided by user input or automatically determined from a set of genomes.
+keywords:
+  - fasta
+  - reference
+  - selection
+  - kma
+components:
+  - kma/index
+  - kma/kma
+  - seqkit/grep
+  - cat/cat
+
+input:
+  - tools:
+      type: string
+      description: |
+        Comma-separated list of tool names that are used for this task
+      pattern: "kma"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'mySample', single_end:false ]
+  - ch_reads:
+      type: file
+      description: |
+        List of two input FastQ files for paired-end NGS data.
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing reference genome/chromosome/segment information.
+        e.g. [ id:'myReference' ]
+  - ch_reference_db_fastas:
+      type: list
+      description: |
+        List of genome/chromosome/segment sequences (FASTA).
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.{fa,fasta,fa.gz,fasta.gz}"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing reference genome/chromosome/segment information.
+        e.g. [ id:'myReference' ]
+  - ch_kma_index:
+      type: list
+      description: |
+        List of index files (from KMA_INDEX).
+        Structure: [ val(meta), path(kma_index) ]
+      pattern: "*.{comp.b,length.b,name,seq.b}"
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the sample identifier.
+        e.g. [ id: 'NA12878' ]
+  - spa:
+      type: file
+      description: |
+        File containing the ranking of top matching references.
+        Structure: [ val(meta), path(spa) ]
+      pattern: "*.kma.spa"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the sample identifier.
+        e.g. [ id: 'NA12878' ]
+  - top1ids:
+      type: file
+      description: |
+        File containing the top ranked genome ID or top ranked ID per segment.
+        Structure: [ val(meta), path(txt) ]
+      pattern: "*.txt"
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing the sample identifier.
+        e.g. [ id: 'NA12878' ]
+  - final_topRefs:
+      type: file
+      description: |
+        File containing the sequence of the top-reanked genome or segments.
+        Structure: [ val(meta), path(fasta) ]
+      pattern: "*.fa.gz"
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+
+authors:
+  - "@krannich479"
+maintainers:
+  - "@krannich479"

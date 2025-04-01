@@ -1,7 +1,7 @@
 include { BCFTOOLS_FILTER                            } from '../../../modules/nf-core/bcftools/filter/main'
-include { ADJUST_DELETION_CONSENSUS                  } from '../../../modules/local/inv_consensus_pyvcf/main'
-include { ADJUST_GT_CONSENSUS                        } from '../../../modules/local/inv_consensus_bcftools/main'
-include { CREATE_MASK_CONSENSUS                      } from '../../../modules/local/inv_consensus_bedtools/main'
+include { INV_GET_DELETIONS_PYVCF                    } from '../../../modules/local/inv_get_deletions_pyvcf/main'
+include { INV_CREATE_CONSENSUS_MASK_BEDTOOLS         } from '../../../modules/local/inv_create_consensus_mask_bedtools/main'
+include { INV_SET_GT_BCFTOOLS                        } from '../../../modules/local/inv_set_gt_bcftools/main'
 include { TABIX_TABIX                                } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_CONSENSUS                         } from '../../../modules/nf-core/bcftools/consensus/main'
 
@@ -28,7 +28,7 @@ workflow VCF_CALL_CONSENSUS_ALL {
         ch_versions = ch_versions.mix(BCFTOOLS_FILTER.out.versions.first())
 
         // mask
-        ADJUST_DELETION_CONSENSUS(
+        INV_GET_DELETIONS_PYVCF(
             ch_filtered_vcf             // channel: [ val(meta), vcf ]
         )
         .del_vcf
@@ -36,7 +36,7 @@ workflow VCF_CALL_CONSENSUS_ALL {
         //note: no version save, because bcftools is used and it was incorporated prior
 
         // comprised createMaskConsensus & createMaskConsensus_special_variant_case in this module
-        CREATE_MASK_CONSENSUS(
+        INV_CREATE_CONSENSUS_MASK_BEDTOOLS(
             val_consensus_mincov,       // integer
             ch_del_adjusted_vcf,        // channel: [ val(meta), vcf ]
             ch_bam,                     // channel: [ val(meta), bam ]
@@ -44,15 +44,15 @@ workflow VCF_CALL_CONSENSUS_ALL {
         ).final_bed
         | set {ch_final_bed}
 
-        ch_versions = ch_versions.mix(CREATE_MASK_CONSENSUS.out.versions.first())
+        ch_versions = ch_versions.mix(INV_CREATE_CONSENSUS_MASK_BEDTOOLS.out.versions.first())
 
         // vcf
-        ADJUST_GT_CONSENSUS(
+        INV_SET_GT_BCFTOOLS(
             ch_filtered_vcf             // channel: [ val(meta), vcf ]
         ).vcf
         | set {ch_final_vcf}
 
-        ch_versions = ch_versions.mix(ADJUST_GT_CONSENSUS.out.versions.first())
+        ch_versions = ch_versions.mix(INV_SET_GT_BCFTOOLS.out.versions.first())
 
         TABIX_TABIX(
             ch_final_vcf                // channel: [ val(meta), vcf ]
