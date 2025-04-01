@@ -121,17 +121,16 @@ workflow IGSMP {
     //
     // Mapping
     //
-    // FASTQ_MAP_ALL(
-    //     params.aligner,                                                               // string
-    //     ch_reads,                                                                     // channel: [ val(meta), fastq ]
-    //     ch_ref,                                                                       // channel: [ val(meta), fasta ]
-    //     ch_bwa_index                                                                  // channel: [ val(meta), index ]
-    // )
-    // ch_mapping = FASTQ_MAP_ALL.out.bam
-    // ch_mapping_index = FASTQ_MAP_ALL.out.bai
-    // ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
-
-    // ch_multiqc_files mark duplicates, samtools stats?
+    FASTQ_MAP_ALL(
+        params.aligner,                                                               // string
+        ch_reads,                                                                     // channel: [ val(meta), fastq ]
+        ch_ref,                                                                       // channel: [ val(meta), fasta ]
+        ch_bwa_index                                                                  // channel: [ val(meta), index ]
+    )
+    ch_mapping = FASTQ_MAP_ALL.out.bam
+    ch_mapping_index = FASTQ_MAP_ALL.out.bai
+    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQ_MAP_ALL.out.multiqc_files)
 
     //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
@@ -183,8 +182,7 @@ workflow IGSMP {
     // )
     // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
-    // ch_multiqc_files = ch_multiqc_files.mix(VCF_CALL_CONSENSUS_ALL.out.multiqc_files.collect())
-
+    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
     //
     // Genome QC

@@ -49,6 +49,10 @@ output:
         File containing software versions
         Structure: [ path(versions.yml) ]
       pattern: "versions.yml"
+  - multiqc_files:
+      type: files
+      description: |
+        Set of files that are incorporated in the MultiQC report
 authors:
   - "@DimitriTernovoj"
 maintainers:

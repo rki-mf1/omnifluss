@@ -14,6 +14,8 @@ workflow FASTQ_MAP_ALL {
     ch_bam      = Channel.empty()
     ch_bai      = Channel.empty()
     ch_versions = Channel.empty()
+    //for multiqc
+    ch_multiqc_files = Channel.empty()
 
     if (tools.split(',').contains('bwa')) {
 
@@ -37,12 +39,22 @@ workflow FASTQ_MAP_ALL {
         ch_bam      = BAM_MARKDUPLICATES_PICARD.out.bam
         ch_bai      = BAM_MARKDUPLICATES_PICARD.out.bai
         ch_versions = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions.first())
+        //MultiQC
+        ch_samtools_stats = BAM_MARKDUPLICATES_PICARD.out.stats.map{it[1]}
+        ch_samtools_flagstat = BAM_MARKDUPLICATES_PICARD.out.flagstat.map{it[1]}
+        ch_samtools_idxstats = BAM_MARKDUPLICATES_PICARD.out.idxstats.map{it[1]}
+        ch_picard_markduplicate_metrics = BAM_MARKDUPLICATES_PICARD.out.metrics.map{it[1]}
+        //combining channels
+        ch_multiqc_files = ch_samtools_stats.mix(ch_samtools_flagstat,ch_samtools_idxstats,ch_picard_markduplicate_metrics)
     }
 
     emit:
     bam           = ch_bam
     bai           = ch_bai
     versions      = ch_versions
+    //MultiQC
+    multiqc_files       = ch_multiqc_files
+
 
 }
 
