@@ -15,7 +15,14 @@ workflow BAM_SORT_STATS_SAMTOOLS {
 
     ch_versions = Channel.empty()
 
-    SAMTOOLS_SORT ( ch_bam, ch_fasta )
+    //sort channels to maintain order across different channels
+    ch_samtools_sort_input = ch_bam.join(ch_fasta)
+    .multiMap{meta, bam, reference ->
+        ch_bam: [ meta, bam ]
+        ch_ref: [ meta, reference ]
+        }
+
+    SAMTOOLS_SORT ( ch_samtools_sort_input.ch_bam, ch_samtools_sort_input.ch_ref )
     ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
 
     SAMTOOLS_INDEX ( SAMTOOLS_SORT.out.bam )

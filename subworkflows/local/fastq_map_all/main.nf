@@ -7,8 +7,9 @@ workflow FASTQ_MAP_ALL {
     take:
     tools           // string
     ch_reads        // channel: [ val(meta), fastq ]
-    ch_ref          // channel: [ val(meta), fasta ]
     ch_bwa_index    // channel: [ val(meta), index ]
+    ch_ref          // channel: [ val(meta), fasta ]
+    ch_fai_index    // channel: [ val(meta), index ]
 
     main:
     ch_bam      = Channel.empty()
@@ -28,11 +29,13 @@ workflow FASTQ_MAP_ALL {
         ch_versions     = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     }
 
+
     if (tools.split(',').contains('picard_remove_duplicates')) {
+
         BAM_MARKDUPLICATES_PICARD(
-            ch_bam,         // channel: [ val(meta), bam ]
-            [[], []],
-            [[], []]
+            ch_bam,          // channel: [ val(meta), bam ]
+            ch_ref,          // channel: [ val(meta), ref ]
+            ch_fai_index     // channel: [ val(meta), fai ]
         )
         ch_bam      = BAM_MARKDUPLICATES_PICARD.out.bam
         ch_bai      = BAM_MARKDUPLICATES_PICARD.out.bai
