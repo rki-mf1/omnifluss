@@ -132,8 +132,7 @@ workflow IGSMP {
     ch_mapping          = FASTQ_MAP_ALL.out.bam
     ch_mapping_index    = FASTQ_MAP_ALL.out.bai
     ch_versions         = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
-
-    // ch_multiqc_files mark duplicates, samtools stats?
+    ch_multiqc_files    = ch_multiqc_files.mix(FASTQ_MAP_ALL.out.multiqc_files)
 
     //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
