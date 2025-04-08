@@ -48,8 +48,8 @@ workflow IGSMP {
         .trimmed_reads
         | set {ch_reads}
 
-        ch_multiqc_files = ch_multiqc_files.mix(FASTQ_QC_TRIMMING_ALL.out.multiqc_files.collect())
-        ch_versions = ch_versions.mix(FASTQ_QC_TRIMMING_ALL.out.versions)
+        ch_multiqc_files    = ch_multiqc_files.mix(FASTQ_QC_TRIMMING_ALL.out.multiqc_files.collect())
+        ch_versions         = ch_versions.mix(FASTQ_QC_TRIMMING_ALL.out.versions)
     }
 
     //
@@ -74,7 +74,7 @@ workflow IGSMP {
     //
     if (params.reference_selection == "static"){
 
-        ch_final_topRefs = ch_reads.map { meta, reads -> [meta, params.reference]}
+        ch_final_topRefs = ch_reads.map { meta, _reads -> [meta, params.reference]}
     }
     else {
         ch_reference_db_fastas = Channel.fromPath("${params.reference_selection_db}/*.fasta")
@@ -114,10 +114,10 @@ workflow IGSMP {
         params.aligner,
         ch_final_topRefs
     )
-    ch_ref = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
-    ch_fai_index = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
-    ch_bwa_index = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
-    ch_versions = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
+    ch_ref          = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
+    ch_fai_index    = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
+    ch_bwa_index    = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
+    ch_versions     = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
 
     //
     // Mapping
@@ -129,9 +129,9 @@ workflow IGSMP {
         ch_ref,          // channel: [ val(meta), fasta ]
         ch_fai_index     // channel: [ val(meta), fai_index ]
     )
-    ch_mapping = FASTQ_MAP_ALL.out.bam
-    ch_mapping_index = FASTQ_MAP_ALL.out.bai
-    ch_versions = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+    ch_mapping          = FASTQ_MAP_ALL.out.bam
+    ch_mapping_index    = FASTQ_MAP_ALL.out.bai
+    ch_versions         = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
 
     // ch_multiqc_files mark duplicates, samtools stats?
 

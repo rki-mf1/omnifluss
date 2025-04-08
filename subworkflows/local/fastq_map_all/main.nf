@@ -24,9 +24,9 @@ workflow FASTQ_MAP_ALL {
             true,
             ch_ref          // channel: [ val(meta), fasta ]
         )
-        ch_bam          = FASTQ_ALIGN_BWA.out.bam
-        ch_bai          = FASTQ_ALIGN_BWA.out.bai
-        ch_versions     = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
+        ch_bam      = FASTQ_ALIGN_BWA.out.bam
+        ch_bai      = FASTQ_ALIGN_BWA.out.bai
+        ch_versions = ch_versions.mix(FASTQ_ALIGN_BWA.out.versions.first())
     }
 
 

@@ -17,9 +17,9 @@ workflow BAM_SORT_STATS_SAMTOOLS {
 
     //sort channels to maintain order across different channels
     ch_samtools_sort_input = ch_bam.join(ch_fasta)
-    .multiMap{meta, bam, reference ->
-        ch_bam: [ meta, bam ]
-        ch_ref: [ meta, reference ]
+        .multiMap{meta, bam, reference ->
+            ch_bam: [ meta, bam ]
+            ch_ref: [ meta, reference ]
         }
 
     SAMTOOLS_SORT ( ch_samtools_sort_input.ch_bam, ch_samtools_sort_input.ch_ref )

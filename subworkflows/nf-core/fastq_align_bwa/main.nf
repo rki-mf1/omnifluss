@@ -21,15 +21,23 @@ workflow FASTQ_ALIGN_BWA {
             ch_reads: [ meta, reads ]
             ch_ref: [ meta, reference ]
             ch_bwa_index: [ meta, bwa_index ]
-            }
+        }
 
     //
     // Map reads with BWA
     //
-    BWA_MEM ( ch_bwa_mem_input.ch_reads, ch_bwa_mem_input.ch_bwa_index, ch_bwa_mem_input.ch_ref, val_sort_bam )
+    BWA_MEM(
+        ch_bwa_mem_input.ch_reads,
+        ch_bwa_mem_input.ch_bwa_index,
+        ch_bwa_mem_input.ch_ref,
+        val_sort_bam
+    )
     ch_versions = ch_versions.mix(BWA_MEM.out.versions.first())
 
-    BAM_SORT_STATS_SAMTOOLS ( BWA_MEM.out.bam, ch_fasta )
+    BAM_SORT_STATS_SAMTOOLS(
+        BWA_MEM.out.bam,
+        ch_fasta
+    )
     ch_versions = ch_versions.mix(BAM_SORT_STATS_SAMTOOLS.out.versions)
 
     emit:
