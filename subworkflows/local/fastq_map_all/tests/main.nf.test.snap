@@ -3,19 +3,56 @@
         "content": [
             {
                 "0": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.markduplicates.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "1": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.markduplicates.sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+
                 ],
                 "2": [
                     
                 ],
+                "3": [
+                    "test.markduplicates.sorted.MarkDuplicates.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
                 "bai": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.markduplicates.sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "bam": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.markduplicates.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "multiqc_files": [
+                    "test.markduplicates.sorted.MarkDuplicates.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "versions": [
                     
@@ -26,25 +63,61 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2025-04-07T13:47:33.69723224"
+        "timestamp": "2025-03-07T11:00:36.392391164"
     },
     "sarscov2 - paired_end - stub": {
         "content": [
             {
                 "0": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.markduplicates.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "1": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.markduplicates.sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "2": [
                     
                 ],
+                "3": [
+                    "test.markduplicates.sorted.MarkDuplicates.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
                 "bai": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.markduplicates.sorted.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
                 ],
                 "bam": [
-                    
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.markduplicates.sorted.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "multiqc_files": [
+                    "test.markduplicates.sorted.MarkDuplicates.metrics.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e",
+                    "test.sorted.bam.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "versions": [
                     
@@ -55,6 +128,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2025-04-07T13:47:40.828368471"
+        "timestamp": "2025-03-07T11:00:48.858915631"
     }
 }

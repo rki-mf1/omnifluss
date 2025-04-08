@@ -33,7 +33,8 @@ workflow VCF_CALL_CONSENSUS_ALL {
         )
         .del_vcf
         | set {ch_del_adjusted_vcf}
-        //note: no version save, because bcftools is used and it was incorporated prior
+        ch_versions = ch_versions.mix(INV_GET_DELETIONS_PYVCF.out.versions.first())
+
 
         // comprised createMaskConsensus & createMaskConsensus_special_variant_case in this module
         INV_CREATE_CONSENSUS_MASK_BEDTOOLS(
