@@ -45,7 +45,7 @@ nextflow_workflow {
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true) ]
                     ])
                 input[2] = Channel.value([
-                    [id:'index'], //meta map
+                    [id:'test'], //meta map
                     file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
                 ])
                 input[3] = Channel.of([
@@ -83,7 +83,7 @@ nextflow_workflow {
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
                     ])
                 input[2] = Channel.value([
-                    [id:'index'], //meta map
+                    [id:'test'], //meta map
                     file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
                 ])
                 input[3] = Channel.of([

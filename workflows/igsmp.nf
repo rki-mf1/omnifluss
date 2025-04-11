@@ -184,7 +184,7 @@ workflow IGSMP {
     // )
     // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
-    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
     //
     // Genome QC
