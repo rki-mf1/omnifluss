@@ -115,7 +115,7 @@ workflow IGSMP {
         ch_final_topRefs
     )
     ch_ref          = FASTA_PROCESS_REFERENCE_ALL.out.preped_ref
-    ch_fai_index    = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
+    ch_ref_index    = FASTA_PROCESS_REFERENCE_ALL.out.fai_index
     ch_bwa_index    = FASTA_PROCESS_REFERENCE_ALL.out.bwa_index
     ch_versions     = ch_versions.mix(FASTA_PROCESS_REFERENCE_ALL.out.versions)
 
@@ -127,7 +127,7 @@ workflow IGSMP {
         ch_reads,        // channel: [ val(meta), fastq ]
         ch_bwa_index,    // channel: [ val(meta), bwa_index ]
         ch_ref,          // channel: [ val(meta), fasta ]
-        ch_fai_index     // channel: [ val(meta), fai_index ]
+        ch_ref_index     // channel: [ val(meta), fai_index ]
     )
     ch_mapping          = FASTQ_MAP_ALL.out.bam
     ch_mapping_index    = FASTQ_MAP_ALL.out.bai
@@ -148,14 +148,15 @@ workflow IGSMP {
     //
     // Variant calling
     //
-    // BAM_CALL_VARIANT_ALL(
-    //     params.variant_caller,
-    //     ch_mapping,
-    //     ch_ref,
-    //     ch_fai_index
-    // )
-    // ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
-    // ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
+    BAM_CALL_VARIANT_ALL(
+        params.variant_caller,
+        ch_mapping,
+        ch_ref,
+        ch_ref_index
+    )
+    ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf     // should be used for consensus subworkflow
+    ch_bam           = BAM_CALL_VARIANT_ALL.out.bam     // should be used for consensus subworkflow
+    ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
     // Special INV variant calling
@@ -166,7 +167,7 @@ workflow IGSMP {
     //         ch_mapping,
     //         ch_mapping_index,
     //         ch_ref,
-    //         ch_fai_index
+    //         ch_ref_index
     //     )
     //     ch_rescued_variants = BAM_SPECIAL_VARIANTS_CASE_ALL.out.bed
     // }
