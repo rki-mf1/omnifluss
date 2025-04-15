@@ -8,7 +8,7 @@ workflow BAM_SPECIAL_VARIANTS_CASE_ALL {
 
     take:
     ch_iqbam        // channel: [ val(meta), [ bam ]   ]
-    ch_bai          // channel: [ val(meta), [ bai ]   ]
+    ch_iqbam_bai    // channel: [ val(meta), [ bai ]   ]
     ch_ref          // channel: [ val(meta), [ fasta ] ]
     ch_ref_index    // channel: [ val(meta), [ fai ]   ]
 
@@ -18,28 +18,43 @@ workflow BAM_SPECIAL_VARIANTS_CASE_ALL {
     ch_bed      = Channel.empty()
     ch_versions = Channel.empty()
 
-    // LOFREQ_CALLPARALLEL requires formatting of the input Channel
-    ch_callbam = ch_iqbam
-                    .join(ch_bai)
-                    .map{ it -> [it[0], it[1], it[2], [] ] }
-                    // [ val(meta), [bam], [bai], ""]
+    /****************************************************************/
+    /* STEP 0: Format input Channels for LOFREQ_CALLPARALLEL        */
+    /****************************************************************/
+    ch_iqbam_cpy        = ch_iqbam.map{ meta, iqbam -> return [meta.id, meta, iqbam ] }
+    ch_iqbam_bai_cpy    = ch_iqbam_bai.map{ meta, iqbai -> return [meta.id, meta, iqbai ] }
+    ch_ref_cpy          = ch_ref.map{ meta, fasta -> return [meta.id, meta, fasta] }
+    ch_ref_index_cpy    = ch_ref_index.map{ meta, fai -> return [meta.id, meta, fai] }
 
-    // LOFREQ_CALLPARALLEL does the actual variant calling
+    ch_lofreq_callparallel_input = ch_iqbam_cpy.join(ch_iqbam_bai_cpy).join(ch_ref_cpy).join(ch_ref_index_cpy)
+        .multiMap{ _sample_id, meta, iqbam, _meta2, iqbai, meta3, fasta, meta4, fai ->
+            ch_input_sample: [meta, iqbam, iqbai, [] ]  // needs empty optional parameter here
+            ch_ref: [meta3, fasta]
+            ch_ref_index: [meta4, fai]
+            }
+
+    /*******************************************************************/
+    /* STEP 1: LOFREQ_CALLPARALLEL variant calling                     */
+    /*******************************************************************/
     LOFREQ_CALLPARALLEL_SPEC_CASE (
-        ch_callbam,
-        ch_ref,
-        ch_ref_index
+        ch_lofreq_callparallel_input.ch_input_sample,
+        ch_lofreq_callparallel_input.ch_ref,
+        ch_lofreq_callparallel_input.ch_ref_index
     )
     ch_versions = ch_versions.mix(LOFREQ_CALLPARALLEL_SPEC_CASE.out.versions.first())
 
-    // LOFREQ_FILTER is a non-default variant filter here; see conf
+    /*******************************************************************/
+    /* STEP 2: LOFREQ_FILTER filters the variant set; see config       */
+    /*******************************************************************/
     LOFREQ_FILTER (
         LOFREQ_CALLPARALLEL_SPEC_CASE.out.vcf
     )
     ch_vcf      = LOFREQ_FILTER.out.vcf
     ch_versions = ch_versions.mix(LOFREQ_FILTER.out.versions.first())
 
-    // INV_RESCUE_VARIANTS_PYTHON is a custom python script that generates a bed file with HQ variant sites to be masked in the consensus
+    /***************************************************************************************************************/
+    /* STEP 3: INV_RESCUE_VARIANTS_PYTHON generates a bed file with HQ variant sites to be masked in the consensus */
+    /***************************************************************************************************************/
     INV_RESCUE_VARIANTS_PYTHON (
         ch_vcf
     )
