@@ -24,7 +24,7 @@ workflow BAM_CALL_VARIANT_ALL {
     ch_versions     = Channel.empty()
 
     /****************************************************************/
-    /* STEP 0: Format input Chennels for sample-wise ordered tuples */
+    /* STEP 0: Format input Channels for sample-wise ordered tuples */
     /****************************************************************/
     ch_bam_cpy          = ch_bam.map{ meta, bam -> return [meta.id, meta, bam ] }
     ch_ref_cpy          = ch_ref.map{ meta, fasta -> return [meta.id, meta, fasta] }
