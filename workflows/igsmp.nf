@@ -161,16 +161,16 @@ workflow IGSMP {
     //
     // Special INV variant calling
     //
-    // ch_rescued_variants = Channel.empty()
-    // if (workflow.profile.contains("INV")) {
-    //     BAM_SPECIAL_VARIANTS_CASE_ALL(
-    //         ch_mapping,
-    //         ch_mapping_index,
-    //         ch_ref,
-    //         ch_ref_index
-    //     )
-    //     ch_rescued_variants = BAM_SPECIAL_VARIANTS_CASE_ALL.out.bed
-    // }
+    ch_rescued_variants = Channel.empty()
+    if (workflow.profile.contains("INV")) {
+        BAM_SPECIAL_VARIANTS_CASE_ALL(
+            ch_mapping,
+            ch_mapping_index,
+            ch_ref,
+            ch_ref_index
+        )
+        ch_rescued_variants = BAM_SPECIAL_VARIANTS_CASE_ALL.out.bed
+    }
 
     //
     // Consensus calling
