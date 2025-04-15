@@ -103,7 +103,7 @@ workflow BAM_CALL_VARIANT_ALL {
 
     /*******************************************************************/
     /* STEP 5: Caller-independent postprocessing                       */
-    /* STEP 5: BCFTOOLS_INDEX createse an index of the VCF file        */
+    /* STEP 5: BCFTOOLS_INDEX creates an index of the VCF file        */
     /*******************************************************************/
     BCFTOOLS_INDEX (
         ch_vcf
