@@ -175,15 +175,15 @@ workflow IGSMP {
     //
     // Consensus calling
     //
-    // VCF_CALL_CONSENSUS_ALL(
-    //     params.consensus_caller,
-    //     params.consensus_mincov,
-    //     ch_ref,                             // channel: [ val(meta), fasta ]
-    //     BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
-    //     BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
-    //     ch_rescued_variants                 // channel: [ val(meta), bed   ]
-    // )
-    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+    VCF_CALL_CONSENSUS_ALL(
+        params.consensus_caller,
+        params.consensus_mincov,
+        ch_ref,                             // channel: [ val(meta), fasta ]
+        BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
+        BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
+        ch_rescued_variants                 // channel: [ val(meta), bed   ]
+    )
+    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
     // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
