@@ -26,7 +26,7 @@ nextflow_workflow {
                 input[0] = "bcftools"
                 input[1] = 10
                 input[2] = Channel.value([
-                    [ id: "ref", single_end:false],
+                    [ id: "test", single_end:false],
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
                 ])
                 input[3] = Channel.of([

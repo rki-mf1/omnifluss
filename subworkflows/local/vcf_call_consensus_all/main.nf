@@ -29,6 +29,7 @@ workflow VCF_CALL_CONSENSUS_ALL {
         ch_filtered_vcf = BCFTOOLS_FILTER.out.vcf
         ch_versions = ch_versions.mix(BCFTOOLS_FILTER.out.versions.first())
 
+        if (workflow.profile.contains("INV")) {
         // mask
         INV_GET_DELETIONS_PYVCF(
             ch_filtered_vcf             // channel: [ val(meta), vcf ]
@@ -65,7 +66,8 @@ workflow VCF_CALL_CONSENSUS_ALL {
         )
         ch_final_vcf = INV_SET_GT_BCFTOOLS.out.vcf
         ch_versions = ch_versions.mix(INV_SET_GT_BCFTOOLS.out.versions.first())
-
+        }
+        
         TABIX_TABIX(
             ch_final_vcf                // channel: [ val(meta), vcf ]
         )
