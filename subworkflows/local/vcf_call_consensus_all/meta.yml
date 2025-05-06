@@ -1,0 +1,64 @@
+name: "VCF_CALL_CONSENSUS_ALL"
+description: Process a vcf file, generate a bed file defining masked positions, take a bam file and infer a consensus sequence
+keywords:
+  - vcf
+  - bed
+  - bam
+  - processing
+  - consensus
+components:
+  - bcftools
+  - bedtools
+  - biopython
+  - pyvcf
+  - tabix
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - val_consensus_mincov:
+    type: int
+    descirption: |
+      threshold value below a position in the consensus sequence is masked with N
+  - tools:
+    type: string
+    description: |
+      comma-separated list of tool names that are used for this task
+  - ch_ref:
+    type: file
+    descirption: FASTA file of the reference
+    pattern: "*.{fasta/fa}"
+  - ch_vcf:
+      type: file
+      description: VCF file
+      pattern: "*.{vcf}"
+  - ch_bam:
+      type: file
+      description: BAM file
+      pattern: "*.{bam}"
+  - ch_bed:
+      type: file
+      description: BED file containing positions to be masked in consensus
+      pattern: "*.{bed}"
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1', single_end:false ]`
+  - consensus:
+      type: file
+      description: FASTA file containing the consensus sequence
+      pattern: "*{.fa}"
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+authors:
+  - "@DimitriTernovoj"
+maintainers:
+  - "@DimitriTernovoj"

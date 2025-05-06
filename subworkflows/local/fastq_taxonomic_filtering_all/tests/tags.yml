@@ -1,0 +1,2 @@
+subworkflows/fastq_taxonomic_filtering_all:
+  - subworkflows/local/fastq_taxonomic_filtering_all/**
