@@ -1,0 +1,55 @@
+nextflow_workflow {
+
+    name "Test Subworkflow VCF_CALL_CONSENSUS_ALL"
+    script "../main.nf"
+    config "./nextflow.config"
+    workflow "VCF_CALL_CONSENSUS_ALL"
+
+    tag "subworkflows"
+    tag "subworkflows_nfcore"
+    tag "subworkflows/vcf_call_consensus_all"
+    tag "bedtools"
+    tag "bcftools/filter"
+    tag "tabix/tabix"
+    tag "bcftools/consensus"
+    tag "pyvcf"
+    tag "inv_get_deletions_pyvcf"
+    tag "inv_create_consensus_mask_bedtools"
+    tag "inv_set_gt_bcftools"
+
+
+    test("vcf_call_consensus_all") {
+        options '-stub'
+        when {
+            workflow {
+                """
+                input[0] = "bcftools"
+                input[1] = 10
+                input[2] = Channel.value([
+                    [ id: "test", single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true) ]
+                ])
+                input[3] = Channel.of([
+                    [ id:'test', single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test.vcf.gz', checkIfExists: true) ]
+                ]  )
+                input[4] = Channel.of([
+                    [ id:'test', single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.bam', checkIfExists: true) ]
+                ])
+                input[5] = Channel.of([
+                    [ id:'test', single_end:false],
+                    [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bedgraph/test.bedgraph', checkIfExists: true) ]
+                ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(workflow.out).match()}
+            )
+        }
+    }
+}

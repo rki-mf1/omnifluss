@@ -1,0 +1,59 @@
+name: "FASTQ_MAP_ALL"
+description: Map the reads against the reference and sort the resulting bam file
+keywords:
+  - fastq
+  - mapping
+  - sorting
+  - bwa
+  - samtools
+components:
+  - fastq_align_bwa
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - tools:
+    type: string
+    description: |
+      comma-separated list of tool names that are used for this task
+  - ch_reads:
+      type: file
+      description: |
+        List of input FastQ files of size 1 and 2 for single-end and paired-end data,
+        respectively.
+  - reference:
+      type: file
+      description: (Multi) Fasta file used as the reference
+  - index:
+      type: directory
+      description: results from bwa index
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample1', single_end:false ]`
+  - bam:
+      type: file
+      description: |
+        sorted bam file from mapping the reads against
+  - bai:
+      type: file
+      description: |
+        bam file index
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+  - multiqc_files:
+      type: files
+      description: |
+        Set of files that are incorporated in the MultiQC report
+authors:
+  - "@DimitriTernovoj"
+maintainers:
+  - "@DimitriTernovoj"

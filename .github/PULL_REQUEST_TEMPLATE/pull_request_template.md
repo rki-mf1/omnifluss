@@ -8,8 +8,8 @@ assignees: ''
 ---
 
 ## Describe the feature, fix or addition you are working on
-_\<General info here...\>_  
-_\<Have you introduced new nf-core modules? ...\>_  
+_\<General info here...\>_
+_\<Have you introduced new nf-core modules? ...\>_
 _\<Have you added a test/ stub command? ...\>_
 
 ---

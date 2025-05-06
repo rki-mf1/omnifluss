@@ -1,0 +1,41 @@
+name: INV_GET_DELETIONS_PYVCF
+description: writes entries containing deletions into a vcf
+keywords:
+  - vcf
+  - deletions
+tools:
+  - Biopython:
+      description: |
+        write entries to a file where the length of REF is > length of ALT
+      homepage: https://github.com/jdoughertyii/PyVCF
+      documentation: https://pyvcf.readthedocs.io/en/latest/API.html
+      doi:
+      licence: ["MIT"]
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - fasta:
+      type: vcf
+      description: VCF file
+      pattern: "*.{vcf}"
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - vcf:
+      type: file
+      description: vcf file containing only entries with deletions
+      pattern: "*.{vcf}"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@DimitriTernovoj"
+maintainers:
+  - "@DimitriTernovoj"

@@ -1,0 +1,82 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/subworkflows/yaml-schema.json
+name: "bam_call_variant_all"
+description: The subworkflow implements SNV and indel variant calling using the a variant caller of choice.
+keywords:
+  - variant calling
+  - variant
+  - calling
+  - bam
+  - vcf
+components:
+  - lofreq/viterbi
+  - lofreq/indelqual
+  - lofreq/callparallel
+  - samtools/index
+  - bcftools/norm
+  - bcftools/index
+input:
+  - tools:
+      type: string
+      description: |
+        Comma separated list of activated tools
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding read alignment file (BAM)
+        e.g. [ id:'test', single_end:false ]
+  - ch_bam:
+      type: file
+      description: |
+        File in BAM format containing read alignments
+      pattern: "*.{bam}"
+  - ch_ref:
+      type: file
+      description: |
+        File in (multi) FASTA format containing reference sequences
+      pattern: "*.{fasta/fa}"
+  - ch_ref_index:
+      type: file
+      description: |
+        Index file for the reference sequences
+      pattern: "*.{fai}"
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding read alignment file (BAM)
+        e.g. [ id:'test', single_end:false ]
+  - bam:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding read alignment file (BAM).
+        Copy of the original input alignments but normalized, sorted and annotated for variant calling.
+        Structure: [ val(meta), path(bam) ]
+      pattern: "*.bam"
+  - bai:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding read alignment index file (BAI).
+        Structure: [ val(meta), path(bai) ]
+      pattern: "*.bai"
+  - vcf:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding set of raw variant calls (VCF).
+        Structure: [ val(meta), path(vcf) ]
+      pattern: "*.vcf"
+  - tbi:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding variant call index (TBI).
+        Structure: [ val(meta), path(tbi) ]
+      pattern: "*.tbi"
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+authors:
+  - "@Krannich479"
+maintainers:
+  - "@Krannich479"

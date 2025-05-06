@@ -1,0 +1,2 @@
+subworkflows/bam_call_variant_all:
+  - subworkflows/local/bam_call_variant_all/**

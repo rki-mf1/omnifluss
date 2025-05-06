@@ -1,0 +1,90 @@
+
+nextflow_workflow {
+
+    name "Test Subworkflow BAM_SPECIAL_VARIANTS_CASE_ALL"
+    script "../main.nf"
+    config "subworkflows/local/bam_special_variants_case_all/tests/nextflow.config"
+    workflow "BAM_SPECIAL_VARIANTS_CASE_ALL"
+
+    tag "subworkflows"
+    tag "subworkflows/local"
+    tag "subworkflows/local/bam_special_variants_case_all"
+
+    tag "lofreq"
+    tag "lofreq/callparallel"
+    tag "lofreq/filter"
+
+    tag "inv_rescue_variants_python"
+
+
+    test("sarscov2 - bam") {
+
+        when {
+            workflow {
+                """
+                input[0] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true)
+                            ])
+                input[1] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true)
+                            ])
+                input[2] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                            ])
+                input[3] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)
+                            ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out.vcf.flatten()[1]).name == "test.filtered.vcf.gz" },
+                { assert snapshot(workflow.out["bed"]).match() }
+            )
+        }
+    }
+
+
+    test("sarscov2 - bam - stub ") {
+
+        tag "stub"
+        options '-stub'
+
+        when {
+            workflow {
+                """
+                input[0] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam', checkIfExists: true)
+                            ])
+                input[1] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.sorted.bam.bai', checkIfExists: true)
+                            ])
+                input[2] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                            ])
+                input[3] =  Channel.value([
+                                [ id:'test' ],
+                                file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)
+                            ])
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}
