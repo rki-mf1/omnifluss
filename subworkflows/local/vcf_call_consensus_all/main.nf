@@ -17,6 +17,7 @@ workflow VCF_CALL_CONSENSUS_ALL {
     main:
     ch_versions                 = Channel.empty()
     ch_del_adjusted_vcf         = Channel.empty()
+    ch_vcf_tbi                  = Channel.empty()
 
     if (tools.split(',').contains('bcftools')) {
 
@@ -81,8 +82,6 @@ workflow VCF_CALL_CONSENSUS_ALL {
 
         ch_bcftools_consensus_input = ch_vcf_cpy.join(ch_vcf_tbi_cpy).join(ch_ref_cpy).join(ch_bed_mask_cpy)
             .map{_sample_id, meta, vcf, _meta2, tbi, _meta3, fasta, _meta4, bed -> return [ meta , vcf, tbi, fasta, bed]}
-
-        ch_bcftools_consensus_input
         
         BCFTOOLS_CONSENSUS(
             ch_bcftools_consensus_input // channel: [ val(meta), vcf, tbi, fasta, bed ]
