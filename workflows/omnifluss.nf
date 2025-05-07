@@ -5,6 +5,7 @@
 */
 include { FASTQ_QC_TRIMMING_ALL               } from '../subworkflows/local/fastq_qc_trimming_all'
 include { FASTQ_TAXONOMIC_FILTERING_ALL       } from '../subworkflows/local/fastq_taxonomic_filtering_all'
+include { FASTA_REFERENCE_SELECTION_ALL       } from '../subworkflows/local/fasta_reference_selection_all/main.nf'
 include { FASTA_PROCESS_REFERENCE_ALL         } from '../subworkflows/local/fasta_process_reference_all'
 include { FASTQ_MAP_ALL                       } from '../subworkflows/local/fastq_map_all'
 include { BAM_CALL_VARIANT_ALL                } from '../subworkflows/local/bam_call_variant_all'
@@ -15,8 +16,8 @@ include { MULTIQC                             } from '../modules/nf-core/multiqc
 include { paramsSummaryMap                    } from 'plugin/nf-validation'
 include { paramsSummaryMultiqc                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML              } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText              } from '../subworkflows/local/utils_nfcore_igsmp_pipeline'
-include { FASTA_REFERENCE_SELECTION_ALL } from '../subworkflows/local/fasta_reference_selection_all/main.nf'
+include { methodsDescriptionText              } from '../subworkflows/local/utils_nfcore_omnifluss_pipeline'
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,7 +25,7 @@ include { FASTA_REFERENCE_SELECTION_ALL } from '../subworkflows/local/fasta_refe
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow IGSMP {
+workflow OMNIFLUSS {
 
     take:
     ch_samplesheet                       // channel: [ meta, fastq ]

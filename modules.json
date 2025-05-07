@@ -1,6 +1,6 @@
 {
-    "name": "rki-mf1/igsmp",
-    "homePage": "https://github.com/rki-mf1/igsmp",
+    "name": "rki-mf1/omnifluss",
+    "homePage": "https://github.com/rki-mf1/omnifluss",
     "repos": {
         "https://github.com/nf-core/modules.git": {
             "modules": {

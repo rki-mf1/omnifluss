@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    rki-mf1/igsmp
+    rki-mf1/omnifluss
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/rki-mf1/igsmp
+    Github : https://github.com/rki-mf1/omnifluss
 ----------------------------------------------------------------------------------------
 */
 
@@ -15,9 +15,9 @@ nextflow.enable.dsl = 2
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { IGSMP  } from './workflows/igsmp'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_igsmp_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_igsmp_pipeline'
+include { OMNIFLUSS               } from './workflows/omnifluss'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_omnifluss_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_omnifluss_pipeline'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,7 +28,7 @@ include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_igsm
 //
 // WORKFLOW: Run main analysis pipeline depending on type of input
 //
-workflow RKIMF1_IGSMP {
+workflow RKIMF1_OMNIFLUSS {
 
     take:
     samplesheet // channel: samplesheet read in from --input
@@ -38,12 +38,12 @@ workflow RKIMF1_IGSMP {
     //
     // WORKFLOW: Run pipeline
     //
-    IGSMP (
+    OMNIFLUSS (
         samplesheet
     )
 
     emit:
-    multiqc_report = IGSMP.out.multiqc_report // channel: /path/to/multiqc_report.html
+    multiqc_report = OMNIFLUSS.out.multiqc_report // channel: /path/to/multiqc_report.html
 
 }
 /*
@@ -72,7 +72,7 @@ workflow {
     //
     // WORKFLOW: Run main workflow
     //
-    RKIMF1_IGSMP (
+    RKIMF1_OMNIFLUSS (
         PIPELINE_INITIALISATION.out.samplesheet
     )
 
@@ -86,7 +86,7 @@ workflow {
         params.outdir,
         params.monochrome_logs,
         params.hook_url,
-        RKIMF1_IGSMP.out.multiqc_report
+        RKIMF1_OMNIFLUSS.out.multiqc_report
     )
 }
 
