@@ -1,5 +1,5 @@
 //
-// Subworkflow with functionality specific to the rki-mf1/igsmp pipeline
+// Subworkflow with functionality specific to the rki-mf1/omnifluss pipeline
 //
 
 /*

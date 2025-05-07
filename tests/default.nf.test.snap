@@ -9,7 +9,7 @@
                     "fastqc": "0.12.1"
                 },
                 "Workflow": {
-                    "rki-mf1/igsmp": "v1.0dev"
+                    "rki-mf1/omnifluss": "v1.0dev"
                 }
             }
         ],
