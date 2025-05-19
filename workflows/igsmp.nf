@@ -167,14 +167,8 @@ workflow IGSMP {
         ch_ref,
         ch_ref_index
     )
-<<<<<<< HEAD
-    ch_bam           = BAM_CALL_VARIANT_ALL.out.bam
-    ch_bai           = BAM_CALL_VARIANT_ALL.out.bai
-    ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf
-=======
     ch_vcf           = BAM_CALL_VARIANT_ALL.out.vcf     // should be used for consensus subworkflow
     ch_bam           = BAM_CALL_VARIANT_ALL.out.bam     // should be used for consensus subworkflow
->>>>>>> dev
     ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
@@ -183,7 +177,7 @@ workflow IGSMP {
     BAM_SAMTOOLS_STATS_ALL(
         ch_bam,
         ch_ref,
-        ch_fai_index
+        ch_ref_index
     )
 
     //
@@ -192,8 +186,8 @@ workflow IGSMP {
     ch_rescued_variants = Channel.empty()
     if (workflow.profile.contains("INV")) {
         BAM_SPECIAL_VARIANTS_CASE_ALL(
-            ch_bam,         //old version: ch_mapping
-            ch_bai,         //old version: ch_mapping_index
+            ch_mapping,
+            ch_mapping_index,
             ch_ref,
             ch_ref_index
         )
@@ -207,13 +201,12 @@ workflow IGSMP {
         params.consensus_caller,
         params.consensus_mincov,
         ch_ref,                             // channel: [ val(meta), fasta ]
-        BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
-        BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
+        ch_vcf,       // channel: [ val(meta), vcf   ]
+        ch_bam,       // channel: [ val(meta), bam   ]
         ch_rescued_variants                 // channel: [ val(meta), bed   ]
     )
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
-<<<<<<< HEAD
     //collect files for report
     ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
     ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
@@ -236,9 +229,6 @@ workflow IGSMP {
         ch_samtools_flagstat,
         ch_consensus_calls
     )
-=======
-    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
->>>>>>> dev
 
     //
     // Genome QC
