@@ -27,5 +27,5 @@ authors:
     family-names: Krannich
     affiliation: Robert Koch Institute (RKI)
     orcid: 'https://orcid.org/0000-0002-5525-1849'
-repository-code: 'https://github.com/rki-mf1/igsmp'
+repository-code: 'https://github.com/rki-mf1/omnifluss'
 license: MIT
