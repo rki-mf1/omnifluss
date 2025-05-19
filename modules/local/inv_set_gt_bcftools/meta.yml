@@ -1,24 +1,29 @@
-name: ADJUST_DELETION_CONSENSUS
-description: writes entries containing deletions into a vcf
+name: INV_SET_GT_BCFTOOLS
+description: Add and adjust Genotypes, index the vcf
 keywords:
   - vcf
-  - deletions
+  - consensus
+  - genotype
 tools:
-  - Biopython:
+  - bcftools index and +setGT:
       description: |
-        write entries to a file where the length of REF is > length of ALT
-      homepage: https://github.com/jdoughertyii/PyVCF
-      documentation: https://pyvcf.readthedocs.io/en/latest/API.html
-      doi: 
+        index a vcf file
+        set the genotype based on a defined condition
+      homepage: http://samtools.github.io/bcftools/bcftools.html
+      documentation: http://www.htslib.org/doc/bcftools.html
+      doi: 10.1093/bioinformatics/btp352
       licence: ["MIT"]
+  - custom bash script:
+      description: |
+        add a GT column, add a line containing meta-information
 input:
   - meta:
       type: map
       description: |
         Groovy Map containing sample information
         e.g. [ id:'test', single_end:false ]
-  - fasta:
-      type: vcf
+  - vcf:
+      type: file
       description: VCF file
       pattern: "*.{vcf}"
 output:
@@ -29,7 +34,7 @@ output:
         e.g. [ id:'test', single_end:false ]
   - vcf:
       type: file
-      description: vcf file containing only entries with deletions
+      description: VCF file with added and adjusted GT column
       pattern: "*.{vcf}"
   - versions:
       type: file

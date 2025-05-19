@@ -1,5 +1,5 @@
-name: CREATE_MASK_CONSENSUS
-description: infer low coverage regions, remove all regions containing deletions and concatenate it with another bed file 
+name: INV_CREATE_CONSENSUS_MASK_BEDTOOLS
+description: infer low coverage regions, remove all regions containing deletions and concatenate it with another bed file
 keywords:
   - genome coverage
   - mask

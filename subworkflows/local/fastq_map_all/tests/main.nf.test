@@ -41,16 +41,20 @@ nextflow_workflow {
                 """
                 input[0] = 'bwa,picard_remove_duplicates'
                 input[1] = Channel.of([
-                    [ id:'test', single_end:true ], // meta map
+                    [ id:'test'], // meta map
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true) ]
-                    ])
-                input[2] = Channel.of([
-                    [id:'test_ref'],
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
-                    ])
-                input[3] = Channel.value([
-                    [id:'index'], //meta map
+                ])
+                input[2] = Channel.value([
+                    [id:'test'], //meta map
                     file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
+                ])
+                input[3] = Channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)
                 ])
                 """
             }
@@ -74,17 +78,21 @@ nextflow_workflow {
                 """
                 input[0] = 'bwa,picard_remove_duplicates'
                 input[1] = Channel.of([
-                    [ id:'test', single_end:false ], // meta map
+                    [ id:'test'], // meta map
                     [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_1.fastq.gz', checkIfExists: true),
                     file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/fastq/test_2.fastq.gz', checkIfExists: true) ]
-                    ])
-                input[2] = Channel.of([
-                    [ id:'test_ref' ],
-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
-                    ])
-                input[3] = Channel.value([
-                    [id:'index'], //meta map
+                ])
+                input[2] = Channel.value([
+                    [id:'test'], //meta map
                     file("$projectDir/assets/dummy_file.txt", checkIfExists: true)
+                ])
+                input[3] = Channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+                ])
+                input[4] = Channel.of([
+                    [id:'test'],
+                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta.fai', checkIfExists: true)
                 ])
                 """
             }

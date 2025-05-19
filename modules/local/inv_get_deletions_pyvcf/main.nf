@@ -1,4 +1,4 @@
-process ADJUST_DELETION_CONSENSUS {
+process INV_GET_DELETIONS_PYVCF {
     tag "$meta.id"
     label 'process_medium'
 
@@ -17,11 +17,11 @@ process ADJUST_DELETION_CONSENSUS {
     script:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
-    adjust_dels.py --vcf ${vcf} --out ${prefix}.vcf
+    get_deletions.py --vcf ${vcf} --out ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        adjust_dels.py: \$(head -n 1 version.tmp)
+        get_deletions.py: \$(get_deletions.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 
@@ -32,7 +32,7 @@ process ADJUST_DELETION_CONSENSUS {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        adjust_dels.py: '1.0.0'
+        get_deletions.py: \$(get_deletions.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 }

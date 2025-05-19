@@ -8,8 +8,8 @@ import vcf
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        prog="adjust_dels",
-        description="adjusts deletions in VCFs",
+        prog="get_deletions.py",
+        description="extract deletions from VCFs",
     )
     parser.add_argument(
         "--vcf", metavar="FILE", help="vcf file", type=str, required=True
@@ -17,6 +17,7 @@ def parse_args():
     parser.add_argument(
         "--out", metavar="FILE", help="output vcf file", type=str, required=True
     )
+    parser.add_argument("--version", action="version", version="%(prog)s 1.0.1")
     return parser.parse_args()
 
 
@@ -32,15 +33,9 @@ def process(file, out):
         # vcf_writer.write_record(record)
 
 
-def write_version():
-    with open("version.tmp", "w") as fw:
-        fw.write("1.0.0")
-
-
 def main():
     args = parse_args()
     process(args.vcf, args.out)
-    write_version()
 
 
 if __name__ == "__main__":

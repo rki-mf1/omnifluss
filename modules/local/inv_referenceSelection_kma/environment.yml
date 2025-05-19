@@ -1,0 +1,6 @@
+name: kma
+channels:
+ - bioconda
+ - conda-forge
+dependencies:
+ - kma==1.4.15

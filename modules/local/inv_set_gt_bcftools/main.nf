@@ -1,4 +1,4 @@
-process ADJUST_GT_CONSENSUS {
+process INV_SET_GT_BCFTOOLS {
     tag "$meta.id"
     label 'process_medium'
 

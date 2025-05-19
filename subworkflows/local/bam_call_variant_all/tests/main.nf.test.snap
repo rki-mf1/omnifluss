@@ -96,12 +96,11 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-31T11:10:46.19393397"
+        "timestamp": "2025-03-07T11:13:05.475766545"
     },
     "sarscov2 - bam": {
         "content": [
             [
-                "##INFO=<ID=DP,Number=1,Type=Integer,Description=\"Raw Depth\">",
                 "##INFO=<ID=AF,Number=1,Type=Float,Description=\"Allele Frequency\">",
                 "##INFO=<ID=SB,Number=1,Type=Integer,Description=\"Phred-scaled strand bias at this position\">",
                 "##INFO=<ID=DP4,Number=4,Type=Integer,Description=\"Counts for ref-forward bases, ref-reverse, alt-forward and alt-reverse bases\">",
@@ -113,6 +112,7 @@
                 "##FILTER=<ID=min_dp_10,Description=\"Minimum Coverage 10\">",
                 "##FILTER=<ID=sb_fdr,Description=\"Strand-Bias Multiple Testing Correction: fdr corr. pvalue > 0.001000\">",
                 "##FILTER=<ID=min_snvqual_43,Description=\"Minimum SNV Quality (Phred) 43\">",
+                "##FILTER=<ID=min_indelqual_28,Description=\"Minimum Indel Quality (Phred) 28\">",
                 "##bcftools_normVersion=1.20+htslib-1.20"
             ]
         ],
@@ -120,6 +120,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-07-31T11:10:21.300536264"
+        "timestamp": "2025-03-07T11:12:54.662479838"
     }
 }

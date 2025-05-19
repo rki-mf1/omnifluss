@@ -1,5 +1,5 @@
 {
-    "sarscov2 - single_end - stub": {
+    "dummy input - stub": {
         "content": [
             {
                 "0": [
@@ -7,7 +7,7 @@
                         {
                             "id": "dummy_file"
                         },
-                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "dummy_file.prepared_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "1": [
@@ -15,7 +15,7 @@
                         {
                             "id": "dummy_file"
                         },
-                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "dummy_file.prepared_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "2": [
@@ -24,18 +24,18 @@
                             "id": "dummy_file"
                         },
                         [
-                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "dummy_file.prepared_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
                 "3": [
+                    "versions.yml:md5,60985767bf3fe3c86e4abf166ba84f89",
                     "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
-                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de",
-                    "versions.yml:md5,e1b0b033bf8c2bf4b5e6bbb5d626091d"
+                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de"
                 ],
                 "bwa_index": [
                     [
@@ -43,11 +43,11 @@
                             "id": "dummy_file"
                         },
                         [
-                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
+                            "dummy_file.prepared_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
+                            "dummy_file.prepared_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
                         ]
                     ]
                 ],
@@ -56,7 +56,7 @@
                         {
                             "id": "dummy_file"
                         },
-                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "dummy_file.prepared_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "preped_ref": [
@@ -64,13 +64,13 @@
                         {
                             "id": "dummy_file"
                         },
-                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
+                        "dummy_file.prepared_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
                     ]
                 ],
                 "versions": [
+                    "versions.yml:md5,60985767bf3fe3c86e4abf166ba84f89",
                     "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
-                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de",
-                    "versions.yml:md5,e1b0b033bf8c2bf4b5e6bbb5d626091d"
+                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de"
                 ]
             }
         ],
@@ -78,87 +78,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.04.1"
         },
-        "timestamp": "2024-08-14T11:12:13.994431295"
-    },
-    "sarscov2 - paired_end - stub": {
-        "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "id": "dummy_file"
-                        },
-                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    [
-                        {
-                            "id": "dummy_file"
-                        },
-                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "2": [
-                    [
-                        {
-                            "id": "dummy_file"
-                        },
-                        [
-                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                "3": [
-                    "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
-                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de",
-                    "versions.yml:md5,e1b0b033bf8c2bf4b5e6bbb5d626091d"
-                ],
-                "bwa_index": [
-                    [
-                        {
-                            "id": "dummy_file"
-                        },
-                        [
-                            "dummy_file_preped.amb:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.ann:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.bwt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.pac:md5,d41d8cd98f00b204e9800998ecf8427e",
-                            "dummy_file_preped.sa:md5,d41d8cd98f00b204e9800998ecf8427e"
-                        ]
-                    ]
-                ],
-                "fai_index": [
-                    [
-                        {
-                            "id": "dummy_file"
-                        },
-                        "dummy_file_preped.fasta.fai:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "preped_ref": [
-                    [
-                        {
-                            "id": "dummy_file"
-                        },
-                        "dummy_file_preped.fasta:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "versions": [
-                    "versions.yml:md5,71a08e942ca2135c3774ed51f3a016f5",
-                    "versions.yml:md5,adbc88ab264ac89cad5ade17f4c494de",
-                    "versions.yml:md5,e1b0b033bf8c2bf4b5e6bbb5d626091d"
-                ]
-            }
-        ],
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.04.1"
-        },
-        "timestamp": "2024-08-14T11:12:23.351263889"
+        "timestamp": "2025-04-01T09:40:53.840153526"
     }
 }
