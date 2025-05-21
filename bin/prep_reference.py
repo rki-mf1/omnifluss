@@ -10,6 +10,7 @@ import sys
 import argparse
 import textwrap
 import gzip
+import re
 from Bio import SeqIO
 
 
@@ -80,6 +81,9 @@ def prepare_reference(fasta, length, out):
                     .replace("[", "_")
                     .replace("]", "_")
                 )
+                
+                header = re.sub(r'kraken_taxid\|\d+_',"", header)
+                
                 seq = str(record.seq).upper()
                 if not all(i in valid_letters for i in seq):
                     sys.exit(

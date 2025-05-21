@@ -12,13 +12,21 @@ workflow BAM_SAMTOOLS_STATS_ALL {
     ch_versions = Channel.empty()
 
     //getBamStats
-    ch_mapping_coverage_samtools = ch_mapping_var_calling
-        | map {meta, bam -> [meta, bam, []]}
+    ch_bam_cpy = ch_mapping_var_calling.map{ meta, bam -> return [meta.id, meta, bam ] }
+    ch_ref_cpy = ch_ref.map{ meta, ref -> return [meta.id, meta, ref ] }
+    ch_index_cpy = ch_index.map { meta, idx -> return [meta.id, meta, idx ]}
+
+    ch_samtools_coverage_input = ch_bam_cpy.join(ch_ref_cpy).join(ch_index_cpy)
+        .multiMap{_sample_id, meta, bam, meta2, fasta, meta3, idx ->
+            ch_bam: [meta, bam, []]
+            ch_ref: [meta2, fasta]
+            ch_index: [meta3, idx]
+        }
 
     SAMTOOLS_COVERAGE(
-        ch_mapping_coverage_samtools,
-        ch_ref,
-        ch_index
+        ch_samtools_coverage_input.ch_bam,
+        ch_samtools_coverage_input.ch_ref,
+        ch_samtools_coverage_input.ch_index
     )
     ch_cov_samtools = SAMTOOLS_COVERAGE.out.coverage
     ch_versions = ch_versions.mix(SAMTOOLS_COVERAGE.out.versions)

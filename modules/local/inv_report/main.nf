@@ -9,6 +9,7 @@ process INV_REPORT {
     path(script)
     path(fastp_jsons)
     path(kraken_reports)
+    path(mapping_references)
     path(markduplicate_metrics)
     path(bedtools_genomecov)
     path(samtools_coverage)
@@ -23,7 +24,7 @@ process INV_REPORT {
     """
     # create report
     cp -L ${script} report_copied.rmd
-    Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${outdir}', list_folder='${outdir}/reporting_temp', min_cov=50.0), output_file='${outdir}/qc_report.html')"
+    Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${outdir}', list_folder='${outdir}/reporting_files', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${outdir}/qc_report.html')"
     mv '${outdir}/qc_report.html' .
     """
 }

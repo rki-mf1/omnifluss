@@ -5,6 +5,7 @@ workflow INV_REPORTING_ALL {
     reporting_script
     fastp_jsons
     kraken_reports
+    mapping_references
     markduplicate_metrics
     bedtools_genomecov
     samtools_coverage
@@ -16,6 +17,7 @@ workflow INV_REPORTING_ALL {
         reporting_script,
         fastp_jsons,
         kraken_reports,
+        mapping_references,
         markduplicate_metrics,
         bedtools_genomecov,
         samtools_coverage,

@@ -104,8 +104,8 @@ workflow OMNIFLUSS {
             ch_reference_db_fastas,
             ch_reference_db_index
         )
-        ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa             // channel: [ val(meta), [file(spa)] ]      // nf-core style
-        ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs   // channel: [ val(meta), fasta ]            // nf-core style
+        ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa.collect{it[1]} //prepared for reporting
+        ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs
         ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
         // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
     }
@@ -202,8 +202,8 @@ workflow OMNIFLUSS {
         params.consensus_caller,
         params.consensus_mincov,
         ch_ref,                             // channel: [ val(meta), fasta ]
-        ch_vcf,       // channel: [ val(meta), vcf   ]
-        ch_bam,       // channel: [ val(meta), bam   ]
+        ch_vcf,                             // channel: [ val(meta), vcf   ]
+        ch_bam,                             // channel: [ val(meta), bam   ]
         ch_rescued_variants                 // channel: [ val(meta), bed   ]
     )
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
@@ -211,6 +211,7 @@ workflow OMNIFLUSS {
     //collect files for report
     ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
     ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
+    ch_kma_mapping_refs = ch_spa.ifEmpty([])
     ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]}
     ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
     ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
@@ -224,6 +225,7 @@ workflow OMNIFLUSS {
         params.reporting_script,
         ch_fastp_jsons,
         ch_kraken_reports,
+        ch_kma_mapping_refs,
         ch_markduplicates_metrics,
         ch_bedtools_genomecov,
         ch_samtools_coverage,
