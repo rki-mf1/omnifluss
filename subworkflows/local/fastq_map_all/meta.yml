@@ -43,6 +43,10 @@ output:
       type: file
       description: |
         bam file index
+  - markduplicates_metrics:
+      type: file
+      description: |
+        File containing statistics 
   - versions:
       type: file
       description: |
