@@ -18,11 +18,22 @@ workflow BAM_MARKDUPLICATES_PICARD {
     ch_versions = Channel.empty()
 
     //sort channels to maintain order across different channels
-    ch_picard_markduplicates_input = ch_reads.join(ch_fasta).join(ch_fai)
-        .multiMap{meta, reads, reference, fai_index ->
+    // ch_picard_markduplicates_input = ch_reads.join(ch_fasta).join(ch_fai)
+    //     .multiMap{meta, reads, reference, fai_index ->
+    //         ch_reads: [ meta, reads ]
+    //         ch_ref: [ meta, reference ]
+    //         ch_fai_index: [ meta, fai_index ]
+    //     }
+
+    ch_reads_cpy = ch_reads.map {meta, reads -> return [meta.id, meta, reads]} 
+    ch_fasta_cpy = ch_fasta.map {meta, fasta -> return [meta.id, meta, fasta]}
+    ch_fai_cpy = ch_fai.map {meta, fai -> return [meta.id, meta, fai]}
+
+    ch_picard_markduplicates_input = ch_reads_cpy.join(ch_fasta_cpy).join(ch_fai_cpy)
+        .multiMap{_sample_id, meta, reads, meta2, reference, meta3, fai_index ->
             ch_reads: [ meta, reads ]
-            ch_ref: [ meta, reference ]
-            ch_fai_index: [ meta, fai_index ]
+            ch_ref: [ meta2, reference ]
+            ch_fai_index: [ meta3, fai_index ]
         }
 
     PICARD_MARKDUPLICATES(
