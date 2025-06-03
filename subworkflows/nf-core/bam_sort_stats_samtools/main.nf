@@ -16,12 +16,6 @@ workflow BAM_SORT_STATS_SAMTOOLS {
     ch_versions = Channel.empty()
 
     //sort channels to maintain order across different channels
-    // ch_samtools_sort_input = ch_bam.join(ch_fasta)
-    //     .multiMap{meta, bam, reference ->
-    //         ch_bam: [ meta, bam ]
-    //         ch_ref: [ meta, reference ]
-    //     }
-
     ch_bam_cpy = ch_bam.map { meta, bam -> return [meta.id, meta, bam]}
     ch_fasta_cpy = ch_fasta.map { meta, fasta -> return [meta.id, meta, fasta]}
 

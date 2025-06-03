@@ -16,14 +16,6 @@ workflow FASTQ_ALIGN_BWA {
     ch_versions = Channel.empty()
 
     //sort channels to maintain order across different channels
-    // ch_bwa_mem_input = ch_reads.join(ch_fasta).join(ch_index)
-    //     .multiMap{meta, reads, reference, bwa_index ->
-    //         ch_reads: [ meta, reads ]
-    //         ch_ref: [ meta, reference ]
-    //         ch_bwa_index: [ meta, bwa_index ]
-    //     }
-
-    //sort channels to maintain order across different channels
     ch_reads_cpy = ch_reads.map { meta, reads -> return [meta.id, meta, reads]}
     ch_fasta_cpy = ch_fasta.map { meta, fasta -> return [meta.id, meta, fasta]}
     ch_index_cpy = ch_index.map { meta, index -> return [meta.id, meta, index]}
