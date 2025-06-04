@@ -58,11 +58,19 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_versions = ch_versions.mix(KMA.out.versions.first())
         ch_kma_spa  = ch_kma_spa.mix(KMA.out.spa)
 
+        //filter out files for which no references could be inferred
+        def constraint = branchCriteria {_meta, spa ->
+            valid: spa.toFile().readLines().size() >= 2
+            invalid: spa.toFile().readLines().size() < 2
+        }
+
+        ch_kma_spa = ch_kma_spa.branch(constraint)
+        
         /****************************************************************/
         /* STEP 2: Get ID of Top1 refrences                             */
         /****************************************************************/
         INV_GET_TOP1_REFERENCE_GREP(
-            ch_kma_spa
+            ch_kma_spa.valid
         )
         ch_versions = ch_versions.mix(INV_GET_TOP1_REFERENCE_GREP.out.versions.first())
         ch_top1ids  = ch_top1ids.mix(INV_GET_TOP1_REFERENCE_GREP.out.txt)
@@ -111,7 +119,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
 
 
     emit:
-    spa                 = ch_kma_spa            // channel: [ val(meta), [file(spa)] ]      // nf-core style
+    spa                 = ch_kma_spa.valid            // channel: [ val(meta), [file(spa)] ]      // nf-core style
     top1ids             = ch_top1ids            // channel: [ val(meta), file(txt) ]        // nf-core style
     final_topRefs       = ch_final_topRefs      // channel: [ val(meta), fasta ]            // nf-core style
     versions            = ch_versions           // channel: [ versions.yml ]
