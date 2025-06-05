@@ -24,7 +24,14 @@ process INV_REPORT {
     """
     # create report
     cp -L ${script} report_copied.rmd
-    Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${outdir}', list_folder='${outdir}/reporting_files', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${outdir}/qc_report.html')"
-    mv '${outdir}/qc_report.html' .
+
+    # distinguishes between absolute and relative output path
+    if [[ ${outdir} == /* ]]; then
+        Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${outdir}', list_folder='${outdir}/reporting_files', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${outdir}/qc_report.html')"
+        mv '${outdir}/qc_report.html' .
+    else
+        Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${projectDir}/${outdir}', list_folder='${projectDir}/${outdir}/reporting_files', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${projectDir}/${outdir}/qc_report.html')"
+        mv '${projectDir}/${outdir}/qc_report.html' .
+    fi
     """
 }

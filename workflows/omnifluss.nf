@@ -211,7 +211,7 @@ workflow OMNIFLUSS {
     //collect files for report
     ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
     ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
-    ch_kma_mapping_refs = ch_spa.ifEmpty([])
+    ch_kma_mapping_refs = ch_spa.ifEmpty([])                                                //channel is empty if a fixed reference is specified
     ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]}
     ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
     ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
