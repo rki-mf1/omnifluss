@@ -676,7 +676,10 @@ if (params$reference != "static") {
   dt.top.refs$segment <- sapply(strsplit(dt.top.refs$'#Template', "\\|"), function(x) tail(x, 1))                         
   colnames(dt.top.refs) <- c("sample","taxid", "magic number", "segment")
   
-  dt.top.refs$taxid <- substr(dt.top.refs$taxid, 20, nchar(dt.top.refs$taxid)-3)
+  #in house adapatation - remove the "kraken:taxid" part + remove the "|segment" ending
+  dt.top.refs$taxid <- ifelse(!grepl("^kraken:taxid\\|", dt.top.refs$taxid), dt.top.refs$taxid, substr(dt.top.refs$taxid, 20, nchar(dt.top.refs$taxid)))
+  dt.top.refs$taxid <- ifelse(!grepl("\\|PB1$|\\|PB2$", dt.top.refs$taxid), substr(dt.top.refs$taxid,1,nchar(dt.top.refs$taxid)-3), substr(dt.top.refs$taxid,1,nchar(dt.top.refs$taxid)-4))
+  
   dt.top.refs <- dt.top.refs %>% group_by(sample, segment) %>% arrange(desc(`magic number`))
   dt.top.refs <- dt.top.refs %>% arrange(sample, segment)
   dt.top.refs <- dt.top.refs[,-3]

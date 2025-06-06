@@ -141,13 +141,14 @@ workflow OMNIFLUSS {
     //
     // Collecting Data for Report (1/2)
     //
-    BAM_GENOMECOV_ALL(
-        ch_mapping,
-        [],
-        "coverage.tsv",
-        true
-    )
-
+    if (! params.skip_report) {
+        BAM_GENOMECOV_ALL(
+            ch_mapping,
+            [],
+            "coverage.tsv",
+            true
+        )
+    }
     //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
     //
@@ -175,11 +176,13 @@ workflow OMNIFLUSS {
     //
     // Collecting Data for Report (2/2)
     //
-    BAM_SAMTOOLS_STATS_ALL(
-        ch_bam,
-        ch_ref,
-        ch_ref_index
-    )
+    if (! params.skip_report) {
+        BAM_SAMTOOLS_STATS_ALL(
+            ch_bam,
+            ch_ref,
+            ch_ref_index
+        )
+    }
 
     //
     // Special INV variant calling
@@ -208,30 +211,32 @@ workflow OMNIFLUSS {
     )
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
-    //collect files for report
-    ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
-    ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
-    ch_kma_mapping_refs = ch_spa.ifEmpty([])                                                //channel is empty if a fixed reference is specified
-    ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]}
-    ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
-    ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
-    ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
-    ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
+    if (! params.skip_report) {
+        //collect files for report
+        ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
+        ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
+        ch_kma_mapping_refs = ch_spa.ifEmpty([])                                                //channel is empty if a fixed reference is specified
+        ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]}
+        ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
+        ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
+        ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
+        ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
 
-    //
-    // Reporting
-    //
-    INV_REPORTING_ALL(
-        params.reporting_script,
-        ch_fastp_jsons,
-        ch_kraken_reports,
-        ch_kma_mapping_refs,
-        ch_markduplicates_metrics,
-        ch_bedtools_genomecov,
-        ch_samtools_coverage,
-        ch_samtools_flagstat,
-        ch_consensus_calls
-    )
+        //
+        // Reporting
+        //
+        INV_REPORTING_ALL(
+            params.reporting_script,
+            ch_fastp_jsons,
+            ch_kraken_reports,
+            ch_kma_mapping_refs,
+            ch_markduplicates_metrics,
+            ch_bedtools_genomecov,
+            ch_samtools_coverage,
+            ch_samtools_flagstat,
+            ch_consensus_calls
+        )
+    }
 
     //
     // Genome QC
