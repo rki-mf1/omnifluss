@@ -23,7 +23,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success }
-                // I refrain from complete snapshot here, so that one can use this for protopyping
+                // I refrain from complete snapshot here, so that one can use this for prototyping
             )
         }
 
