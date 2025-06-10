@@ -1,4 +1,4 @@
-# rki-mf1/igsmp: Citations
+# rki-mf1/omnifluss: Citations
 
 ## [nf-core](https://pubmed.ncbi.nlm.nih.gov/32055031/)
 
