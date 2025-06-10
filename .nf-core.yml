@@ -14,6 +14,8 @@ lint:
     - .github/.dockstore.yml
     - .github/CONTRIBUTING.md
     - .github/PULL_REQUEST_TEMPLATE.md
+    - conf/igenomes.config
+    - conf/igenomes_ignored.config
   files_unchanged:
     - CODE_OF_CONDUCT.md
     - assets/nf-core-omnifluss_logo_light.png
