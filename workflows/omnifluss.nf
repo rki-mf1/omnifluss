@@ -16,7 +16,7 @@ include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_omni
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-workflow IGSMP {
+workflow OMNIFLUSS {
 
     take:
     ch_samplesheet // channel: samplesheet read in from --input
