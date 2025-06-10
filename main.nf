@@ -1,9 +1,9 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    rki-mf1/igsmp
+    rki-mf1/omnifluss
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/rki-mf1/igsmp
+    Github : https://github.com/rki-mf1/omnifluss
 ----------------------------------------------------------------------------------------
 */
 
@@ -13,9 +13,9 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { IGSMP  } from './workflows/igsmp'
-include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_igsmp_pipeline'
-include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_igsmp_pipeline'
+include { IGSMP  } from './workflows/omnifluss'
+include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_omnifluss_pipeline'
+include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_omnifluss_pipeline'
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE

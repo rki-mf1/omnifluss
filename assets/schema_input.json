@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/rki-mf1/igsmp/main/assets/schema_input.json",
-    "title": "rki-mf1/igsmp pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/rki-mf1/omnifluss/main/assets/schema_input.json",
+    "title": "rki-mf1/omnifluss pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {

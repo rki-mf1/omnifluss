@@ -1,6 +1,6 @@
-# rki-mf1/igsmp: Documentation
+# rki-mf1/omnifluss: Documentation
 
-The rki-mf1/igsmp documentation is split into the following pages:
+The rki-mf1/omnifluss documentation is split into the following pages:
 
 - [Usage](usage.md)
   - An overview of how the pipeline works, how to run it and a description of all of the different command-line flags.
