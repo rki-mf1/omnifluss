@@ -30,7 +30,8 @@ workflow FASTQ_QC_TRIMMING_ALL {
             false,
             false
         )
-        ch_multiqc_files = ch_multiqc_files.mix(FASTP.out.json.collect{it[1]})
+        ch_fastp_jsons = FASTP.out.json
+        ch_multiqc_files = ch_multiqc_files.mix(ch_fastp_jsons.collect{it[1]})
         ch_versions = ch_versions.mix(FASTP.out.versions.first())
 
         ch_trimmed_reads = FASTP.out.reads
@@ -38,6 +39,8 @@ workflow FASTQ_QC_TRIMMING_ALL {
 
     emit:
     trimmed_reads     = ch_trimmed_reads  // channel: [ val(meta), fastq ]
+    fastp_jsons       = ch_fastp_jsons    // channel: [ jsons ]
+    
 
     multiqc_files     = ch_multiqc_files  // channel: [ multiqc_files ]
     versions          = ch_versions       // channel: [ versions.yml ]
