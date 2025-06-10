@@ -79,13 +79,13 @@ workflow OMNIFLUSS {
     }
     else {
         ch_reference_db_fastas = Channel.fromPath("${params.reference_selection_db}/*.fasta")
-            .map{fasta -> 
+            .map{fasta ->
                 def id = fasta.getName().tokenize('.')[0]
                 return tuple([id: id], fasta)
             }
 
         ch_reference_db_index = Channel.fromPath("${params.reference_selection_db}/*.{length.b,seq.b,comp.b,name}")
-            .map{indexfile -> 
+            .map{indexfile ->
                 def id = indexfile.getName().tokenize('.')[0]
                 return [id, indexfile]
             }
@@ -212,7 +212,7 @@ workflow OMNIFLUSS {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_pipeline_software_mqc_versions.yml',
+            name:  'omnifluss_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
@@ -220,6 +220,7 @@ workflow OMNIFLUSS {
     //
     // MODULE: MultiQC
     //
+    ch_multiqc_report = Channel.empty()
     if (!params.skip_multiqc) {
         ch_multiqc_config        = Channel.fromPath(
             "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
@@ -233,15 +234,14 @@ workflow OMNIFLUSS {
         summary_params      = paramsSummaryMap(
             workflow, parameters_schema: "nextflow_schema.json")
         ch_workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
-
+        ch_multiqc_files = ch_multiqc_files.mix(
+            ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
             file(params.multiqc_methods_description, checkIfExists: true) :
             file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
         ch_methods_description                = Channel.value(
             methodsDescriptionText(ch_multiqc_custom_methods_description))
 
-        ch_multiqc_files = ch_multiqc_files.mix(
-            ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
         ch_multiqc_files = ch_multiqc_files.mix(
             ch_methods_description.collectFile(
@@ -250,22 +250,18 @@ workflow OMNIFLUSS {
             )
         )
 
-
-        // ch_multiqc_files.view()
-        // ch_multiqc_config.view()
-        // ch_multiqc_custom_config.view()
-        // ch_multiqc_logo.view()
-
         MULTIQC (
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),
             ch_multiqc_custom_config.toList(),
-            ch_multiqc_logo.toList()
+            ch_multiqc_logo.toList(),
+            [],
+            []
         )
-        multiqc_report = MULTIQC.out.report.toList()
+        ch_multiqc_report = MULTIQC.out.report.toList()
     }
     emit:
-    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    multiqc_report = ch_multiqc_report           // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 
