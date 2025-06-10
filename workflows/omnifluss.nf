@@ -13,7 +13,7 @@ include { BAM_SPECIAL_VARIANTS_CASE_ALL       } from '../subworkflows/local/bam_
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
-include { paramsSummaryMap                    } from 'plugin/nf-validation'
+include { paramsSummaryMap                    } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML              } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText              } from '../subworkflows/local/utils_nfcore_omnifluss_pipeline'
