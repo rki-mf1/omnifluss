@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/rki-mf1/igsmp/main/nextflow_schema.json",
-    "title": "rki-mf1/igsmp pipeline parameters",
+    "$id": "https://raw.githubusercontent.com/rki-mf1/omnifluss/main/nextflow_schema.json",
+    "title": "rki-mf1/omnifluss pipeline parameters",
     "description": "GR for viruses",
     "type": "object",
     "$defs": {
