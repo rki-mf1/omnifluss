@@ -2,7 +2,7 @@
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "$id": "https://raw.githubusercontent.com/rki-mf1/igsmp/main/nextflow_schema.json",
     "title": "rki-mf1/igsmp pipeline parameters",
-    "description": "GR for viruses",
+    "description": "Omnifluss is a genome reconstruction pipeline for different viruses; it's a Nextflow pipeline based on the nf-core pipeline template.",
     "type": "object",
     "$defs": {
         "input_output_options": {
