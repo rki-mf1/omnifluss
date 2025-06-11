@@ -3,20 +3,19 @@ nextflow_process {
     name "Test Process INV_RESCUE_VARIANTS_PYTHON"
     script "../main.nf"
     process "INV_RESCUE_VARIANTS_PYTHON"
-    config "./nextflow.config"
 
     tag "modules"
     tag "modules_local"
     tag "inv_rescue_variants_python"
 
-    test("influenza - vcf") {
+    test("Influenza - vcf - special case") {
 
         when {
             process {
                 """
                 input[0] = Channel.of([
-                    [ id: params.testdata_id ],
-                    [ file('${projectDir}/' + params.testdata_vcf, checkIfExists: true) ]
+                    [ id: 'test.spec_case.filtered' ],
+                    [ file(params.local_testdata_base_path + 'INV_illumina/vcf/test.spec_case.filtered.vcf.gz', checkIfExists: true) ]
                 ])
                 """
             }
@@ -33,7 +32,7 @@ nextflow_process {
     }
 
 
-    test("influenza - vcf - stub") {
+    test("Influenza - vcf - special case - stub") {
 
         tag "stub"
         options '-stub'
@@ -42,8 +41,8 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of([
-                    [ id: params.testdata_id ],
-                    [ file('${projectDir}/' + params.testdata_vcf, checkIfExists: true) ]
+                    [ id: 'test.spec_case.filtered.vcf' ],
+                    [ file(params.local_testdata_base_path + 'INV_illumina/vcf/test.spec_case.filtered.vcf.gz', checkIfExists: true) ]
                 ])
                 """
             }
@@ -60,20 +59,20 @@ nextflow_process {
     }
 
 
-    test("sarscov2 - vcf") {
+    test("SARS-CoV-2 - vcf - no special case") {
 
         when {
             process {
                 """
                 input[0] =  Channel.of([
                                 [ id:'test2' ],
-                                [ file(params.testdata_nfcore_base_path + 'genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true) ]
+                                [ file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/vcf/test2.vcf.gz', checkIfExists: true) ]
                             ])
                 """
             }
         }
 
-        // the nf-core testdata should not contain such a special case
+        // the nf-core test data should not contain such a special case
         then {
             assertAll (
                 { assert process.success },
