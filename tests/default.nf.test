@@ -47,7 +47,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") }
+                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/omnifluss_software_mqc_versions.yml")).match("software_versions") }
             )
         }
 
@@ -72,7 +72,7 @@ nextflow_pipeline {
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_omnifluss_software_mqc_versions.yml"),
+                    removeNextflowVersion("$outputDir/pipeline_info/omnifluss_software_mqc_versions.yml"),
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents
