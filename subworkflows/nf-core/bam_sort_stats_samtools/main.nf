@@ -21,7 +21,6 @@ workflow BAM_SORT_STATS_SAMTOOLS {
 
     ch_samtools_sort_input = ch_bam_cpy.join(ch_fasta_cpy)
         .multiMap{_sample_id, meta, bam, meta2, reference ->
-        .multiMap{meta, bam, reference ->
             ch_bam: [ meta, bam ]
             ch_ref: [ meta2, reference ]
         }
