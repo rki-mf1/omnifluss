@@ -190,20 +190,14 @@
                 "pipeline_info/omnifluss_software_mqc_versions.yml"
             ],
             [
-                "SAMPLE1_PE.fastp.html:md5,5f791f56ab06b705bc42da24aec116af",
                 "SAMPLE1_PE.fastp.json:md5,c5906e853e76b3e7221a6f641c832ce7",
-                "SAMPLE1_PE.fastp.log:md5,1e775adddc4a5d4319ad54746e419245",
                 "SAMPLE1_PE_1.fastp.fastq.gz:md5,3db1926e6d967b3ddfd06343f449cb87",
                 "SAMPLE1_PE_2.fastp.fastq.gz:md5,338d78aaff76a8761e29d0c78a24bab2",
-                "SAMPLE2_PE.fastp.html:md5,8e240c5ea1f0bea36bbed752fabccc82",
                 "SAMPLE2_PE.fastp.json:md5,a97523ec476d53cbcb59375c071fc5cf",
-                "SAMPLE2_PE.fastp.log:md5,476c1a2341a9f62580afea63b4ec6fa1",
                 "SAMPLE2_PE_1.fastp.fastq.gz:md5,a4b3c26f992f9e56e80efa4a688ac13e",
                 "SAMPLE2_PE_2.fastp.fastq.gz:md5,bbd42a12e38436738821a8be2f3fd756",
                 "SAMPLE3_SE.fastp.fastq.gz:md5,5986c35faa81805b62d1622aa249a393",
-                "SAMPLE3_SE.fastp.html:md5,7daa5a82e2fa3203111d7c9e0cfa1ba8",
                 "SAMPLE3_SE.fastp.json:md5,2ec10724b42d8bcd41f72b132524ba0e",
-                "SAMPLE3_SE.fastp.log:md5,489f5bf4abaff0675adc2aa01db3412e",
                 "fastp-insert-size-plot.txt:md5,4614dc8ee875b062ae96fb8e2f3ee9d7",
                 "fastp-seq-content-gc-plot_Read_1_After_filtering.txt:md5,07eb52afa524204d47ee395a1183a25c",
                 "fastp-seq-content-gc-plot_Read_1_Before_filtering.txt:md5,431fb17b1125b680275ce8d8a4a707af",
@@ -238,6 +232,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-11T09:26:16.657250381"
+        "timestamp": "2025-06-11T10:05:01.795635329"
     }
 }
