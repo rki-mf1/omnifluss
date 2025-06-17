@@ -5,26 +5,25 @@ nextflow_pipeline {
     tag "pipeline"
 
 
-    setup {
-        run("UNTAR") {
-            script "modules/nf-core/untar/main.nf"
-            process {
-                """
-                input[0] = Channel.of([
-                    [],
-                    file(
-                        'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz',
-                        checkIfExists: true
-                    )
-                ])
-                """
-            }
-        }
-    }
-
-
     test("Public ENA data test") {
         tag "ena"
+
+        setup {
+            run("UNTAR") {
+                script "modules/nf-core/untar/main.nf"
+                process {
+                    """
+                    input[0] = Channel.of([
+                        [],
+                        file(
+                            'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz',
+                            checkIfExists: true
+                        )
+                    ])
+                    """
+                }
+            }
+        }
 
         when {
             params {
