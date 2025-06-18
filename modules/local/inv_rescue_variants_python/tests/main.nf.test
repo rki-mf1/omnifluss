@@ -41,7 +41,7 @@ nextflow_process {
             process {
                 """
                 input[0] = Channel.of([
-                    [ id: 'test.spec_case.filtered.vcf' ],
+                    [ id: 'test.spec_case.filtered' ],
                     [ file(params.local_testdata_base_path + 'INV_illumina/vcf/test.spec_case.filtered.vcf.gz', checkIfExists: true) ]
                 ])
                 """

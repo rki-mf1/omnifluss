@@ -4,9 +4,9 @@
             [
                 [
                     {
-                        "id": "test.spec_case.filtered.vcf"
+                        "id": "test.spec_case.filtered"
                     },
-                    "test.spec_case.filtered.vcf.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    "test.spec_case.filtered.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ]
             ]
         ],
@@ -14,7 +14,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-11T15:23:08.582335374"
+        "timestamp": "2025-06-18T14:16:12.07026341"
     },
     "Snapshot-VERSIONS-stub": {
         "content": [
@@ -33,7 +33,7 @@
             [
                 [
                     {
-                        "id": "test.spec_case.filtered.vcf"
+                        "id": "test.spec_case.filtered"
                     },
                     "test.special_case_variant_mask.bed:md5,bdd89429997e007414772c250cd704de"
                 ]
@@ -43,7 +43,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-11T15:23:02.487412468"
+        "timestamp": "2025-06-18T14:15:17.752841485"
     },
     "Snapshot-VERSIONS": {
         "content": [
