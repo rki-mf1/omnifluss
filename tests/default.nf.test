@@ -3,16 +3,17 @@ nextflow_pipeline {
     name "Test Workflow main.nf"
     script "../main.nf"
     tag "pipeline"
-    tag "vanilla"
 
     test("Vanilla stub test") {
         tag "stub"
+        tag "vanilla"
+
         options '-stub'
 
         when {
             params {
                 input = 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv'
-                fasta = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
+                reference = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
 
                 // $outputDir is a global nf-test variable
                 // https://www.nf-test.com/docs/testcases/global_variables/
@@ -23,18 +24,19 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success }
-                // I refrain from complete snapshot here, so that one can use this for protopyping
+                // I refrain from complete snapshot here, so that one can use this for prototyping
             )
         }
 
     }
 
     test("Vanilla test") {
+        tag "vanilla"
 
         when {
             params {
                 input = 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv'
-                fasta = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
+                reference = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
 
                 // $outputDir is a global nf-test variable
                 // https://www.nf-test.com/docs/testcases/global_variables/
@@ -45,10 +47,38 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/nf_core_pipeline_software_mqc_versions.yml")).match("software_versions") }
+                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/omnifluss_software_mqc_versions.yml")).match("software_versions") }
             )
         }
 
     }
 
+    test("-profile test") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/omnifluss_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path
+                ).match() }
+            )
+        }
+    }
 }
