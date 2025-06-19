@@ -72,10 +72,16 @@ if (!dir.exists(params$list_folder)) {
 ```
 ```{r def_functions}
 # input of file listing. requires file names like /path/to/nCoV1.bamstats.txt
-f.get_filenames <- function(l.input){
+f.get_filenames <- function(l.input, segment=FALSE){
     sapply(l.input, function(x){
-        filename <- unlist(strsplit(x, '/'))[length(unlist(strsplit(x, '/')))]
-        samplename <- unlist(strsplit(filename, '\\.'))[1]
+        if (!segment){
+            filename <- unlist(strsplit(x, '/'))[length(unlist(strsplit(x, '/')))]
+            samplename <- unlist(strsplit(filename, '\\.'))[1]
+        } else {
+            filename <- unlist(strsplit(x, '/'))[length(unlist(strsplit(x, '/')))]
+            parts <- unlist(strsplit(filename, '\\.'))
+            samplename <- paste(parts[1], parts[2], sep="_separator_")
+        }
         return(samplename)
     })
     #returns named character vector of sample names, e.g. nCoV1
@@ -208,7 +214,7 @@ l.infiles.read.ranking.refs <- list.files(path = file.path(params$proj_folder,"k
                                  full.names = T,
                                  recursive = F)
 
-names(l.infiles.read.ranking.refs) <- f.get_filenames(l.infiles.read.ranking.refs)
+names(l.infiles.read.ranking.refs) <- f.get_filenames(l.infiles.read.ranking.refs, TRUE)
 
 ```
 
@@ -673,7 +679,8 @@ if (params$reference != "static") {
   dt.top.refs <- as.data.table(ldply(l.infiles.read.ranking.refs, fread, sep='\t', 
                                       select = c(1,3), na.strings = ""))
 
-  dt.top.refs$segment <- sapply(strsplit(dt.top.refs$'#Template', "\\|"), function(x) tail(x, 1))                         
+  dt.top.refs$segment <- sapply(strsplit(dt.top.refs$'.id', "_separator_"), function(x) tail(x, 1))
+  dt.top.refs$".id" <- sapply(strsplit(dt.top.refs$".id", "_separator_"), `[`, 1)                          
   colnames(dt.top.refs) <- c("sample","taxid", "magic number", "segment")
   
   #in house adapatation - remove the "kraken:taxid" part + remove the "|segment" ending
