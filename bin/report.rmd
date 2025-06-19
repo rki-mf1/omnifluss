@@ -1,5 +1,5 @@
 ---
-title: "Flupipe Report"
+title: "Omnifluss INV_Illumina Report"
 output:
   html_document:
     toc: true
