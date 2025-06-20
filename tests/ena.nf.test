@@ -3,6 +3,7 @@ nextflow_pipeline {
     name "Test Workflow main.nf + ENA test data"
     script "../main.nf"
     tag "pipeline"
+    profile "test"
 
 
     test("Public ENA data test") {
