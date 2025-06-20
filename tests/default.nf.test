@@ -8,7 +8,7 @@ nextflow_pipeline {
     profile "test_default"
 
 
-    test("-profile test,INV_illumina") {
+    test("-profile test_default") {
         tag "ena"
         tag "influenza"
 
