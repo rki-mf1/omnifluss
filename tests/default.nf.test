@@ -5,7 +5,7 @@ nextflow_pipeline {
     tag "pipeline"
     tag "ena"
     tag "ena_full"
-    profile "INV_illumina"
+    profile "test_default"
 
 
     test("-profile test,INV_illumina") {
