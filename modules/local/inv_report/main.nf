@@ -34,4 +34,9 @@ process INV_REPORT {
         mv '${projectDir}/${outdir}/qc_report.html' .
     fi
     """
+
+    stub:
+    """
+    touch qc_report.html
+    """
 }
