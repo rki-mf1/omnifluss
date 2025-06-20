@@ -3,61 +3,36 @@ nextflow_pipeline {
     name "Test Workflow main.nf"
     script "../main.nf"
     tag "pipeline"
+    tag "ena"
+    tag "ena_full"
+    profile "INV_illumina"
 
-    test("Vanilla stub test") {
-        tag "stub"
-        tag "vanilla"
 
-        options '-stub'
+    test("-profile test,INV_illumina") {
+        tag "ena"
+        tag "influenza"
 
-        when {
-            params {
-                input = 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv'
-                reference = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
+        setup {
+            println "Downloading segment database..."
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
 
-                // $outputDir is a global nf-test variable
-                // https://www.nf-test.com/docs/testcases/global_variables/
-                outdir = "$outputDir"
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
             }
         }
 
-        then {
-            assertAll(
-                { assert workflow.success }
-                // I refrain from complete snapshot here, so that one can use this for prototyping
-            )
-        }
-
-    }
-
-    test("Vanilla test") {
-        tag "vanilla"
-
         when {
             params {
-                input = 'https://raw.githubusercontent.com/nf-core/test-datasets/viralrecon/samplesheet/samplesheet_test_illumina_amplicon.csv'
-                reference = 'https://raw.githubusercontent.com/nf-core/test-datasets/modules/data/genomics/sarscov2/genome/genome.fasta'
-
-                // $outputDir is a global nf-test variable
-                // https://www.nf-test.com/docs/testcases/global_variables/
-                outdir = "$outputDir"
-            }
-        }
-
-        then {
-            assertAll(
-                { assert workflow.success },
-                { assert snapshot(removeNextflowVersion("$outputDir/pipeline_info/omnifluss_software_mqc_versions.yml")).match("software_versions") }
-            )
-        }
-
-    }
-
-    test("-profile test") {
-
-        when {
-            params {
-                outdir = "$outputDir"
+                input                       = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta         = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                reference_selection         = 'kma'
+                reference_selection_db      = "${launchDir}/segment_db"
+                consensus_mincov            = 5
+                skip_taxonomic_filtering    = true
+                outdir                      = "$outputDir"
             }
         }
 
