@@ -54,6 +54,7 @@ process KMA {
     touch ${prefix}.fsa \\
     touch ${prefix}.aln \\
     touch ${prefix}.frag.gz \\
+    touch ${prefix}.spa \\
     ${create_mat}
 
     cat <<-END_VERSIONS > versions.yml
