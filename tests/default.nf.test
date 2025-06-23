@@ -5,10 +5,12 @@ nextflow_pipeline {
     tag "pipeline"
     tag "ena"
     tag "ena_full"
-    profile "test_default"
+    tag "INV"
+    tag "influenza"
+    profile "INV_test_default"
 
 
-    test("-profile test_default") {
+    test("-profile INV_test_default") {
         tag "ena"
         tag "influenza"
 
