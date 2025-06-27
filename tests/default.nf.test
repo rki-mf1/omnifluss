@@ -90,7 +90,7 @@ nextflow_pipeline {
                     assert "ENA|PQ032842|PQ032842_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_8_nuclear_export_protein__NEP__and_nonstructural_protein_1__NS1__genes_complete_cds_" in final_ref_selection_medium
                 },
 
-                // (2) Final consensus is sensitive to FASTA order; compare only consistency in headers
+                // (2a) Final consensus is sensitive to FASTA order; compare only consistency in headers
                 {
                     def final_consensus_small   = path("$outputDir/bcftools/consensus/SRR31143054_small.fa").fasta
                     def final_consensus_medium  = path("$outputDir/bcftools/consensus/SRR31096286_medium.fa").fasta
@@ -112,6 +112,32 @@ nextflow_pipeline {
                     assert "ENA|PP839261|PP839261_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_6_neuraminidase__NA__gene_complete_cds_" in final_consensus_medium
                     assert "ENA|PQ032841|PQ032841_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_" in final_consensus_medium
                     assert "ENA|PQ032842|PQ032842_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_8_nuclear_export_protein__NEP__and_nonstructural_protein_1__NS1__genes_complete_cds_" in final_consensus_medium
+                },
+
+                // (2b) Final consensus is sensitive to FASTA order; compare snapshot of DNA sequences
+                {
+                    def small_fa    = path("$outputDir/bcftools/consensus/SRR31143054_small.fa").fasta
+                    def medium_fa   = path("$outputDir/bcftools/consensus/SRR31096286_medium.fa").fasta
+                    
+                    assert snapshot(
+                        small_fa."ENA|HQ533879|HQ533879_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_",
+                        small_fa."ENA|PP877002|PP877002_1_Influenza_A_virus__A/Nebraska/14/2024_H3N2___segment_4_hemagglutinin__HA__gene_complete_cds_",
+                        small_fa."ENA|HQ533877|HQ533877_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_2_polymerase_PB1__PB1__gene_complete_cds;_and_nonfunctional_PB1-F2_protein__PB1-F2__gene_complete_sequence_",
+                        small_fa."ENA|PP839261|PP839261_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_6_neuraminidase__NA__gene_complete_cds_",
+                        small_fa."ENA|PQ032842|PQ032842_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_8_nuclear_export_protein__NEP__and_nonstructural_protein_1__NS1__genes_complete_cds_",
+                        small_fa."ENA|PP839259|PP839259_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_3_polymerase_PA__PA__and_PA-X_protein__PA-X__genes_complete_cds_",
+                        small_fa."ENA|HQ533871|HQ533871_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_5_nucleocapsid_protein__NP__gene_complete_cds_",
+                        small_fa."ENA|PQ615339|PQ615339_1_Influenza_A_virus__A/California/173/2024_H5N1___segment_7_matrix_protein_2__M2__and_matrix_protein_1__M1__genes_complete_cds_",
+
+                        medium_fa."ENA|HQ533871|HQ533871_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_5_nucleocapsid_protein__NP__gene_complete_cds_",
+                        medium_fa."ENA|PP839259|PP839259_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_3_polymerase_PA__PA__and_PA-X_protein__PA-X__genes_complete_cds_",
+                        medium_fa."ENA|PP877002|PP877002_1_Influenza_A_virus__A/Nebraska/14/2024_H3N2___segment_4_hemagglutinin__HA__gene_complete_cds_",
+                        medium_fa."ENA|PQ615339|PQ615339_1_Influenza_A_virus__A/California/173/2024_H5N1___segment_7_matrix_protein_2__M2__and_matrix_protein_1__M1__genes_complete_cds_",
+                        medium_fa."ENA|HQ533877|HQ533877_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_2_polymerase_PB1__PB1__gene_complete_cds;_and_nonfunctional_PB1-F2_protein__PB1-F2__gene_complete_sequence_",
+                        medium_fa."ENA|PP839261|PP839261_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_6_neuraminidase__NA__gene_complete_cds_",
+                        medium_fa."ENA|PQ032841|PQ032841_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_",
+                        medium_fa."ENA|PQ032842|PQ032842_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_8_nuclear_export_protein__NEP__and_nonstructural_protein_1__NS1__genes_complete_cds_"
+                    ).match("Snapshot - Stable consensus")
                 },
 
                 // (3) Final consensus mask is sensitive to BED order; use csv plug-in to reorder and compare
