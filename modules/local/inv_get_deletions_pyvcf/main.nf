@@ -4,8 +4,8 @@ process INV_GET_DELETIONS_PYVCF {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/pyvcf%3A0.6.8--py36_0':
-        'biocontainers/pyvcf:v0.6.8git20170215.476169c-1-deb_cv1' }"
+        'https://depot.galaxyproject.org/singularity/pyvcf:0.6.8--py36_0':
+        'biocontainers/pyvcf:0.6.8--py36_0' }"
 
     input:
     tuple val(meta), path(vcf)
