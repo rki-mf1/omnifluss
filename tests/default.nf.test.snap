@@ -35,8 +35,8 @@
                     "get_deletions.py": "1.0.1"
                 },
                 "INV_GET_TOP1_REFERENCE_GREP": {
-                    "GNU grep": 3.4,
-                    "GNU coreutils": null
+                    "GNU coreutils": null,
+                    "GNU grep": 3.4
                 },
                 "INV_PREPARE_REFERENCE": {
                     "prep_reference.py": "1.0.1"
