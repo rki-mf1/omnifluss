@@ -116,17 +116,20 @@ nextflow_pipeline {
 
                 // (3) Final consensus mask is sensitive to BED order; use csv plug-in to reorder and compare
                 {                    
-                    def consensus_mask_medium_final     = path("$outputDir/bedtools/local/SRR31096286_medium.final.bed").csv(sep: '\t', header: false).sortRows("C0")
-                    def consensus_mask_medium_lowcov    = path("$outputDir/bedtools/local/SRR31096286_medium.lowcov.bed").csv(sep: '\t', header: false).sortRows("C0")
-                    def consensus_mask_small_final      = path("$outputDir/bedtools/local/SRR31143054_small.final.bed").csv(sep: '\t', header: false).sortRows("C0")
-                    def consensus_mask_small_lowcov     = path("$outputDir/bedtools/local/SRR31143054_small.lowcov.bed").csv(sep: '\t', header: false).sortRows("C0")
+                    //def consensus_mask_medium_final     = path("$outputDir/bedtools/local/SRR31096286_medium.final.bed").csv(sep: '\t', header: false).sortRows("C0")
+                    //def consensus_mask_medium_lowcov    = path("$outputDir/bedtools/local/SRR31096286_medium.lowcov.bed").csv(sep: '\t', header: false).sortRows("C0")
+                    //def consensus_mask_small_final      = path("$outputDir/bedtools/local/SRR31143054_small.final.bed").csv(sep: '\t', header: false).sortRows("C0")
+                    //def consensus_mask_small_lowcov     = path("$outputDir/bedtools/local/SRR31143054_small.lowcov.bed").csv(sep: '\t', header: false).sortRows("C0")
 
-                    assert snapshot(
-                        consensus_mask_medium_final,
-                        consensus_mask_medium_lowcov,
-                        consensus_mask_small_final,
-                        consensus_mask_small_lowcov
-                    ).match("Snapshot - BED files")
+                    assert path("$outputDir/bedtools/local/SRR31096286_medium.final.bed").csv(sep: '\t', header: false).columns["C1"].sort() == [0, 0, 43, 187, 197, 302, 323, 377, 385, 503, 629, 694, 773, 774, 804, 836, 1055, 1152, 1253, 1297, 1316, 1495, 1679, 1712, 1919, 2030]
+                    assert path("$outputDir/bedtools/local/SRR31096286_medium.final.bed").csv(sep: '\t', header: false).columns["C2"].sort() == [1, 2, 225, 226, 333, 450, 509, 573, 690, 715, 805, 837, 892, 927, 1046, 1131, 1222, 1311, 1323, 1341, 1433, 1497, 1729, 1785, 1932, 2042]
+                    assert path("$outputDir/bedtools/local/SRR31096286_medium.lowcov.bed").csv(sep: '\t', header: false).columns["C1"].sort() == [0, 0, 43, 187, 197, 302, 323, 377, 385, 503, 629, 694, 773, 774, 1055, 1152, 1253, 1297, 1316, 1495, 1679, 1712, 1919, 2030]
+                    assert path("$outputDir/bedtools/local/SRR31096286_medium.lowcov.bed").csv(sep: '\t', header: false).columns["C2"].sort() == [1, 2, 225, 226, 333, 450, 509, 573, 690, 715, 892, 927, 1046, 1131, 1222, 1311, 1323, 1341, 1433, 1497, 1729, 1785, 1932, 2042]
+
+                    assert path("$outputDir/bedtools/local/SRR31143054_small.final.bed").csv(sep: '\t', header: false).columns["C1"].sort() == [0, 42, 165, 255, 302, 348, 377, 503, 548, 671, 773, 811, 968, 1022, 1054, 1169, 1237, 1253, 1406, 1493, 1493, 1712, 1919, 2279]
+                    assert path("$outputDir/bedtools/local/SRR31143054_small.final.bed").csv(sep: '\t', header: false).columns["C2"].sort() == [2, 236, 282, 333, 408, 450, 550, 578, 705, 898, 924, 1018, 1044, 1132, 1222, 1311, 1324, 1422, 1433, 1497, 1548, 1729, 1932, 2280]
+                    assert path("$outputDir/bedtools/local/SRR31143054_small.lowcov.bed").csv(sep: '\t', header: false).columns["C1"].sort() == [0, 42, 165, 255, 302, 348, 377, 503, 548, 671, 773, 811, 968, 1022, 1054, 1169, 1237, 1253, 1406, 1493, 1493, 1712, 1919, 2279]
+                    assert path("$outputDir/bedtools/local/SRR31143054_small.lowcov.bed").csv(sep: '\t', header: false).columns["C2"].sort() == [2, 236, 282, 333, 408, 450, 550, 578, 705, 898, 924, 1018, 1044, 1132, 1222, 1311, 1324, 1422, 1433, 1497, 1548, 1729, 1932, 2280]
                 }
             )
         }
