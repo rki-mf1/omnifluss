@@ -126,7 +126,7 @@ nextflow_pipeline {
                         consensus_mask_medium_lowcov,
                         consensus_mask_small_final,
                         consensus_mask_small_lowcov
-                    ).md5().match("Snapshot - BED files")
+                    ).match("Snapshot - BED files")
                 }
             )
         }
