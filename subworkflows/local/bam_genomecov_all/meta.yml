@@ -1,0 +1,49 @@
+name: "bam_genomecov_all"
+description: runs bedtools genomecov to compute coverage related statistics.
+keywords:
+  - bam
+  - reporting
+  - statistics
+  - genome coverage
+components:
+  - bedtools/genomecov
+input:
+  - meta:
+        type: map
+        description: |
+          Groovy Map containing sample information
+          e.g. [ id:'test', single_end:false ]
+  - bam:
+        type: file
+        description: File in BAM format containing read alignments
+        pattern: "*.bam"
+  - sizes:
+        type: file
+        description: Tab-delimited table of chromosome names in the first column and
+          chromosome sizes in the second column
+  - extension:
+        type: string
+        description: Extension of the output file (e. g., ".bg", ".bedgraph", ".txt",
+          ".tab", etc.) It is set arbitrarily by the user and corresponds to the file
+          format which depends on arguments.
+  - sort:
+        type: boolean
+        description: Sort the output
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - "*.${extension}":
+      type: file
+      description: Computed genome coverage file
+      pattern: "*.${extension}"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@DimitriTernovoj"
+maintainers:
+  - "@DimitriTernovoj"
