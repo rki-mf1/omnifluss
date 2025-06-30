@@ -114,7 +114,10 @@ nextflow_pipeline {
                     assert "ENA|PQ032842|PQ032842_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_8_nuclear_export_protein__NEP__and_nonstructural_protein_1__NS1__genes_complete_cds_" in final_consensus_medium
                 },
 
-                // (2b) Final consensus is sensitive to FASTA order; compare snapshot of DNA sequences
+                // (2b) Final consensus is sensitive to FASTA order; compare snapshot of DNA sequences.
+                //      FASTA files are loaded into buffer, each header+sequence becomes an object via the
+                //      nft-fasta plugin. All sequences are accessed (<file>.<header>) and collected in a snapshot
+                //      for a joint consistency check.
                 {
                     def small_fa    = path("$outputDir/bcftools/consensus/SRR31143054_small.fa").fasta
                     def medium_fa   = path("$outputDir/bcftools/consensus/SRR31096286_medium.fa").fasta
@@ -140,13 +143,11 @@ nextflow_pipeline {
                     ).match("Snapshot - Stable consensus")
                 },
 
-                // (3) Final consensus mask is sensitive to BED order; use csv plug-in to reorder and compare
-                {                    
-                    //def consensus_mask_medium_final     = path("$outputDir/bedtools/local/SRR31096286_medium.final.bed").csv(sep: '\t', header: false).sortRows("C0")
-                    //def consensus_mask_medium_lowcov    = path("$outputDir/bedtools/local/SRR31096286_medium.lowcov.bed").csv(sep: '\t', header: false).sortRows("C0")
-                    //def consensus_mask_small_final      = path("$outputDir/bedtools/local/SRR31143054_small.final.bed").csv(sep: '\t', header: false).sortRows("C0")
-                    //def consensus_mask_small_lowcov     = path("$outputDir/bedtools/local/SRR31143054_small.lowcov.bed").csv(sep: '\t', header: false).sortRows("C0")
-
+                // (3) Final consensus mask is sensitive to BED order; use csv plug-in to reorder and compare.
+                //     Each BED mask file is loaded into buffer, columns are extracted individually and sorted.
+                //     Therefore, the two integer lists per file do not pairwise correspond to each other any longer.
+                //     The asserts sole functionality is to verify the consistency of the integers (genomic indices).
+                {
                     assert path("$outputDir/bedtools/local/SRR31096286_medium.final.bed").csv(sep: '\t', header: false).columns["C1"].sort() == [0, 0, 43, 187, 197, 302, 323, 377, 385, 503, 629, 694, 773, 774, 804, 836, 1055, 1152, 1253, 1297, 1316, 1495, 1679, 1712, 1919, 2030]
                     assert path("$outputDir/bedtools/local/SRR31096286_medium.final.bed").csv(sep: '\t', header: false).columns["C2"].sort() == [1, 2, 225, 226, 333, 450, 509, 573, 690, 715, 805, 837, 892, 927, 1046, 1131, 1222, 1311, 1323, 1341, 1433, 1497, 1729, 1785, 1932, 2042]
                     assert path("$outputDir/bedtools/local/SRR31096286_medium.lowcov.bed").csv(sep: '\t', header: false).columns["C1"].sort() == [0, 0, 43, 187, 197, 302, 323, 377, 385, 503, 629, 694, 773, 774, 1055, 1152, 1253, 1297, 1316, 1495, 1679, 1712, 1919, 2030]
