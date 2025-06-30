@@ -9,3 +9,4 @@ testing*
 null/
 .vscode/
 .nf-test/
+.nf-test.log*
