@@ -22,7 +22,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-27T16:56:10.936625592"
+        "timestamp": "2025-07-01T09:40:30.533312074"
     },
     "Snapshot - Stable content": {
         "content": [
@@ -583,6 +583,16 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-06-27T16:56:02.173908198"
+        "timestamp": "2025-07-01T09:40:19.369528627"
+    },
+    "Snapshot - Stub trace": {
+        "content": [
+            113
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-01T09:41:30.930445777"
     }
 }
