@@ -1,0 +1,131 @@
+
+/*
+    - nf-test call:
+
+    nf-test test \
+        --profile singularity,INV_test_default
+        --tag ena_empty_spa
+        /<path>/<to>/omnifluss/tests/
+*/
+
+nextflow_pipeline {
+
+    name "Test Workflow main.nf - INV - Illumina - empty .spa case"
+    script "../main.nf"
+    tag "pipeline"
+    tag "ena"
+    tag "ena_empty_spa"
+    tag "empty_spa"
+    tag "spa"
+    tag "INV"
+    tag "influenza"
+    profile "INV_test_default"
+
+
+    test("-profile INV_test_default - empty spa for HA") {
+
+        setup {
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db_noHQmatchForHA.tar.gz"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
+
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                input                       = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta         = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                reference_selection         = 'kma'
+                reference_selection_db      = "${launchDir}/segment_db"
+                consensus_mincov            = 5
+                skip_taxonomic_filtering    = true
+                skip_report                 = true
+                outdir                      = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // bam_files: All bam files
+            def bam_files  = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // vcf_files: All vcf files
+            def vcf_files  = getAllFilesFromDir(params.outdir, include: ['**/*.vcf', '**/*.vcf.gz'])
+
+            assertAll(
+                {assert workflow.success},
+                {assert snapshot(
+                    // Number of successful tasks
+                    workflow.trace.succeeded().size(),
+                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
+                    removeNextflowVersion("$outputDir/pipeline_info/omnifluss_software_mqc_versions.yml"),
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path.isEmpty() ? 'No stable content' : stable_path,
+
+                    ).match("Snapshot - Stable content")
+                },
+
+                // Special file handling
+                // (1)  Check if spa files do or do not have content as expected.
+                //      The segment provided by setup() should result in a missing topRef for the HA segment.
+                {
+                    def spa_file_with_topRef = getAllFilesFromDir("$outputDir/kma/", ignore: ['kma/SRR31143054_small.HA.kma.spa'])
+
+                    assert spa_file_with_topRef.collect{ f -> f.readLines()?.size() == 2 }
+
+                    // missing topRef case
+                    assert path("$outputDir/kma/SRR31143054_small.HA.kma.spa").readLines().size() == 1
+                },
+
+                // (2)  Check if reference selection was done successfully
+                {
+                    def final_ref_selection_small   = path("$outputDir/inv/SRR31143054_small.prepared_preped.fasta").fasta
+
+                    // regular case
+                    assert "ENA|HQ533879|HQ533879_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_" in final_ref_selection_small
+                    // problem case
+                    assert !("ENA|PP877002|PP877002_1_Influenza_A_virus__A/Nebraska/14/2024_H3N2___segment_4_hemagglutinin__HA__gene_complete_cds_" in final_ref_selection_small)
+                },
+
+                // (3)  Final consensus is sensitive to FASTA order; compare snapshot of DNA sequences.
+                //      FASTA files are loaded into buffer, each header+sequence becomes an object via the
+                //      nft-fasta plugin. All sequences are accessed (<file>.<header>) and collected in a snapshot
+                //      for a joint consistency check.
+                {
+                    def small_fa    = path("$outputDir/bcftools/consensus/SRR31143054_small.fa").fasta
+                    def medium_fa   = path("$outputDir/bcftools/consensus/SRR31096286_medium.fa").fasta
+                    
+                    // Mind that within this snapshot both HA segment accessions are null pointer. But that is expected since HA is not processed throughout the workflow after KMA:KMA.
+                    assert snapshot(
+                        small_fa."SRR31143054_small|ref:ENA|HQ533879|HQ533879_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_",
+                        small_fa."SRR31143054_small|ref:ENA|PP877002|PP877002_1_Influenza_A_virus__A/Nebraska/14/2024_H3N2___segment_4_hemagglutinin__HA__gene_complete_cds_",
+                        small_fa."SRR31143054_small|ref:ENA|HQ533877|HQ533877_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_2_polymerase_PB1__PB1__gene_complete_cds;_and_nonfunctional_PB1-F2_protein__PB1-F2__gene_complete_sequence_",
+                        small_fa."SRR31143054_small|ref:ENA|PP839261|PP839261_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_6_neuraminidase__NA__gene_complete_cds_",
+                        small_fa."SRR31143054_small|ref:ENA|PQ032842|PQ032842_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_8_nuclear_export_protein__NEP__and_nonstructural_protein_1__NS1__genes_complete_cds_",
+                        small_fa."SRR31143054_small|ref:ENA|PP839259|PP839259_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_3_polymerase_PA__PA__and_PA-X_protein__PA-X__genes_complete_cds_",
+                        small_fa."SRR31143054_small|ref:ENA|HQ533871|HQ533871_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_5_nucleocapsid_protein__NP__gene_complete_cds_",
+                        small_fa."SRR31143054_small|ref:ENA|PQ615339|PQ615339_1_Influenza_A_virus__A/California/173/2024_H5N1___segment_7_matrix_protein_2__M2__and_matrix_protein_1__M1__genes_complete_cds_",
+
+                        medium_fa."SRR31096286_medium|ref:ENA|HQ533871|HQ533871_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_5_nucleocapsid_protein__NP__gene_complete_cds_",
+                        medium_fa."SRR31096286_medium|ref:ENA|PP839259|PP839259_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_3_polymerase_PA__PA__and_PA-X_protein__PA-X__genes_complete_cds_",
+                        medium_fa."SRR31096286_medium|ref:ENA|PP877002|PP877002_1_Influenza_A_virus__A/Nebraska/14/2024_H3N2___segment_4_hemagglutinin__HA__gene_complete_cds_",
+                        medium_fa."SRR31096286_medium|ref:ENA|PQ615339|PQ615339_1_Influenza_A_virus__A/California/173/2024_H5N1___segment_7_matrix_protein_2__M2__and_matrix_protein_1__M1__genes_complete_cds_",
+                        medium_fa."SRR31096286_medium|ref:ENA|HQ533877|HQ533877_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_2_polymerase_PB1__PB1__gene_complete_cds;_and_nonfunctional_PB1-F2_protein__PB1-F2__gene_complete_sequence_",
+                        medium_fa."SRR31096286_medium|ref:ENA|PP839261|PP839261_1_Influenza_A_virus__A/Michigan/90/2024_H5N1___segment_6_neuraminidase__NA__gene_complete_cds_",
+                        medium_fa."SRR31096286_medium|ref:ENA|PQ032841|PQ032841_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_",
+                        medium_fa."SRR31096286_medium|ref:ENA|PQ032842|PQ032842_1_Influenza_A_virus__A/Colorado/109/2024_H5N1___segment_8_nuclear_export_protein__NEP__and_nonstructural_protein_1__NS1__genes_complete_cds_"
+                    ).match("Snapshot - Stable consensus")
+                }
+
+            )
+        }
+    }
+}
