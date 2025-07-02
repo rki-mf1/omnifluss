@@ -15,7 +15,7 @@ nextflow_process {
                 """
                 input[0] = Channel.of([
                     [ id: 'test.spec_case.filtered' ],
-                    [ file(params.local_testdata_base_path + 'INV_illumina/vcf/test.spec_case.filtered.vcf.gz', checkIfExists: true) ]
+                    [ file(params.omnifluss_data_base_path + 'INV_illumina/vcf/test.spec_case.filtered.vcf.gz', checkIfExists: true) ]
                 ])
                 """
             }
@@ -42,7 +42,7 @@ nextflow_process {
                 """
                 input[0] = Channel.of([
                     [ id: 'test.spec_case.filtered' ],
-                    [ file(params.local_testdata_base_path + 'INV_illumina/vcf/test.spec_case.filtered.vcf.gz', checkIfExists: true) ]
+                    [ file(params.omnifluss_data_base_path + 'INV_illumina/vcf/test.spec_case.filtered.vcf.gz', checkIfExists: true) ]
                 ])
                 """
             }
