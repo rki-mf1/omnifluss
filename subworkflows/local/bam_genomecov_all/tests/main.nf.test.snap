@@ -1,0 +1,68 @@
+{
+    "sarscov2  - stub": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.test.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,338f4892744593cda3dba7e072416f9b"
+                ],
+                "bedtools_cov": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.test.tsv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,338f4892744593cda3dba7e072416f9b"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2025-03-27T08:03:56.878193748"
+    },
+    "sarscov2": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.test.tsv:md5,122381298ce5c7d5ccf3b570d4b0f2b1"
+                    ]
+                ],
+                "1": [
+                    "versions.yml:md5,338f4892744593cda3dba7e072416f9b"
+                ],
+                "bedtools_cov": [
+                    [
+                        {
+                            "id": "test"
+                        },
+                        "test.test.tsv:md5,122381298ce5c7d5ccf3b570d4b0f2b1"
+                    ]
+                ],
+                "versions": [
+                    "versions.yml:md5,338f4892744593cda3dba7e072416f9b"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.04.1"
+        },
+        "timestamp": "2025-03-27T08:04:32.899218466"
+    }
+}

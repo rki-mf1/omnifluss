@@ -8,9 +8,12 @@ include { FASTQ_TAXONOMIC_FILTERING_ALL       } from '../subworkflows/local/fast
 include { FASTA_REFERENCE_SELECTION_ALL       } from '../subworkflows/local/fasta_reference_selection_all/main.nf'
 include { FASTA_PROCESS_REFERENCE_ALL         } from '../subworkflows/local/fasta_process_reference_all'
 include { FASTQ_MAP_ALL                       } from '../subworkflows/local/fastq_map_all'
+include { BAM_GENOMECOV_ALL                   } from '../subworkflows/local/bam_genomecov_all'
 include { BAM_CALL_VARIANT_ALL                } from '../subworkflows/local/bam_call_variant_all'
 include { BAM_SPECIAL_VARIANTS_CASE_ALL       } from '../subworkflows/local/bam_special_variants_case_all'
+include { BAM_SAMTOOLS_STATS_ALL              } from '../subworkflows/local/bam_samtools_stats_all'
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
+include { INV_REPORTING_ALL                   } from '../subworkflows/local/inv_reporting_all'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
 include { paramsSummaryMap                    } from 'plugin/nf-schema'
@@ -101,8 +104,8 @@ workflow OMNIFLUSS {
             ch_reference_db_fastas,
             ch_reference_db_index
         )
-        ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa             // channel: [ val(meta), [file(spa)] ]      // nf-core style
-        ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs   // channel: [ val(meta), fasta ]            // nf-core style
+        ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa.collect{it[1]} //prepared for reporting
+        ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs
         ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
         // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
     }
@@ -136,6 +139,17 @@ workflow OMNIFLUSS {
     ch_multiqc_files    = ch_multiqc_files.mix(FASTQ_MAP_ALL.out.multiqc_files)
 
     //
+    // Collecting Data for Report (1/2)
+    //
+    if (! params.skip_report) {
+        BAM_GENOMECOV_ALL(
+            ch_mapping,
+            [],
+            "coverage.tsv",
+            true
+        )
+    }
+    //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
     //
     // if (! params.skip_primer_clipping) {
@@ -160,6 +174,17 @@ workflow OMNIFLUSS {
     ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
+    // Collecting Data for Report (2/2)
+    //
+    if (! params.skip_report) {
+        BAM_SAMTOOLS_STATS_ALL(
+            ch_bam,
+            ch_ref,
+            ch_ref_index
+        )
+    }
+
+    //
     // Special INV variant calling
     //
     ch_rescued_variants = Channel.empty()
@@ -180,13 +205,38 @@ workflow OMNIFLUSS {
         params.consensus_caller,
         params.consensus_mincov,
         ch_ref,                             // channel: [ val(meta), fasta ]
-        BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
-        BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
+        ch_vcf,                             // channel: [ val(meta), vcf   ]
+        ch_bam,                             // channel: [ val(meta), bam   ]
         ch_rescued_variants                 // channel: [ val(meta), bed   ]
     )
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
-    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+    if (! params.skip_report) {
+        //collect files for report
+        ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
+        ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
+        ch_kma_mapping_refs = ch_spa.ifEmpty([])                                                //channel is empty if a fixed reference is specified
+        ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]}
+        ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
+        ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
+        ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
+        ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
+
+        //
+        // Reporting
+        //
+        INV_REPORTING_ALL(
+            params.reporting_script,
+            ch_fastp_jsons,
+            ch_kraken_reports,
+            ch_kma_mapping_refs,
+            ch_markduplicates_metrics,
+            ch_bedtools_genomecov,
+            ch_samtools_coverage,
+            ch_samtools_flagstat,
+            ch_consensus_calls
+        )
+    }
 
     //
     // Genome QC
