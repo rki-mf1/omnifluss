@@ -193,11 +193,18 @@ nextflow_pipeline {
         }
 
         then {
+            // stable_path: All files in ${params.outdir}/ with stable content
+            // In contrast to the non-stub test, this stable_path also includes files that are
+            // unstable in the non-stub case since they should be present but empty in the stub case.
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore-stub')
+
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.trace.succeeded().size(),
-                    workflow.trace.failed().size() == 0
+                    workflow.trace.failed().size() == 0,
+                    stable_path.isEmpty() ? 'No stable content' : stable_path
+
                 ).match("Snapshot - Stub trace") }
             )
         }
