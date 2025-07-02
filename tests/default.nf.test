@@ -162,4 +162,51 @@ nextflow_pipeline {
             )
         }
     }
+
+
+    test("-profile INV_test_default -stub") {
+
+        options "-stub"
+
+        setup {
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
+
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                input                       = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta         = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                reference_selection         = 'kma'
+                reference_selection_db      = "${launchDir}/segment_db"
+                consensus_mincov            = 5
+                skip_taxonomic_filtering    = true
+                skip_report                 = true
+                outdir                      = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_path: All files in ${params.outdir}/ with stable content
+            // In contrast to the non-stub test, this stable_path also includes files that are
+            // unstable in the non-stub case since they should be present but empty in the stub case.
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore-stub')
+
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(
+                    workflow.trace.succeeded().size(),
+                    workflow.trace.failed().size() == 0,
+                    stable_path.isEmpty() ? 'No stable content' : stable_path
+
+                ).match("Snapshot - Stub trace") }
+            )
+        }
+    }
 }
