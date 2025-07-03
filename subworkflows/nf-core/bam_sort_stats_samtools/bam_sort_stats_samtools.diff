@@ -1,0 +1,562 @@
+Changes in component 'nf-core/bam_sort_stats_samtools'
+Changes in 'bam_sort_stats_samtools/main.nf':
+--- subworkflows/nf-core/bam_sort_stats_samtools/main.nf
++++ subworkflows/nf-core/bam_sort_stats_samtools/main.nf
+@@ -15,7 +15,18 @@
+ 
+     ch_versions = Channel.empty()
+ 
+-    SAMTOOLS_SORT ( ch_bam, ch_fasta )
++    //sort channels to maintain order across different channels
++    ch_bam_cpy = ch_bam.map { meta, bam -> return [meta.id, meta, bam]}
++    ch_fasta_cpy = ch_fasta.map { meta, fasta -> return [meta.id, meta, fasta]}
++
++    ch_samtools_sort_input = ch_bam_cpy.join(ch_fasta_cpy)
++        .multiMap{_sample_id, meta, bam, meta2, reference ->
++        .multiMap{meta, bam, reference ->
++            ch_bam: [ meta, bam ]
++            ch_ref: [ meta2, reference ]
++        }
++
++    SAMTOOLS_SORT ( ch_samtools_sort_input.ch_bam, ch_samtools_sort_input.ch_ref )
+     ch_versions = ch_versions.mix(SAMTOOLS_SORT.out.versions.first())
+ 
+     SAMTOOLS_INDEX ( SAMTOOLS_SORT.out.bam )
+
+'subworkflows/nf-core/bam_sort_stats_samtools/meta.yml' is unchanged
+Changes in 'bam_sort_stats_samtools/tests/main.nf.test':
+--- subworkflows/nf-core/bam_sort_stats_samtools/tests/main.nf.test
++++ subworkflows/nf-core/bam_sort_stats_samtools/tests/main.nf.test
+@@ -19,6 +19,9 @@
+     test("test_bam_sort_stats_samtools_single_end") {
+ 
+         when {
++            params {
++                outdir   = "$outputDir"
++            }
+             workflow {
+                 """
+                 input[0] = Channel.of([
+@@ -38,11 +41,9 @@
+                 { assert workflow.success},
+                 { assert workflow.out.bam.get(0).get(1) ==~ ".*.bam"},
+                 { assert workflow.out.bai.get(0).get(1) ==~ ".*.bai"},
+-                { assert snapshot(
+-                    workflow.out.flagstat,
+-                    workflow.out.idxstats,
+-                    workflow.out.stats,
+-                    workflow.out.versions).match() }
++                { assert snapshot(workflow.out.stats).match("test_bam_sort_stats_samtools_single_end_stats") },
++                { assert snapshot(workflow.out.flagstat).match("test_bam_sort_stats_samtools_single_end_flagstats") },
++                { assert snapshot(workflow.out.idxstats).match("test_bam_sort_stats_samtools_single_end_idxstats") }
+             )
+         }
+     }
+@@ -50,6 +51,9 @@
+     test("test_bam_sort_stats_samtools_paired_end") {
+ 
+         when {
++            params {
++                outdir   = "$outputDir"
++            }
+             workflow {
+                 """
+                 input[0] = Channel.of([
+@@ -69,65 +73,9 @@
+                 { assert workflow.success},
+                 { assert workflow.out.bam.get(0).get(1) ==~ ".*.bam"},
+                 { assert workflow.out.bai.get(0).get(1) ==~ ".*.bai"},
+-                { assert snapshot(
+-                    workflow.out.flagstat,
+-                    workflow.out.idxstats,
+-                    workflow.out.stats,
+-                    workflow.out.versions).match() }
+-            )
+-        }
+-    }
+-
+-    test("test_bam_sort_stats_samtools_single_end - stub") {
+-
+-        options "-stub"
+-
+-        when {
+-            workflow {
+-                """
+-                input[0] = Channel.of([
+-                    [ id:'test', single_end:false ], // meta map
+-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.single_end.bam', checkIfExists: true)
+-                ])
+-                input[1] = Channel.of([
+-                    [ id:'genome' ],
+-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+-                ])
+-                """
+-            }
+-        }
+-
+-        then {
+-            assertAll(
+-                { assert workflow.success},
+-                { assert snapshot(workflow.out).match() }
+-            )
+-        }
+-    }
+-
+-    test("test_bam_sort_stats_samtools_paired_end - stub") {
+-
+-        options "-stub"
+-
+-        when {
+-            workflow {
+-                """
+-                input[0] = Channel.of([
+-                    [ id:'test', single_end:false ], // meta map
+-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.bam', checkIfExists: true)
+-                ])
+-                input[1] = Channel.of([
+-                    [ id:'genome' ],
+-                    file(params.modules_testdata_base_path + 'genomics/sarscov2/genome/genome.fasta', checkIfExists: true)
+-                ])
+-                """
+-            }
+-        }
+-
+-        then {
+-            assertAll(
+-                { assert workflow.success},
+-                { assert snapshot(workflow.out).match() }
++                { assert snapshot(workflow.out.stats).match("test_bam_sort_stats_samtools_paired_end_stats") },
++                { assert snapshot(workflow.out.flagstat).match("test_bam_sort_stats_samtools_paired_end_flagstats") },
++                { assert snapshot(workflow.out.idxstats).match("test_bam_sort_stats_samtools_paired_end_idxstats") }
+             )
+         }
+     }
+
+Changes in 'bam_sort_stats_samtools/tests/main.nf.test.snap':
+--- subworkflows/nf-core/bam_sort_stats_samtools/tests/main.nf.test.snap
++++ subworkflows/nf-core/bam_sort_stats_samtools/tests/main.nf.test.snap
+@@ -1,5 +1,95 @@
+ {
+-    "test_bam_sort_stats_samtools_single_end": {
++    "test_bam_sort_stats_samtools_paired_end_flagstats": {
++        "content": [
++            [
++                [
++                    {
++                        "id": "test",
++                        "single_end": false
++                    },
++                    "test.flagstat:md5,4f7ffd1e6a5e85524d443209ac97d783"
++                ]
++            ]
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "24.01.0"
++        },
++        "timestamp": "2023-10-22T20:25:03.687121177"
++    },
++    "test_bam_sort_stats_samtools_paired_end_idxstats": {
++        "content": [
++            [
++                [
++                    {
++                        "id": "test",
++                        "single_end": false
++                    },
++                    "test.idxstats:md5,df60a8c8d6621100d05178c93fb053a2"
++                ]
++            ]
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "24.01.0"
++        },
++        "timestamp": "2023-10-22T20:25:03.709648916"
++    },
++    "test_bam_sort_stats_samtools_single_end_stats": {
++        "content": [
++            [
++                [
++                    {
++                        "id": "test",
++                        "single_end": false
++                    },
++                    "test.stats:md5,d32de3b3716a11039cef2367c3c1a56e"
++                ]
++            ]
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "23.10.1"
++        },
++        "timestamp": "2024-05-29T07:47:44.044172487"
++    },
++    "test_bam_sort_stats_samtools_paired_end_stats": {
++        "content": [
++            [
++                [
++                    {
++                        "id": "test",
++                        "single_end": false
++                    },
++                    "test.stats:md5,cca83e4fc9406fc3875b5e60055d6574"
++                ]
++            ]
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "23.10.1"
++        },
++        "timestamp": "2024-05-29T07:47:51.426232891"
++    },
++    "test_bam_sort_stats_samtools_single_end_idxstats": {
++        "content": [
++            [
++                [
++                    {
++                        "id": "test",
++                        "single_end": false
++                    },
++                    "test.idxstats:md5,613e048487662c694aa4a2f73ca96a20"
++                ]
++            ]
++        ],
++        "meta": {
++            "nf-test": "0.8.4",
++            "nextflow": "24.01.0"
++        },
++        "timestamp": "2024-01-18T17:10:02.84631"
++    },
++    "test_bam_sort_stats_samtools_single_end_flagstats": {
+         "content": [
+             [
+                 [
+@@ -9,322 +99,12 @@
+                     },
+                     "test.flagstat:md5,2191911d72575a2358b08b1df64ccb53"
+                 ]
+-            ],
+-            [
+-                [
+-                    {
+-                        "id": "test",
+-                        "single_end": false
+-                    },
+-                    "test.idxstats:md5,613e048487662c694aa4a2f73ca96a20"
+-                ]
+-            ],
+-            [
+-                [
+-                    {
+-                        "id": "test",
+-                        "single_end": false
+-                    },
+-                    "test.stats:md5,d32de3b3716a11039cef2367c3c1a56e"
+-                ]
+-            ],
+-            [
+-                "versions.yml:md5,494b5530a1aa29fd5867cf655bebbfe1",
+-                "versions.yml:md5,9fcb0cd845bfb1f89d83201bb20649b4",
+-                "versions.yml:md5,bacc323ec4055d6f69f07a09089772d1",
+-                "versions.yml:md5,ce946e97097c6a9ccf834a3f91f6da30",
+-                "versions.yml:md5,d6c8dae685f1b7d050165fc15c7a20b5"
+             ]
+         ],
+         "meta": {
+-            "nf-test": "0.9.0",
+-            "nextflow": "24.04.3"
++            "nf-test": "0.8.4",
++            "nextflow": "24.01.0"
+         },
+-        "timestamp": "2024-07-22T17:02:44.34964"
+-    },
+-    "test_bam_sort_stats_samtools_paired_end": {
+-        "content": [
+-            [
+-                [
+-                    {
+-                        "id": "test",
+-                        "single_end": false
+-                    },
+-                    "test.flagstat:md5,4f7ffd1e6a5e85524d443209ac97d783"
+-                ]
+-            ],
+-            [
+-                [
+-                    {
+-                        "id": "test",
+-                        "single_end": false
+-                    },
+-                    "test.idxstats:md5,df60a8c8d6621100d05178c93fb053a2"
+-                ]
+-            ],
+-            [
+-                [
+-                    {
+-                        "id": "test",
+-                        "single_end": false
+-                    },
+-                    "test.stats:md5,cca83e4fc9406fc3875b5e60055d6574"
+-                ]
+-            ],
+-            [
+-                "versions.yml:md5,494b5530a1aa29fd5867cf655bebbfe1",
+-                "versions.yml:md5,9fcb0cd845bfb1f89d83201bb20649b4",
+-                "versions.yml:md5,bacc323ec4055d6f69f07a09089772d1",
+-                "versions.yml:md5,ce946e97097c6a9ccf834a3f91f6da30",
+-                "versions.yml:md5,d6c8dae685f1b7d050165fc15c7a20b5"
+-            ]
+-        ],
+-        "meta": {
+-            "nf-test": "0.9.0",
+-            "nextflow": "24.04.3"
+-        },
+-        "timestamp": "2024-07-22T17:03:02.583095"
+-    },
+-    "test_bam_sort_stats_samtools_single_end - stub": {
+-        "content": [
+-            {
+-                "0": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "1": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "2": [
+-                    
+-                ],
+-                "3": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "4": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "5": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "6": [
+-                    "versions.yml:md5,494b5530a1aa29fd5867cf655bebbfe1",
+-                    "versions.yml:md5,9fcb0cd845bfb1f89d83201bb20649b4",
+-                    "versions.yml:md5,bacc323ec4055d6f69f07a09089772d1",
+-                    "versions.yml:md5,ce946e97097c6a9ccf834a3f91f6da30",
+-                    "versions.yml:md5,d6c8dae685f1b7d050165fc15c7a20b5"
+-                ],
+-                "bai": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "bam": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "csi": [
+-                    
+-                ],
+-                "flagstat": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "idxstats": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "stats": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "versions": [
+-                    "versions.yml:md5,494b5530a1aa29fd5867cf655bebbfe1",
+-                    "versions.yml:md5,9fcb0cd845bfb1f89d83201bb20649b4",
+-                    "versions.yml:md5,bacc323ec4055d6f69f07a09089772d1",
+-                    "versions.yml:md5,ce946e97097c6a9ccf834a3f91f6da30",
+-                    "versions.yml:md5,d6c8dae685f1b7d050165fc15c7a20b5"
+-                ]
+-            }
+-        ],
+-        "meta": {
+-            "nf-test": "0.9.0",
+-            "nextflow": "24.04.3"
+-        },
+-        "timestamp": "2024-07-22T17:03:22.328703"
+-    },
+-    "test_bam_sort_stats_samtools_paired_end - stub": {
+-        "content": [
+-            {
+-                "0": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "1": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "2": [
+-                    
+-                ],
+-                "3": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "4": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "5": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "6": [
+-                    "versions.yml:md5,494b5530a1aa29fd5867cf655bebbfe1",
+-                    "versions.yml:md5,9fcb0cd845bfb1f89d83201bb20649b4",
+-                    "versions.yml:md5,bacc323ec4055d6f69f07a09089772d1",
+-                    "versions.yml:md5,ce946e97097c6a9ccf834a3f91f6da30",
+-                    "versions.yml:md5,d6c8dae685f1b7d050165fc15c7a20b5"
+-                ],
+-                "bai": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam.bai:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "bam": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.bam:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "csi": [
+-                    
+-                ],
+-                "flagstat": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.flagstat:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "idxstats": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.idxstats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "stats": [
+-                    [
+-                        {
+-                            "id": "test",
+-                            "single_end": false
+-                        },
+-                        "test.stats:md5,d41d8cd98f00b204e9800998ecf8427e"
+-                    ]
+-                ],
+-                "versions": [
+-                    "versions.yml:md5,494b5530a1aa29fd5867cf655bebbfe1",
+-                    "versions.yml:md5,9fcb0cd845bfb1f89d83201bb20649b4",
+-                    "versions.yml:md5,bacc323ec4055d6f69f07a09089772d1",
+-                    "versions.yml:md5,ce946e97097c6a9ccf834a3f91f6da30",
+-                    "versions.yml:md5,d6c8dae685f1b7d050165fc15c7a20b5"
+-                ]
+-            }
+-        ],
+-        "meta": {
+-            "nf-test": "0.9.0",
+-            "nextflow": "24.04.3"
+-        },
+-        "timestamp": "2024-07-22T17:03:38.833662"
++        "timestamp": "2024-01-18T17:10:02.829756"
+     }
+ }
+'subworkflows/nf-core/bam_sort_stats_samtools/tests/tags.yml' is unchanged
+************************************************************
