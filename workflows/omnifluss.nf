@@ -34,11 +34,18 @@ workflow OMNIFLUSS {
     ch_samplesheet                       // channel: [ meta, fastq ]
 
     main:
-    ch_reads            = ch_samplesheet
-    ch_versions         = Channel.empty()
-    ch_multiqc_files    = Channel.empty()
-    ch_final_topRefs    = Channel.empty()
-    ch_spa              = Channel.empty()
+    ch_reads                    = ch_samplesheet
+    ch_versions                 = Channel.empty()
+    ch_multiqc_files            = Channel.empty()
+    ch_final_topRefs            = Channel.empty()
+    ch_fastp_jsons              = Channel.empty() //from here: channels for reporting
+    ch_kraken_reports           = Channel.empty()
+    ch_kma_mapping_refs         = Channel.empty()
+    ch_markduplicates_metrics   = Channel.empty()
+    ch_bedtools_genomecov       = Channel.empty()
+    ch_samtools_coverage        = Channel.empty()
+    ch_samtools_flagstat        = Channel.empty()
+    ch_consensus_calls          = Channel.empty()
 
     //
     // Read QC
@@ -52,6 +59,7 @@ workflow OMNIFLUSS {
         .trimmed_reads
         | set {ch_reads}
 
+        ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]} //prepared for reporting
         ch_multiqc_files    = ch_multiqc_files.mix(FASTQ_QC_TRIMMING_ALL.out.multiqc_files.collect())
         ch_versions         = ch_versions.mix(FASTQ_QC_TRIMMING_ALL.out.versions)
     }
@@ -69,6 +77,7 @@ workflow OMNIFLUSS {
         .extracted_kraken2_reads
         | set {ch_reads}
 
+        ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]} //prepared for reporting
         ch_multiqc_files  = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
         ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
     }
@@ -104,7 +113,7 @@ workflow OMNIFLUSS {
             ch_reference_db_fastas,
             ch_reference_db_index
         )
-        ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa.collect{it[1]} //prepared for reporting
+        ch_kma_mapping_refs = FASTA_REFERENCE_SELECTION_ALL.out.spa.collect{it[1]} //prepared for reporting
         ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs
         ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
         // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
@@ -133,10 +142,11 @@ workflow OMNIFLUSS {
         ch_ref,          // channel: [ val(meta), fasta ]
         ch_ref_index     // channel: [ val(meta), fai_index ]
     )
-    ch_mapping          = FASTQ_MAP_ALL.out.bam
-    ch_mapping_index    = FASTQ_MAP_ALL.out.bai
-    ch_versions         = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
-    ch_multiqc_files    = ch_multiqc_files.mix(FASTQ_MAP_ALL.out.multiqc_files)
+    ch_mapping                = FASTQ_MAP_ALL.out.bam
+    ch_mapping_index          = FASTQ_MAP_ALL.out.bai
+    ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]} //prepared for reporting
+    ch_versions               = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+    ch_multiqc_files          = ch_multiqc_files.mix(FASTQ_MAP_ALL.out.multiqc_files)
 
     //
     // Collecting Data for Report (1/2)
@@ -148,6 +158,7 @@ workflow OMNIFLUSS {
             "coverage.tsv",
             true
         )
+        ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
     }
     //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
@@ -182,6 +193,8 @@ workflow OMNIFLUSS {
             ch_ref,
             ch_ref_index
         )
+        ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
+        ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
     }
 
     //
@@ -209,18 +222,19 @@ workflow OMNIFLUSS {
         ch_bam,                             // channel: [ val(meta), bam   ]
         ch_rescued_variants                 // channel: [ val(meta), bed   ]
     )
+    ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
     if (! params.skip_report) {
         //collect files for report
-        ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]}
-        ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]}
-        ch_kma_mapping_refs = ch_spa.ifEmpty([])                                                //channel is empty if a fixed reference is specified
-        ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]}
-        ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
-        ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
-        ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
-        ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
+        ch_fastp_jsons = ch_fastp_jsons.ifEmpty([])
+        ch_kraken_reports = ch_kraken_reports.ifEmpty([])
+        ch_kma_mapping_refs = ch_kma_mapping_refs.ifEmpty([])
+        ch_markduplicates_metrics = ch_markduplicates_metrics.ifEmpty([])
+        ch_bedtools_genomecov = ch_bedtools_genomecov.ifEmpty([])
+        ch_samtools_coverage = ch_samtools_coverage.ifEmpty([])
+        ch_samtools_flagstat = ch_samtools_flagstat.ifEmpty([])
+        ch_consensus_calls = ch_consensus_calls.ifEmpty([])
 
         //
         // Reporting
