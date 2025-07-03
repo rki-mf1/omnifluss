@@ -2,6 +2,7 @@ include { KMA }                         from '../../../modules/local/inv_referen
 include { INV_GET_TOP1_REFERENCE_GREP } from '../../../modules/local/inv_reference_selection_grep/main'
 include { CAT_CAT }                     from '../../../modules/nf-core/cat/cat/main'
 include { SEQKIT_GREP }                 from '../../../modules/nf-core/seqkit/grep/main.nf'
+include { SEQKIT_REPLACE }              from '../../../modules/nf-core/seqkit/replace/main.nf'
 
 /*
     TECHNICAL DESCRIPTION
@@ -30,11 +31,12 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
     ch_kma_index            // channel: [ val(meta), [ kma_index ] ]
 
     main:
-    ch_versions         = Channel.empty()
-    ch_kma_spa          = Channel.empty()
-    ch_top1ids          = Channel.empty()
-    ch_top1fastas       = Channel.empty()
-    ch_final_topRefs    = Channel.empty()
+    ch_versions                 = Channel.empty()
+    ch_kma_spa                  = Channel.empty()
+    ch_top1ids                  = Channel.empty()
+    ch_top1fastas               = Channel.empty()
+    ch_top1fastas_standardized  = Channel.empty()
+    ch_final_topRefs            = Channel.empty()
 
 
     if (tools.split(',').contains('kma')) {
@@ -90,15 +92,24 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter)
 
         /****************************************************************/
-        /* STEP 4: Concat FASTAs of Top1 refrences                      */
+        /* STEP 4: Patch FASTA header Top1 refrences                    */
         /****************************************************************/
-        ch_top1fastas
+        SEQKIT_REPLACE(
+            ch_top1fastas
+        )
+        ch_versions                 = ch_versions.mix(SEQKIT_REPLACE.out.versions.first())
+        ch_top1fastas_standardized  = ch_top1fastas_standardized.mix(SEQKIT_REPLACE.out.fastx)
+
+        /****************************************************************/
+        /* STEP 5: Concat FASTAs of Top1 refrences                      */
+        /****************************************************************/
+        ch_top1fastas_standardized
             .map{ meta, fasta -> return [[id:meta.id, single_end:meta.single_end], fasta] }
             .groupTuple()
-            .set{ ch_top1fastas }
+            .set{ ch_top1fastas_standardized }
 
         CAT_CAT(
-            ch_top1fastas
+            ch_top1fastas_standardized
         )
         ch_versions         = ch_versions.mix(CAT_CAT.out.versions.first())
         ch_final_topRefs    = CAT_CAT.out.file_out
