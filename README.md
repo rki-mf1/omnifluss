@@ -1,8 +1,16 @@
+![Static Badge](https://img.shields.io/badge/Nextflow-%E2%89%A525.04.3-darkgreen?logo=nextflow&label=Nextflow)
+![Static Badge](https://img.shields.io/badge/nf--core-%E2%89%A53.3.1-darkgreen?logo=nf-core)
+![Static Badge](https://img.shields.io/badge/nf--test-%E2%89%A50.9.2-darkgreen)
+![Static Badge](https://img.shields.io/badge/run_with-conda-3EB049?logo=anaconda&labelColor=black)
+![Static Badge](https://img.shields.io/badge/run_with-docker-0db7ed?logo=docker&labelColor=black)
+![Static Badge](https://img.shields.io/badge/run_with-singularity-1d355c?labelColor=black)
+
+
 # rki-mf1/omnifluss
 
 ## Introduction
 
-**rki-mf1/omnifluss** is a bioinformatics pipeline that ...
+**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes.
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
@@ -13,9 +21,6 @@
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
-
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
