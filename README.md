@@ -1,9 +1,22 @@
+![GitHub Release](https://img.shields.io/github/v/release/rki-mf1/omnifluss)
+![Static Badge](https://img.shields.io/badge/Nextflow-%E2%89%A525.04.3-darkgreen?logo=nextflow&label=Nextflow)
+![Static Badge](https://img.shields.io/badge/nf--core-%E2%89%A53.3.1-darkgreen?logo=nf-core)
+![Static Badge](https://img.shields.io/badge/nf--test-%E2%89%A50.9.2-darkgreen)
+![Static Badge](https://img.shields.io/badge/run_with-conda-3EB049?logo=anaconda&labelColor=black)
+![Static Badge](https://img.shields.io/badge/run_with-docker-0db7ed?logo=docker&labelColor=black)
+![Static Badge](https://img.shields.io/badge/run_with-singularity-1d355c?labelColor=black)
+
+
 # rki-mf1/omnifluss
 
 ## Introduction
 
-**rki-mf1/omnifluss** is a bioinformatics pipeline that ...
+**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes.
 
+Omnifluss takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.
+The specific algorithms and software selected for these operations primarily depend on two parameters: virus type and sequencing technology.
+Beside these two parameters many settings and subroutines can be finetuned.
+After a successful run `omnifluss` returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
    major pipeline sections and the types of output it produces. You're giving an overview to someone new
@@ -13,9 +26,6 @@
 <!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
      workflows use the "tube map" design for that. See https://nf-co.re/docs/guidelines/graphic_design/workflow_diagrams#examples for examples.   -->
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
-
-1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Usage
 
