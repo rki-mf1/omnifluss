@@ -1,0 +1,35 @@
+{
+    "Snapshot - Workflow status - kma+reference (provided a segment DB path)": {
+        "content": [
+            true,
+            true
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-03T13:06:41.608488953"
+    },
+    "Snapshot - Workflow status - kma+reference (single FASTA file; single sequence)": {
+        "content": [
+            true,
+            true
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-03T13:06:55.770905324"
+    },
+    "Snapshot - Workflow status - static+reference_selection_db": {
+        "content": [
+            true,
+            true
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-03T13:06:29.003948145"
+    }
+}
