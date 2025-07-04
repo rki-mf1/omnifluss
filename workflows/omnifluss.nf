@@ -46,6 +46,7 @@ workflow OMNIFLUSS {
     ch_samtools_coverage        = Channel.empty()
     ch_samtools_flagstat        = Channel.empty()
     ch_consensus_calls          = Channel.empty()
+    ch_report                   = Channel.empty()
 
     //
     // Read QC
@@ -250,6 +251,8 @@ workflow OMNIFLUSS {
             ch_samtools_flagstat,
             ch_consensus_calls
         )
+        ch_report = INV_REPORTING_ALL.out.report
+        ch_versions = ch_versions.mix(INV_REPORTING_ALL.out.versions)
     }
 
     //
@@ -326,6 +329,7 @@ workflow OMNIFLUSS {
     }
     emit:
     multiqc_report = ch_multiqc_report           // channel: /path/to/multiqc_report.html
+    report         = ch_report                   // channel: /path/to/qc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 

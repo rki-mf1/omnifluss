@@ -13,6 +13,9 @@ workflow INV_REPORTING_ALL {
     consensus_calls
 
     main:
+    report   = Channel.empty()
+    versions = Channel.empty()
+
     INV_REPORT(
         reporting_script,
         fastp_jsons,
@@ -25,4 +28,11 @@ workflow INV_REPORTING_ALL {
         consensus_calls,
         params.outdir
     )
+    report = INV_REPORT.out.report
+    versions = INV_REPORT.out.versions
+
+    emit:
+    report = report
+    versions = versions
+
 }

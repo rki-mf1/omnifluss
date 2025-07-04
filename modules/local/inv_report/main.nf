@@ -18,7 +18,8 @@ process INV_REPORT {
     val(outdir)
 
     output:
-    path("qc_report.html")
+    path "qc_report.html" , emit: report
+    path "versions.yml"   , emit: versions
 
     script:
     """
@@ -33,10 +34,16 @@ process INV_REPORT {
         Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${projectDir}/${outdir}', list_folder='${projectDir}/${outdir}/reporting_files', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${projectDir}/${outdir}/qc_report.html')"
         mv '${projectDir}/${outdir}/qc_report.html' .
     fi
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        report.rmd: \$(cat version.txt)
+    END_VERSIONS
     """
 
     stub:
     """
     touch qc_report.html
+    touch versions.yml
     """
 }
