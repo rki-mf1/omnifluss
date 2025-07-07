@@ -1,2 +1,0 @@
-subworkflows/bam_special_variants_case_all:
-  - subworkflows/local/bam_special_variants_case_all/**
