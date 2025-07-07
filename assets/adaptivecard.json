@@ -17,7 +17,7 @@
                         "size": "Large",
                         "weight": "Bolder",
                         "color": "<% if (success) { %>Good<% } else { %>Attention<%} %>",
-                        "text": "rki-mf1/igsmp v${version} - ${runName}",
+                        "text": "rki-mf1/omnifluss v${version} - ${runName}",
                         "wrap": true
                     },
                     {

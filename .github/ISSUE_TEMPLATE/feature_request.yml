@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for the rki-mf1/igsmp pipeline
+description: Suggest an idea for the rki-mf1/omnifluss pipeline
 labels: enhancement
 body:
   - type: textarea

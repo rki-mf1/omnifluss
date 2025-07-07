@@ -4,8 +4,8 @@ process INV_PREPARE_REFERENCE {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/biopython%3A1.73':
-        'biocontainers/biopython:v1.73dfsg-1-deb-py3_cv1' }"
+        'https://depot.galaxyproject.org/singularity/biopython:1.79':
+        'biocontainers/biopython:1.79' }"
 
     input:
     tuple val(meta), path(fasta)
@@ -21,7 +21,7 @@ process INV_PREPARE_REFERENCE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        prep_reference.py: \$(head -n 1 version.tmp)
+        prep_reference.py: \$(prep_reference.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 
@@ -32,7 +32,7 @@ process INV_PREPARE_REFERENCE {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        prep_reference.py: '1.0.0'
+        prep_reference.py: \$(prep_reference.py --version | cut -d ' ' -f 2)
     END_VERSIONS
     """
 }

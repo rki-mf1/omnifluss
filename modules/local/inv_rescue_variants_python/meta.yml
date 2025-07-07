@@ -1,0 +1,35 @@
+name: INV_RESCUE_VARIANTS_PYTHON
+description: Get variants with good qualities that failed the variant filtering due to the lofreq strand bias filter.
+keywords:
+  - variants
+  - variant filter
+  - vcf
+  - bed
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test' ]
+  - vcf:
+      type: file
+      description: |
+        File in VCF format containing variants from the lofreq variant caller.
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test' ]
+  - bed:
+      type: file
+      description: |
+        File in BED format with variant sites that should still be considered for the consensus sequence generation even when filtered by lofreq.
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+authors:
+  - "@krannich479"
+maintainers:
+  - "@krannich479"

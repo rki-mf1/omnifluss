@@ -1,0 +1,2 @@
+inv_rescue_variants_python:
+  - modules/local/inv_rescue_variants_python/**

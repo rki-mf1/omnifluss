@@ -4,21 +4,21 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta name="description" content="rki-mf1/igsmp: ">
-  <title>rki-mf1/igsmp Pipeline Report</title>
+  <meta name="description" content="rki-mf1/omnifluss: Omnifluss is a genome reconstruction pipeline for different viruses; it\'s a Nextflow pipeline based on the nf-core pipeline template.">
+  <title>rki-mf1/omnifluss Pipeline Report</title>
 </head>
 <body>
 <div style="font-family: Helvetica, Arial, sans-serif; padding: 30px; max-width: 800px; margin: 0 auto;">
 
 <img src="cid:nfcorepipelinelogo">
 
-<h1>rki-mf1/igsmp ${version}</h1>
+<h1>rki-mf1/omnifluss ${version}</h1>
 <h2>Run Name: $runName</h2>
 
 <% if (!success){
     out << """
     <div style="color: #a94442; background-color: #f2dede; border-color: #ebccd1; padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px;">
-        <h4 style="margin-top:0; color: inherit;">rki-mf1/igsmp execution completed unsuccessfully!</h4>
+        <h4 style="margin-top:0; color: inherit;">rki-mf1/omnifluss execution completed unsuccessfully!</h4>
         <p>The exit status of the task that caused the workflow execution to fail was: <code>$exitStatus</code>.</p>
         <p>The full error message was:</p>
         <pre style="white-space: pre-wrap; overflow: visible; margin-bottom: 0;">${errorReport}</pre>
@@ -27,7 +27,7 @@
 } else {
     out << """
     <div style="color: #3c763d; background-color: #dff0d8; border-color: #d6e9c6; padding: 15px; margin-bottom: 20px; border: 1px solid transparent; border-radius: 4px;">
-        rki-mf1/igsmp execution completed successfully!
+        rki-mf1/omnifluss execution completed successfully!
     </div>
     """
 }
@@ -44,8 +44,8 @@
     </tbody>
 </table>
 
-<p>rki-mf1/igsmp</p>
-<p><a href="https://github.com/rki-mf1/igsmp">https://github.com/rki-mf1/igsmp</a></p>
+<p>rki-mf1/omnifluss</p>
+<p><a href="https://github.com/rki-mf1/omnifluss">https://github.com/rki-mf1/omnifluss</a></p>
 
 </div>
 

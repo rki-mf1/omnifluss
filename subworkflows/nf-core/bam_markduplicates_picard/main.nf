@@ -9,15 +9,31 @@ include { BAM_STATS_SAMTOOLS    } from '../bam_stats_samtools/main'
 workflow BAM_MARKDUPLICATES_PICARD {
 
     take:
-    ch_reads   // channel: [ val(meta), path(reads) ]
-    ch_fasta // channel: [ path(fasta) ]
-    ch_fai   // channel: [ path(fai) ]
+    ch_reads    // channel: [ val(meta), path(reads) ]
+    ch_fasta    // channel: [ path(fasta) ]
+    ch_fai      // channel: [ path(fai) ]
 
     main:
 
     ch_versions = Channel.empty()
 
-    PICARD_MARKDUPLICATES ( ch_reads, ch_fasta, ch_fai )
+    //sort channels to maintain order across different channels
+    ch_reads_cpy = ch_reads.map {meta, reads -> return [meta.id, meta, reads]} 
+    ch_fasta_cpy = ch_fasta.map {meta, fasta -> return [meta.id, meta, fasta]}
+    ch_fai_cpy = ch_fai.map {meta, fai -> return [meta.id, meta, fai]}
+
+    ch_picard_markduplicates_input = ch_reads_cpy.join(ch_fasta_cpy).join(ch_fai_cpy)
+        .multiMap{_sample_id, meta, reads, meta2, reference, meta3, fai_index ->
+            ch_reads: [ meta, reads ]
+            ch_ref: [ meta2, reference ]
+            ch_fai_index: [ meta3, fai_index ]
+        }
+
+    PICARD_MARKDUPLICATES(
+        ch_picard_markduplicates_input.ch_reads,
+        ch_picard_markduplicates_input.ch_ref,
+        ch_picard_markduplicates_input.ch_fai_index
+    )
     ch_versions = ch_versions.mix(PICARD_MARKDUPLICATES.out.versions.first())
 
     ch_markdup = PICARD_MARKDUPLICATES.out.bam.mix(PICARD_MARKDUPLICATES.out.cram)

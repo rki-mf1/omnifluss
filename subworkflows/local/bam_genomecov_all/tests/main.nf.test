@@ -1,0 +1,66 @@
+nextflow_workflow {
+    name "Test Subworkflow BAM_GENOMECOV_ALL"
+    script "../main.nf"
+    // Incude a nextflow.config for the test if needed
+    config "subworkflows/local/bam_genomecov_all/tests/nextflow.config"
+    workflow "BAM_GENOMECOV_ALL"
+
+    //  Add tags for the subworkflow
+    tag "subworkflows"
+    tag "subworkflows/local"
+    tag "subworkflows/bam_genomecov_all"
+    // Add tags for all modules used within this subworkflow
+    tag "bedtools"
+
+    test("sarscov2  - stub") {
+
+        options '-stub'
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                [id:'test'],
+                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.bam', checkIfExists: true)
+                ])
+                input[1] = []
+                input[2] = 'test.tsv'
+                input[3] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(workflow.out).match()}
+            )
+        }
+    }
+
+    test("sarscov2") {
+
+        when {
+            workflow {
+                """
+                input[0] = Channel.of([
+                [id:'test'],
+                file(params.modules_testdata_base_path + 'genomics/sarscov2/illumina/bam/test.paired_end.bam', checkIfExists: true)
+                ])
+                input[1] = []
+                input[2] = 'test.tsv'
+                input[3] = true
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(workflow.out).match()}
+            )
+        }
+    }
+
+
+}

@@ -1,0 +1,31 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Omnifluss
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: >-
+      Viroinformatics, Genome Competence Centre (MF1),
+      Robert Koch Institute
+    address: Nordufer 20
+    city: Berlin
+    country: DE
+    post-code: '13353'
+    website: 'https://www.rki.de/EN/Home/homepage_node.html'
+  - given-names: Marie
+    family-names: Lataretu
+    affiliation: Robert Koch Institute (RKI)
+    orcid: 'https://orcid.org/0000-0002-3637-5870'
+  - given-names: Dimitri
+    family-names: Ternovoj
+    affiliation: Robert Koch Institute (RKI)
+  - given-names: Thomas
+    family-names: Krannich
+    affiliation: Robert Koch Institute (RKI)
+    orcid: 'https://orcid.org/0000-0002-5525-1849'
+repository-code: 'https://github.com/rki-mf1/omnifluss'
+license: MIT

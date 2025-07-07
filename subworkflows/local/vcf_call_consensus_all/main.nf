@@ -1,7 +1,7 @@
 include { BCFTOOLS_FILTER                            } from '../../../modules/nf-core/bcftools/filter/main'
-include { ADJUST_DELETION_CONSENSUS                  } from '../../../modules/local/inv_consensus_pyvcf/main'
-include { ADJUST_GT_CONSENSUS                        } from '../../../modules/local/inv_consensus_bcftools/main'
-include { CREATE_MASK_CONSENSUS                      } from '../../../modules/local/inv_consensus_bedtools/main'
+include { INV_GET_DELETIONS_PYVCF                    } from '../../../modules/local/inv_get_deletions_pyvcf/main'
+include { INV_CREATE_CONSENSUS_MASK_BEDTOOLS         } from '../../../modules/local/inv_create_consensus_mask_bedtools/main'
+include { INV_SET_GT_BCFTOOLS                        } from '../../../modules/local/inv_set_gt_bcftools/main'
 include { TABIX_TABIX                                } from '../../../modules/nf-core/tabix/tabix/main'
 include { BCFTOOLS_CONSENSUS                         } from '../../../modules/nf-core/bcftools/consensus/main'
 
@@ -12,61 +12,79 @@ workflow VCF_CALL_CONSENSUS_ALL {
     ch_ref                      // channel: [ val(meta), fasta ]
     ch_vcf                      // channel: [ val(meta), vcf   ]
     ch_bam                      // channel: [ val(meta), bam   ]
-    ch_rescued_variants         // channel: [ val(meta), bed   ]
+    ch_bed_mask                 // channel: [ val(meta), bed   ]
 
     main:
     ch_versions                 = Channel.empty()
+    ch_del_adjusted_vcf         = Channel.empty()
+    ch_vcf_tbi                  = Channel.empty()
 
     if (tools.split(',').contains('bcftools')) {
 
         BCFTOOLS_FILTER(
             ch_vcf                      // channel: [ val(meta), vcf ]
         )
-        .vcf
-        | set {ch_filtered_vcf}
-
+        ch_vcf = BCFTOOLS_FILTER.out.vcf
         ch_versions = ch_versions.mix(BCFTOOLS_FILTER.out.versions.first())
 
-        // mask
-        ADJUST_DELETION_CONSENSUS(
-            ch_filtered_vcf             // channel: [ val(meta), vcf ]
-        )
-        .del_vcf
-        | set {ch_del_adjusted_vcf}
-        //note: no version save, because bcftools is used and it was incorporated prior
+        if (workflow.profile.contains("INV")) {
+            // mask
+            INV_GET_DELETIONS_PYVCF(
+                ch_vcf             // channel: [ val(meta), vcf ]
+            )
+            ch_del_adjusted_vcf = INV_GET_DELETIONS_PYVCF.out.del_vcf
+            ch_versions = ch_versions.mix(INV_GET_DELETIONS_PYVCF.out.versions.first())
 
-        // comprised createMaskConsensus & createMaskConsensus_special_variant_case in this module
-        CREATE_MASK_CONSENSUS(
-            val_consensus_mincov,       // integer
-            ch_del_adjusted_vcf,        // channel: [ val(meta), vcf ]
-            ch_bam,                     // channel: [ val(meta), bam ]
-            ch_rescued_variants         // channel: [ val(meta), bed ]
-        ).final_bed
-        | set {ch_final_bed}
 
-        ch_versions = ch_versions.mix(CREATE_MASK_CONSENSUS.out.versions.first())
+            // prepare input channel
+            ch_del_adjusted_vcf_cpy     = ch_del_adjusted_vcf.map{ meta, vcf -> return [meta.id, meta, vcf ] }
+            ch_bam_cpy                  = ch_bam.map{ meta, bam -> return [meta.id, meta, bam] }
+            ch_bed_mask_cpy             = ch_bed_mask.map{ meta, bed -> return [meta.id, meta, bed] }
 
-        // vcf
-        ADJUST_GT_CONSENSUS(
-            ch_filtered_vcf             // channel: [ val(meta), vcf ]
-        ).vcf
-        | set {ch_final_vcf}
+            ch_create_consensus_mask_bedtools_input = ch_del_adjusted_vcf_cpy.join(ch_bam_cpy).join(ch_bed_mask_cpy)
+                .multiMap{_sample_id, meta, vcf, meta2, bam, meta3, bed ->
+                    ch_del_adjusted_vcf: [meta, vcf]
+                    ch_bam: [meta2, bam]
+                    ch_bed_mask: [meta3, bed]
+                }
 
-        ch_versions = ch_versions.mix(ADJUST_GT_CONSENSUS.out.versions.first())
+            // comprised createMaskConsensus & createMaskConsensus_special_variant_case in this module
+            INV_CREATE_CONSENSUS_MASK_BEDTOOLS(
+                val_consensus_mincov,                                               // integer
+                ch_create_consensus_mask_bedtools_input.ch_del_adjusted_vcf,        // channel: [ val(meta), vcf ]
+                ch_create_consensus_mask_bedtools_input.ch_bam,                     // channel: [ val(meta), bam ]
+                ch_create_consensus_mask_bedtools_input.ch_bed_mask                 // channel: [ val(meta), bed ]
+            )
+            ch_bed_mask = INV_CREATE_CONSENSUS_MASK_BEDTOOLS.out.final_bed
+            ch_versions = ch_versions.mix(INV_CREATE_CONSENSUS_MASK_BEDTOOLS.out.versions.first())
 
+            // vcf
+            INV_SET_GT_BCFTOOLS(
+                ch_vcf             // channel: [ val(meta), vcf ]
+            )
+            ch_vcf = INV_SET_GT_BCFTOOLS.out.vcf
+            ch_versions = ch_versions.mix(INV_SET_GT_BCFTOOLS.out.versions.first())
+
+        }
+        
         TABIX_TABIX(
-            ch_final_vcf                // channel: [ val(meta), vcf ]
-        ).tbi
-        | set {ch_final_vcf_tbi}
-
+            ch_vcf                // channel: [ val(meta), vcf ]
+        )
+        ch_vcf_tbi = TABIX_TABIX.out.tbi
         ch_versions = ch_versions.mix(TABIX_TABIX.out.versions.first())
 
-        consensus_input = ch_final_vcf.join(ch_final_vcf_tbi, by:[0])
-        consensus_input = consensus_input.combine( ch_ref.map{ it[1] } )
-        consensus_input = consensus_input.join(ch_final_bed, by:[0])
 
+        // prepare input channel
+        ch_vcf_cpy             = ch_vcf.map{ meta, vcf -> return [meta.id, meta, vcf ] }
+        ch_vcf_tbi_cpy         = ch_vcf_tbi.map{ meta, tbi -> return [meta.id, meta, tbi ]}
+        ch_ref_cpy             = ch_ref.map{ meta, fasta -> return [meta.id, meta, fasta] }
+        ch_bed_mask_cpy        = ch_bed_mask.map{ meta, bed -> return [meta.id, meta, bed] }
+
+        ch_bcftools_consensus_input = ch_vcf_cpy.join(ch_vcf_tbi_cpy).join(ch_ref_cpy).join(ch_bed_mask_cpy)
+            .map{_sample_id, meta, vcf, _meta2, tbi, _meta3, fasta, _meta4, bed -> return [ meta , vcf, tbi, fasta, bed]}
+        
         BCFTOOLS_CONSENSUS(
-            consensus_input // channel: [ val(meta), vcf, tbi, fasta, bed ]
+            ch_bcftools_consensus_input // channel: [ val(meta), vcf, tbi, fasta, bed ]
         )
         //note: no version save, because bcftools is used and it was incorporated prior
     }

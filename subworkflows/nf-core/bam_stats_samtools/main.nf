@@ -14,7 +14,17 @@ workflow BAM_STATS_SAMTOOLS {
     main:
     ch_versions = Channel.empty()
 
-    SAMTOOLS_STATS ( ch_bam_bai, ch_fasta )
+    //sort channels to maintain order across different channels
+    ch_bam_bai_cpy = ch_bam_bai.map {meta, bam, bai -> return [meta.id, meta, bam, bai]} 
+    ch_fasta_cpy = ch_fasta.map {meta, fasta -> return [meta.id, meta, fasta]} 
+
+    ch_samtools_stats_input = ch_bam_bai_cpy.join(ch_fasta_cpy)
+        .multiMap{_sample_id, meta, bam, bai, meta2, reference ->
+            ch_bam_bai: [ meta, bam, bai ]
+            ch_ref: [ meta2, reference ]
+        } 
+
+    SAMTOOLS_STATS ( ch_samtools_stats_input.ch_bam_bai, ch_samtools_stats_input.ch_ref )
     ch_versions = ch_versions.mix(SAMTOOLS_STATS.out.versions)
 
     SAMTOOLS_FLAGSTAT ( ch_bam_bai )

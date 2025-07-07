@@ -1,10 +1,8 @@
-# Omnifluss
-
-TODO extensive documentation -> link
+# rki-mf1/omnifluss
 
 ## Introduction
 
-**Omifluss** is a bioinformatics pipeline that ...
+**rki-mf1/omnifluss** is a bioinformatics pipeline that ...
 
 <!-- TODO nf-core:
    Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
@@ -46,19 +44,18 @@ Now, you can run the pipeline using:
 <!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
-nextflow run rki-mf1/igsmp \
+nextflow run rki-mf1/omnifluss \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
 ```
 
 > [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
-> see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
+> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
 
 ## Credits
 
-Omnifluss was originally written by the RKI MF1 Viroinf team.
+rki-mf1/omnifluss was originally written by the RKI MF1 Viroinf team.
 
 TODO credit for nf-core community; pipeline based on pipeline template, ...
 

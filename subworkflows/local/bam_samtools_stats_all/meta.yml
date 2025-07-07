@@ -1,0 +1,50 @@
+name: "bam_samtools_stats_all"
+description: computes statistics for a given bam-file.
+keywords:
+  - bam
+  - reporting
+  - statistics
+components:
+  - samtools/coverage
+  - samtools/flagstat
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information and a corresponding read alignment file (BAM)
+        e.g. [ id:'test', single_end:false ]
+  - bam:
+      type: file
+      description: |
+        File in BAM format containing read alignments
+      pattern: "*.{bam}"
+  - ref:
+      type: file
+      description: |
+        File in (multi) FASTA format containing reference sequences
+      pattern: "*.{fasta/fa}"
+  - index:
+      type: file
+      description: |
+        Index file for the reference sequences
+      pattern: "*.{fai}"
+output:
+  - coverage:
+      type: file
+      description: Tabulated text containing the coverage at each position or region
+        or an ASCII-art histogram (with --histogram).
+      pattern: "*.txt"
+  - flagstat:
+      type: file
+      description: File containing samtools flagstat output
+      pattern: "*.{flagstat}"
+  - versions:
+      type: file
+      description: |
+        File containing software versions
+        Structure: [ path(versions.yml) ]
+      pattern: "versions.yml"
+authors:
+  - "@DimitriTernovoj"
+maintainers:
+  - "@DimitriTernovoj"
