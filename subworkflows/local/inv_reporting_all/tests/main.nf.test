@@ -1,0 +1,364 @@
+nextflow_workflow {
+
+    name "Test Subworkflow INV_REPORTING_ALL"
+    script "../main.nf"
+    workflow "INV_REPORTING_ALL"
+
+    //  Add tags for the subworkflow
+    tag "subworkflows"
+    tag "reporting"
+    tag "R"
+
+    setup {
+        def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/refs/heads/INV_illumina/intermediate_data//ENA_data_wf.tar.gz"
+        def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+        def omnifluss_data_proc = omnifluss_data_command.execute()
+        omnifluss_data_proc.waitFor()
+
+        if (omnifluss_data_proc.exitValue() != 0) {
+            throw new RuntimeException("Error - failed to download input data: ${omnifluss_data_proc.err.text}")
+        }
+    }
+
+    test("complete data") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                //check presence of sections
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                //check snapshot of all outputs but the report (contains a date)
+                { assert snapshot(workflow.out["N_content_and_Ambiguous_calls"], workflow.out["kraken_classification"], workflow.out["mapping_statistics"], workflow.out["read_statistics"], workflow.out["top5_references"], workflow.out["versions"]).match() }
+            )
+        }
+    }
+
+    //(1/8)
+    test("missing fastp input") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = []
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //(2/8)
+    test("missing kraken input") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = []
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //(3/8)
+    test("missing kma input") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = []
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //(4/8)
+    test("missing picard markduplicates input") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = []
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //(5/8)
+    test("missing bedtools genomecov input") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = []
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //(6/8)
+    test("missing samtools coverage input") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = []
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //(7/8)
+    test("missing samtools flagstat input") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = []
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //(8/8)
+    test("missing bcftools consensus data") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = []
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    test("everything missing") {
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = []
+                input[2] = []
+                input[3] = []
+                input[4] = []
+                input[5] = []
+                input[6] = []
+                input[7] = []
+                input[8] = []
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+            )
+        }
+    }
+
+    //stub
+    test("complete data stub") {
+
+        tag "stub"
+        options '-stub'
+
+        when {
+            workflow {
+                """
+                input[0] = '${projectDir}/bin/report.rmd'
+                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[9] = '.'
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(workflow.out).match() }
+            )
+        }
+    }
+}

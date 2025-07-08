@@ -1,0 +1,82 @@
+{
+    "complete data": {
+        "content": [
+            [
+                "N_content_and_Ambigiuos_calls.csv:md5,7f173d58d0a2f71bde0933f29ccc8ea9"
+            ],
+            [
+                "kraken_classification.csv:md5,e7c1324fdd1e5705b8d3f548a0cab9f3"
+            ],
+            [
+                "mapping_statistics.csv:md5,5f50281a09ccc0373edde59061cf9ac3"
+            ],
+            [
+                "read_statistics.csv:md5,5e9eb833f14bcd57e7404df814ac90d3"
+            ],
+            [
+                "top5_references.csv:md5,eefb80b809c0619a29c6605ba9144661"
+            ],
+            [
+                "versions.yml:md5,f403a96c2e29cdd07c6e43a33d2fb13c"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-08T13:46:10.600227356"
+    },
+    "complete data stub": {
+        "content": [
+            {
+                "0": [
+                    "qc_report.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    
+                ],
+                "3": [
+                    
+                ],
+                "4": [
+                    
+                ],
+                "5": [
+                    
+                ],
+                "6": [
+                    
+                ],
+                "N_content_and_Ambigiuos_calls": [
+                    
+                ],
+                "kraken_classification": [
+                    
+                ],
+                "mapping_statistics": [
+                    
+                ],
+                "read_statistics": [
+                    
+                ],
+                "report": [
+                    "qc_report.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "top5_references": [
+                    
+                ],
+                "versions": [
+                    "versions.yml:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-08T13:51:55.153673465"
+    }
+}
