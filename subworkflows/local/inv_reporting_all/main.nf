@@ -41,7 +41,7 @@ workflow INV_REPORTING_ALL {
     kraken_classification         = INV_REPORT.out.kraken_classification
     mapping_statistics            = INV_REPORT.out.mapping_statistics
     top5_references               = INV_REPORT.out.top5_references
-    N_content_and_Ambigiuos_calls = INV_REPORT.out.N_content_and_Ambigiuos_calls
+    N_content_and_Ambiguous_calls = INV_REPORT.out.N_content_and_Ambiguous_calls
 
     emit:
     report                        = report
@@ -50,6 +50,6 @@ workflow INV_REPORTING_ALL {
     kraken_classification         = kraken_classification
     mapping_statistics            = mapping_statistics
     top5_references               = top5_references
-    N_content_and_Ambigiuos_calls = N_content_and_Ambigiuos_calls
+    N_content_and_Ambiguous_calls = N_content_and_Ambiguous_calls
 
 }
