@@ -208,14 +208,14 @@ Technically, the sample sheet can have as many columns as desired, however, only
 <p>\&lt;WIP&gt;</p>
 <h2 id="parameters">Parameters</h2>
 <blockquote>
-<p>[!NOTE]
+<p><strong><em>Note:</em></strong>
 The documentation of pipeline parameters is generated automatically from the pipeline schema. Options are part of Nextflow and use a <em>single</em> hyphen (pipeline parameters use a double-hyphen).</p>
 </blockquote>
 <p>Besides the very crucial parameters explained in <a href="#inputs">Inputs</a>, various parameters can be finetuned thoughout the workflow.
 You can find the full list of parameters via <code>nextflow run rki-mf1/omnifluss -r &lt;release-tag&gt; --help</code>.
 In order to not bloat the omnifluss run command and save time when typing the run for repeatedly you can provide pipeline parameters in <code>JSON</code> or <code>YAML</code> format via <code>-params-file &lt;file&gt;</code>.</p>
 <blockquote>
-<p>[!WARNING]
+<p><strong><em>Warning:</em></strong>
 Do not use the <code>-c &lt;file&gt;</code> to specify pipeline parameters as this will result to errors!
 Custom config files specified in <code>-c</code> must only be used for <a href="https://nf-co.re/docs/usage/configuration#tuning-workflow-resources">tuning process resource specifications</a> or module arguments (args).</p>
 </blockquote>
