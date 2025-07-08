@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>004 INV referencePreparation - Omnifluss documentation</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "004 INV referencePreparation";
+        var mkdocs_page_input_path = "adr/004_INV_referencePreparation.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Omnifluss documentation
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../prerequisites/">Prerequisites</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../pathogens/inv/">Influenza</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../../contributions/">Contributions</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Omnifluss documentation</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">004 INV referencePreparation</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h2 id="title">Title</h2>
+<p>Decision on how to handle IUPAC characters and N's in the reference sequence.</p>
+<h2 id="context">Context</h2>
+<p>The INV GR workflow contains a process in which a python script is executed, which replaces all IUPAC characters and N's with static, unambiguous characters (ACGT).
+Since this seems unintuitive and potentially could introduce differences in the results, we decided to assess the effects of these replacements.</p>
+<p>Removing this step entirely resulted in problems with our variant caller lofreq, which produced VCF files with byte errors in them. This led to crashes in subsequent processes.
+According to a comment in the original script, not only lofreq, but also bcftools consensus can't handle IUPAC characters.</p>
+<p>Next, we assessed whether replacing IUPAC characters with statically defined bases introduces a downstream bias.
+Therefore, we generated five distinct copies of the same reference genome where the IUPAC and 'N' characters were randomly replaced with unambiguous nucleotide characters. Each copy was used as a reference for genome reconstruction of three real data samples (5*3 experiments).
+We observed changes in the VCF files due to different interpretations of the IUPAC characters. We noticed that especially N's are problematic, since these positions don't appear in the VCF files and seem to be conserved in the consensus sequence. However, in the case that an 'N' is replaced by an unambiguous nucleotide character, the position is considered for the variant calling. Subsequently, if the unambiguous nucleotide character in the reference genome differs from the majority allele among the aligned reads it will be replaced during the consensus generation. After removing the option of replacing IUPAC characters with N's, we observed identical md5sums of the consensus sequences across all runs for all samples respectively.</p>
+<h2 id="decision">Decision</h2>
+<p>We found that 'N's and IUPUC characters cause issues with internal software (lofreq).
+However, replacing those characters with unambiguous nucleotide characters showed no downstream effect on the generated consensus sequences.
+For the purpose of reproducibility, we decide to define static replacements of all IUPAC and 'N' characters into unambiguous nucleotide characters.</p>
+<h2 id="status">Status</h2>
+<ul>
+<li>[ ] proposed</li>
+<li>[x] accepted</li>
+<li>[ ] deprecated</li>
+<li>[ ] superseded (via ADR#)</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Pro:</li>
+<li>no randomness, good reproducibility</li>
+<li>both IUPAC and 'N' character positions in the reference genome are now considered for variant calling and consensus generation</li>
+<li>Con:</li>
+<li>seems unintuitive and error-prone at first</li>
+<li>an extremely high ratio of characters in the reference genome being replaced by the proposed method might causes alignment artifacts. However, within the scope of our assessment we observed this effect as minor/ not present.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../search/main.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

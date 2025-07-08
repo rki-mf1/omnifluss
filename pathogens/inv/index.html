@@ -51,6 +51,12 @@
                 <li class="toctree-l1 current"><a class="reference internal current" href="#">Influenza</a>
     <ul class="current">
     <li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#updating-the-pipeline">Updating the pipeline</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#reproducibility">Reproducibility</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#inputs">Inputs</a>
         <ul>
@@ -65,6 +71,10 @@
         </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#parameters">Parameters</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#-resume">-resume</a>
+    </li>
+        </ul>
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#output">Output</a>
     </li>
@@ -101,16 +111,45 @@
                 <h1 id="influenza">Influenza</h1>
 <p><strong>Omnifluss</strong> can perform genome reconstruction of Influenza viruses using Illumina short-read NGS data.</p>
 <h2 id="usage">Usage</h2>
-<p>Basic usage of omnifluss to reconstruct Influenza virus genomes from Illumina paired-end (PE) short-read data:</p>
+<p>Basic usage of omnifluss to reconstruct virus genomes:</p>
+<pre><code class="language-bash">nextflow run rki-mf1/omnifluss \
+    -profile singularity \
+    --input samplesheet.csv \
+    --outdir results
+</code></pre>
+<p>This command launches a basic omnifluss run with samples from the <em>samplesheet</em>, tasks executed within <em>singularity</em> containers, and results stored in an output folder called <em>results</em>.</p>
+<p>We configured and optimised many settings and <a href="#parameters">Parameters</a> to reconstruct Influenza virus genomes from Illumina paired-end (PE) short-read data.
+These configurations can be trivially added to the basic omnifluss run via another profile:</p>
 <pre><code class="language-bash">nextflow run rki-mf1/omnifluss \
     -profile singularity,INV_illumina \
-    -input my_sample_sheet.csv \
-    -outdir results
+    --input samplesheet.csv \
+    --outdir results
 </code></pre>
+<p>See the <a href="#output">Output</a> chapter for the documentation of omnifluss' outputs.</p>
+<h3 id="updating-the-pipeline">Updating the pipeline</h3>
+<p>When you run the commands above, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version.
+When running the pipeline, it will use a cached version by default if available - even if the pipeline has been updated on the developers' side.
+To make sure that you're running the latest version of the omnifluss, you can manually update the cached version of the pipeline:</p>
+<pre><code class="language-bash">nextflow pull rki-mf1/omnifluss
+</code></pre>
+<h3 id="reproducibility">Reproducibility</h3>
+<p>To ensures that a specific version of the pipeline is used when running the pipeline, you can specify the pipeline version.
+If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code afterwards.
+You can visit the release page at <a href="https://github.com/rki-mf1/omnifluss/releases">rki-mf1/omnifluss releases</a> and find the latest pipeline version at the top of the website.
+When running the pipeline with <code>-r</code> (one hyphen), use eg. <code>-r v0.2.1</code>.
+You can switch to another version any time by changing the vertion tag after the <code>-r</code> flag.
+The version of the release will be written to the nextlow log for reproducibility.</p>
 <h2 id="inputs">Inputs</h2>
 <h3 id="sample-sheet">Sample sheet</h3>
-<p>The sample sheet (.csv) provided via <code>--input</code> specifies the raw read sequence data files (.fastq) used by omnifluss.
+<p>The samples to be analysed are provided to omnifluss via a sample sheet (.csv) using the <code>--input</code> parameter.
+It specifies the raw read sequence data files (.fastq) used by omnifluss.
 For instance:</p>
+<pre><code class="language-csv">sample,fastq_1,fastq_2
+INV_ILL_NB1,/path/to/experiment_NB1_R1.fastq.gz,/path/to/experiment_NB1_R2.fastq.gz
+INV_ILL_NB2,/path/to/experiment_NB2_R1.fastq.gz,/path/to/experiment_NB2_R2.fastq.gz
+INV_ILL_NB3,/path/to/experiment_NB3_R1.fastq.gz,/path/to/experiment_NB3_R2.fastq.gz
+</code></pre>
+<p>which refers to the structured information</p>
 <table>
 <thead>
 <tr>
@@ -122,31 +161,85 @@ For instance:</p>
 <tbody>
 <tr>
 <td>INV_ILL_NB1</td>
-<td>/path/to/experiment_NB1_R1.fastq</td>
-<td>/path/to/experiment_NB1_R2.fastq</td>
+<td>/path/to/experiment_NB1_R1.fastq.gz</td>
+<td>/path/to/experiment_NB1_R2.fastq.gz</td>
 </tr>
 <tr>
 <td>INV_ILL_NB2</td>
-<td>/path/to/experiment_NB2_R1.fastq</td>
-<td>/path/to/experiment_NB2_R2.fastq</td>
+<td>/path/to/experiment_NB2_R1.fastq.gz</td>
+<td>/path/to/experiment_NB2_R2.fastq.gz</td>
 </tr>
 <tr>
 <td>INV_ILL_NB3</td>
-<td>/path/to/experiment_NB3_R1.fastq</td>
-<td>/path/to/experiment_NB3_R2.fastq</td>
+<td>/path/to/experiment_NB3_R1.fastq.gz</td>
+<td>/path/to/experiment_NB3_R2.fastq.gz</td>
+</tr>
+</tbody>
+</table>
+<p>The argument parser will auto-detect the sample and paired-end information provided by the samples sheet.
+Technically, the sample sheet can have as many columns as desired, however, only the first three columns are required and have to match the definition table below.</p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sample</code></td>
+<td>Custom sample name. This entry might be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (<code>_</code>).</td>
+</tr>
+<tr>
+<td><code>fastq_1</code></td>
+<td>Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".</td>
+</tr>
+<tr>
+<td><code>fastq_2</code></td>
+<td>Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".</td>
 </tr>
 </tbody>
 </table>
 <h3 id="segment-database">Segment database</h3>
-<p>WIP</p>
+<p>\&lt;WIP&gt;</p>
 <h3 id="kraken-database">Kraken database</h3>
-<p>WIP</p>
+<p>\&lt;WIP&gt;</p>
 <h3 id="adapter-file">Adapter file</h3>
-<p>WIP</p>
+<p>\&lt;WIP&gt;</p>
 <h2 id="parameters">Parameters</h2>
-<p>Besides the very crucial parameters explained in <a href="#inputs">Inputs</a>, various parameters can be finetuned thoughout the workflow.</p>
+<blockquote>
+<p>[!NOTE]
+The documentation of pipeline parameters is generated automatically from the pipeline schema. Options are part of Nextflow and use a <em>single</em> hyphen (pipeline parameters use a double-hyphen).</p>
+</blockquote>
+<p>Besides the very crucial parameters explained in <a href="#inputs">Inputs</a>, various parameters can be finetuned thoughout the workflow.
+You can find the full list of parameters via <code>nextflow run rki-mf1/omnifluss -r &lt;release-tag&gt; --help</code>.
+In order to not bloat the omnifluss run command and save time when typing the run for repeatedly you can provide pipeline parameters in <code>JSON</code> or <code>YAML</code> format via <code>-params-file &lt;file&gt;</code>.</p>
+<blockquote>
+<p>[!WARNING]
+Do not use the <code>-c &lt;file&gt;</code> to specify pipeline parameters as this will result to errors!
+Custom config files specified in <code>-c</code> must only be used for <a href="https://nf-co.re/docs/usage/configuration#tuning-workflow-resources">tuning process resource specifications</a> or module arguments (args).</p>
+</blockquote>
+<p>For instance, the basic use case of omnifluss above can be specified with a params-file in yaml format:</p>
+<pre><code class="language-bash">nextflow run rki-mf1/omnifluss -profile singularity -params-file params.yaml
+</code></pre>
+<p>with:</p>
+<pre><code class="language-yaml">input: 'samplesheet.csv'
+outdir: 'results'
+</code></pre>
+<h3 id="-resume"><code>-resume</code></h3>
+<p>Specify <em>resume</em> when restarting a pipeline.
+Nextflow will use cached results from any pipeline steps where the inputs are the same, continuing from where it got to previously.
+For input to be considered the same, not only the names must be identical but the files' contents as well.
+For more info about this parameter, see <a href="https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html">this blog post</a>.</p>
+<p>You can also supply a run name to resume a specific run: <code>-resume [run-name]</code>.
+Use the <code>nextflow log</code> command to show previous run names.</p>
 <h2 id="output">Output</h2>
-<p>WIP</p>
+<p>After a successful run, the pipeline creates the following files and folders in your working directory:</p>
+<pre><code class="language-bash">work                # Directory containing the Nextflow working files
+&lt;outdir&gt;            # Results in specified location (defined with --outdir)
+.nextflow_log       # Log file from Nextflow
+</code></pre>
+<p>\&lt;WIP&gt;</p>
               
             </div>
           </div><footer>
