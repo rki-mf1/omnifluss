@@ -1,4 +1,3 @@
-<a id="prerequisites_main"></a>
 # Prerequisites
 
 Omnifluss is developed using the Nextflow workflow language and intended for Unix operating systems.
@@ -14,3 +13,7 @@ conda create -n omnifluss -c bioconda -c conda-forge \
     nf-core==3.3.1 \
     nf-test==0.9.2
 ```
+
+> ***Note:***
+> With Nextflow in your active working environment you don't need to install omnifluss at all!
+> In the standard use case, Nextflow will automatically clone and use the code from the Github repository.
