@@ -5,7 +5,7 @@ process INV_REPORT {
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
             'oras://community.wave.seqera.io/library/bioconductor-shortread_r-data.table_r-dplyr_r-formattable_pruned:91e8b683750411aa' :
-            'oras://community.wave.seqera.io/library/bioconductor-shortread_pandoc_r-base_r-data.table_pruned:8772a4bbf7f04989' }"
+            'community.wave.seqera.io/library/bioconductor-shortread_pandoc_r-base_r-data.table_pruned:8772a4bbf7f04989' }"
 
     input:
     path(script)
