@@ -21,12 +21,10 @@ Please visit our **[omnifluss website](https://rki-mf1.github.io/omnifluss/)** f
 
 <details><summary> TL;DR (setup environment) </summary>
 
+You need Nextflow and at least one package manager (conda) or container engine (singularity, docker) available.
+You can install Nextflow via conda:
 ```bash
-conda create -n omnifluss -c bioconda -c conda-forge \
-    nextflow==25.04.3 \
-    nf-core==3.3.1 \
-    nf-test==0.9.2
-
+conda create -n omnifluss -c bioconda -c conda-forge nextflow==25.04.3
 conda activate omnifluss
 ```
 </details>
