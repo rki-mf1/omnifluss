@@ -249,7 +249,8 @@ workflow OMNIFLUSS {
             ch_bedtools_genomecov,
             ch_samtools_coverage,
             ch_samtools_flagstat,
-            ch_consensus_calls
+            ch_consensus_calls,
+            params.outdir
         )
         ch_report = INV_REPORTING_ALL.out.report
         ch_versions = ch_versions.mix(INV_REPORTING_ALL.out.versions)
