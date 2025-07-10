@@ -13,7 +13,6 @@ nextflow run rki-mf1/omnifluss \
 ```
 
 This command launches a basic omnifluss run with samples from the _samplesheet_, tasks executed within _singularity_ containers, and results stored in an output folder called _results_.
-
 We configured and optimised many settings and [Parameters](#parameters) to reconstruct Influenza virus genomes from Illumina paired-end (PE) short-read data.
 These configurations can be trivially added to the basic omnifluss run via another profile:
 ```bash
@@ -24,15 +23,30 @@ nextflow run rki-mf1/omnifluss \
 ```
 
 See the [Output](#output) chapter for the documentation of omnifluss' outputs.
+Remember that the commands above use your last cached version (see [Updating the pipeline](#updating-the-pipeline)) of omnifluss.
+If you like to run omnifluss at a specific release version, use the `-r` parameter of Naxtflow:
+```bash
+nextflow run rki-mf1/omnifluss \
+    -profile singularity,INV_illumina \
+    --input samplesheet.csv \
+    --outdir results \
+    -r v0.2.0
+```
+
+Further, you can resume an interrupted or broken pipeline runs via [resume](#resume).
 
 ### Updating the pipeline
 
 When you run the commands above, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version.
 When running the pipeline, it will use a cached version by default if available - even if the pipeline has been updated on the developers' side.
-To make sure that you're running the latest version of the omnifluss, you can manually update the cached version of the pipeline:
-
+To make sure that you're running the latest version of the omnifluss, you can manually update the cached version of the pipeline via
 ```bash
 nextflow pull rki-mf1/omnifluss
+```
+
+Again, you can add `-r` for a specific version
+```bash
+nextflow pull -r v0.2.0 rki-mf1/omnifluss
 ```
 
 ### Reproducibility
@@ -86,7 +100,14 @@ Technically, the sample sheet can have as many columns as desired, however, only
 
 ### Adapter file
 
-\<WIP\>
+You can especify a plain FASTA file for adapter clipping.
+E.g. for _Illumina Nextera Transposase adapter_
+```
+>Illumina Nextera Transposase adapter fwd
+TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
+>Illumina Nextera Transposase adapter rev
+GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
+```
 
 ## Parameters
 
@@ -114,9 +135,9 @@ input: 'samplesheet.csv'
 outdir: 'results'
 ```
 
-### `-resume`
+### `resume`
 
-Specify _resume_ when restarting a pipeline.
+Specify _-resume_ when restarting a pipeline.
 Nextflow will use cached results from any pipeline steps where the inputs are the same, continuing from where it got to previously.
 For input to be considered the same, not only the names must be identical but the files' contents as well.
 For more info about this parameter, see [this blog post](https://www.nextflow.io/blog/2019/demystifying-nextflow-resume.html).
