@@ -45,6 +45,10 @@ nextflow run rki-mf1/omnifluss \
 
 rki-mf1/omnifluss was originally written by the RKI MF1 Viroinf team.
 
+## Funding
+
+This project was supported by co-funding from the European Union’s EU4Health programme under project no. 101113012 (IMS-HERA2).
+
 ## Citations
 
 \<WIP\>
