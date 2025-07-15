@@ -1,0 +1,20 @@
+name: gh-pages-deploy
+
+on:
+  push:
+    branches: [ "main", "dev", "gh-pages-update", "update-gh-pages", "update_gh-pages", "gh-pages_update" ]
+
+jobs:
+  gh-pages-deploy-job:
+    name: build nf env
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
+
+      - name: Auto-deploy gh-pages
+        run: |
+          mkdocs gh-deploy --remote-branch gh-pages
