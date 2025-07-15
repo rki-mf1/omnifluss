@@ -3,6 +3,9 @@ name: gh-pages-deploy
 on:
   push:
     branches: [ "main", "dev", "gh-pages-update", "update-gh-pages", "update_gh-pages", "gh-pages_update", "gh-pages-autodeploy"]
+    paths:
+      - 'docs/*.md'
+      - 'mkdocs.yml'
 
 jobs:
   gh-pages-deploy-job:
