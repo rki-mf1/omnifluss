@@ -3,6 +3,8 @@ name: gh-pages-deploy
 on:
   push:
     branches: [ "main", "dev", "gh-pages-update", "update-gh-pages", "update_gh-pages", "gh-pages_update" ]
+  pull_request:
+    branches: [ "dev" ]
 
 jobs:
   gh-pages-deploy-job:
