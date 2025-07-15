@@ -1,0 +1,7 @@
+site_name: Omnifluss documentation
+nav:
+  - Home: index.md
+  - Prerequisites: prerequisites.md
+  - Influenza: pathogens/inv.md
+  - Contributions: contributions.md
+theme: readthedocs
