@@ -2,6 +2,7 @@ name: gh-pages-deploy
 
 on:
   push:
+    branches: [ "main", "dev" ]
     paths:
       - 'docs/*.md'
       - 'mkdocs.yml'
