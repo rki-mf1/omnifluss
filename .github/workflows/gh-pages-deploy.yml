@@ -14,9 +14,13 @@ jobs:
       run:
         shell: bash -el {0}
     steps:
-      - uses: actions/checkout@v4
-      - uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Auto-deploy gh-pages
-        run: |
-          mkdocs gh-deploy --remote-branch gh-pages
+      - name: Auto-deploy gh-pages          
+        uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
+        env:
+          CONFIG_FILE: mkdocs.yml
+          GITHUB_TOKEN:  ${{ secrets.GITHUB_TOKEN }}
