@@ -1,5 +1,5 @@
 [![GitHub Release](https://img.shields.io/github/v/release/rki-mf1/omnifluss)](https://github.com/rki-mf1/omnifluss/releases)
-![Static Badge](https://img.shields.io/badge/Nextflow-%E2%89%A525.04.3-darkgreen?logo=nextflow&label=Nextflow)
+![Static Badge](https://img.shields.io/badge/Nextflow-%E2%89%A524.04.2-darkgreen?logo=nextflow&label=Nextflow)
 ![Static Badge](https://img.shields.io/badge/nf--core-%E2%89%A53.3.1-darkgreen?logo=nf-core)
 ![Static Badge](https://img.shields.io/badge/nf--test-%E2%89%A50.9.2-darkgreen)
 ![Static Badge](https://img.shields.io/badge/run_with-conda-3EB049?logo=anaconda&labelColor=black)
