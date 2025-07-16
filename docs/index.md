@@ -20,3 +20,8 @@ After a successful run `omnifluss` returns a consensus sequence, intermediate fi
 ### Technical prerequisites
 
 For system requirements of omnifluss please see the [Prerequisites](prerequisites.md) page.
+
+
+<hr>
+
+*Last update: July, 15th 2025*
