@@ -2,7 +2,7 @@ nextflow_workflow {
 
     name "Test Subworkflow INV_REPORTING_ALL"
     script "../main.nf"
-    config "subworkflows/local/inv_reporting_all/tests/nextflow.config"
+    config "./nextflow.config"
     workflow "INV_REPORTING_ALL"
 
     //  Add tags for the subworkflow

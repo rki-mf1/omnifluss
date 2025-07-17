@@ -16,7 +16,7 @@ workflow INV_REPORTING_ALL {
     main:
     report                        = Channel.empty()
     versions                      = Channel.empty()
-    read_statistics               = Channel.empty() //from here on, optional files
+    read_statistics               = Channel.empty() //from here on, optional files that are only produced if the necessary input is available
     kraken_classification         = Channel.empty()
     mapping_statistics            = Channel.empty()
     top5_references               = Channel.empty()

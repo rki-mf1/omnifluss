@@ -33,14 +33,15 @@ process INV_REPORT {
     # create report
     cp -L ${script} report_copied.rmd
 
-    # distinguishes between absolute and relative output path
+    # distinguish between absolute and relative path
     if [[ ${outdir} == /* ]]; then
-        Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${outdir}/qc_report.html')"
-        mv '${outdir}/qc_report.html' .
+        full_outdir="${outdir}"
     else
-        Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${projectDir}/${outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${projectDir}/${outdir}/qc_report.html')"
-        mv '${projectDir}/${outdir}/qc_report.html' .
+        full_outdir="${projectDir}/${outdir}"
     fi
+
+    Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='\${full_outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='\${full_outdir}/qc_report.html')"
+    mv \${full_outdir}/qc_report.html .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -52,5 +53,12 @@ process INV_REPORT {
     """
     touch qc_report.html
     touch versions.yml
+
+    #optional files
+    touch read_statistics.csv
+    touch kraken_classification.csv
+    touch mapping_statistics.csv
+    touch top5_references.csv
+    touch N_content_and_Ambiguous_calls.csv
     """
 }

@@ -71,19 +71,19 @@ output:
   - kraken_classification:
       type: file
       description: Underlying csv-file for taxonomic classification table
-      pattern: "versions.yml"
+      pattern: "kraken_classification.csv"
   - mapping_statistics:
       type: file
       description: Underlying csv-file for mapping statistics table
-      pattern: "versions.yml"
+      pattern: "mapping_statistics.csv"
   - top5_references:
       type: file
       description: Underlying csv-file for top 5 references table
-      pattern: "versions.yml"
+      pattern: "top5_references.csv"
   - N_content_and_Ambiguous_calls:
       type: file
       description: Underlying csv-file for N-/Ambiguous contents file 
-      pattern: "versions.yml"
+      pattern: "N_content_and_Ambiguous_calls.csv"
     
 
 authors:
