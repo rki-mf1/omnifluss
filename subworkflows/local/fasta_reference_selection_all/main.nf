@@ -1,4 +1,4 @@
-include { KMA }                         from '../../../modules/local/inv_referenceSelection_kma/main'
+include { KMA }                         from '../../../modules/local/inv_reference_selection_kma/main'
 include { INV_GET_TOP1_REFERENCE_GREP } from '../../../modules/local/inv_reference_selection_grep/main'
 include { CAT_CAT }                     from '../../../modules/nf-core/cat/cat/main'
 include { SEQKIT_GREP }                 from '../../../modules/nf-core/seqkit/grep/main.nf'
@@ -57,7 +57,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         )
         ch_versions = ch_versions.mix(KMA.out.versions.first())
         ch_kma_spa  = ch_kma_spa.mix(KMA.out.spa)
-        
+
         //filter out files for which no references could be inferred
         def constraint = branchCriteria {_meta, spa ->
             valid: spa.toFile().readLines().size() >= 2
@@ -65,7 +65,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         }
 
         ch_kma_spa = ch_kma_spa.branch(constraint)
-        
+
         /****************************************************************/
         /* STEP 2: Get ID of Top1 refrences                             */
         /****************************************************************/
@@ -124,4 +124,3 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
     final_topRefs       = ch_final_topRefs      // channel: [ val(meta), fasta ]            // nf-core style
     versions            = ch_versions           // channel: [ versions.yml ]
 }
-
