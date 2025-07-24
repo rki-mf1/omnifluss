@@ -3,7 +3,9 @@ process INV_REPORT {
     label 'process_single'
 
     conda "${moduleDir}/environment.yml"
-    container "oras://community.wave.seqera.io/library/bioconductor-shortread_r-data.table_r-dplyr_r-formattable_pruned:91e8b683750411aa"
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+            'oras://community.wave.seqera.io/library/bioconductor-shortread_r-data.table_r-dplyr_r-formattable_pruned:91e8b683750411aa' :
+            'community.wave.seqera.io/library/bioconductor-shortread_pandoc_r-base_r-data.table_pruned:8772a4bbf7f04989' }"
 
     input:
     path(script)
@@ -18,32 +20,50 @@ process INV_REPORT {
     val(outdir)
 
     output:
-    path "qc_report.html" , emit: report
-    path "versions.yml"   , emit: versions
+    path "qc_report.html"                       , emit: report
+    path "versions.yml"                         , emit: versions
+    path "read_statistics.csv"                  , optional: true, emit: read_statistics
+    path "kraken_classification.csv"            , optional: true, emit: kraken_classification
+    path "mapping_statistics.csv"               , optional: true, emit: mapping_statistics
+    path "top5_references.csv"                  , optional: true, emit: top5_references
+    path "N_content_and_Ambiguous_calls.csv"    , optional: true, emit: N_content_and_Ambiguous_calls
 
     script:
     """
     # create report
     cp -L ${script} report_copied.rmd
 
-    # distinguishes between absolute and relative output path
+    # distinguish between absolute and relative path
     if [[ ${outdir} == /* ]]; then
-        Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${outdir}', list_folder='${outdir}/reporting_files', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${outdir}/qc_report.html')"
-        mv '${outdir}/qc_report.html' .
+        full_outdir="${outdir}"
     else
-        Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='${projectDir}/${outdir}', list_folder='${projectDir}/${outdir}/reporting_files', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='${projectDir}/${outdir}/qc_report.html')"
-        mv '${projectDir}/${outdir}/qc_report.html' .
+        full_outdir="${projectDir}/${outdir}"
     fi
+
+    Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='\${full_outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='\${full_outdir}/qc_report.html')"
+    mv \${full_outdir}/qc_report.html .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        report.rmd: \$(cat version.txt)
+        report.rmd: \$(grep 'version:' report_copied.rmd | cut -d ':' -f2)
     END_VERSIONS
     """
 
     stub:
     """
+    cp -L ${script} report_copied.rmd
+    
     touch qc_report.html
-    touch versions.yml
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        report.rmd: \$(grep 'version:' report_copied.rmd | cut -d ':' -f2)
+    END_VERSIONS
+
+    #optional files
+    touch read_statistics.csv
+    touch kraken_classification.csv
+    touch mapping_statistics.csv
+    touch top5_references.csv
+    touch N_content_and_Ambiguous_calls.csv
     """
 }

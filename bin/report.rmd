@@ -9,12 +9,10 @@ output:
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 params:
   proj_folder: "none"
-  list_folder: "none"
   min_cov: "none"
   reference: "none"
   rki_sample_name: true
   information_json: "none"
-  print_version: FALSE
   version: "1.0.0"
 ---
 
@@ -48,15 +46,7 @@ params:
 }
 </style>
 
-`r if(params$print_version){
-print(paste0("report.rmd ", params$version)) 
-knitr::knit_exit()
-}`
-
 ```{r setup, include=FALSE}
-
-#write version file
-write(params$version, "version.txt")
 
 # turn off warnings
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, time_it = TRUE)
@@ -74,12 +64,6 @@ library("dplyr")
 
 stepsize=20
 n_content_threshold=5
-
-#create folder for files generated during report creation
-if (!dir.exists(params$list_folder)) {
-  dir.create(params$list_folder)
-}
-
 ```
 ```{r def_functions}
 # input of file listing. requires file names like /path/to/nCoV1.bamstats.txt
@@ -241,7 +225,7 @@ l.infiles.fasta.files <- list.files(path = ".",
 names(l.infiles.fasta.files) <- f.get_filenames(l.infiles.fasta.files)
 ```
 
-`r if(length(l.infiles.trimming) != 0){"## Read counts\n Raw reads were subjected to adapter clipping. The following table summarizes the read count per sample before and after trimming. Additionally, the percentage of remaining reads after trimming is listed."}`
+`r if(length(l.infiles.trimming) != 0){"## Read Counts\n Raw reads were subjected to adapter clipping. The following table summarizes the read count per sample before and after trimming. Additionally, the percentage of remaining reads after trimming is listed."}`
 
 ```{r read_trimming, eval = length(l.infiles.trimming) != 0}
 l.trimming.data.json <- lapply(l.infiles.trimming, function(x){
@@ -304,7 +288,7 @@ kbl(x = df.table,
 # save table as csv for later use
 write.csv(  x=df.summary,
             row.names = FALSE,
-            file = file.path(params$list_folder, "read_stats.csv")
+            file = "read_statistics.csv"
           )
 ```
 
@@ -365,7 +349,7 @@ df.kraken_output <- df.kraken_output[, c("Sample", "filter passed", "Homo sapien
 # save table as csv for later use
 write.csv(  x=df.kraken_output,
             row.names = FALSE,
-            file = file.path(params$list_folder, "species_filtering.csv")
+            file = "kraken_classification.csv"
 )
 
 kbl(df.kraken_output) %>%
@@ -523,7 +507,7 @@ dt.coverage <- dt.coverage %>% group_by(sample)
 dt.coverage$chromosome = factor(dt.coverage$chromosome, levels=c("HA","NA","MP","NP","NS","PA","PB1","PB2"))
 ```
 
-`r if(length(l.infiles.bamstats) != 0 && length(l.infiles.read.duplicates) != 0 && exists("dt.bamstats_coverage")){"## Mapping statisics\nReads were mapped to the reference genome using BWA.
+`r if(length(l.infiles.bamstats) != 0 && length(l.infiles.read.duplicates) != 0 && exists("dt.bamstats_coverage")){"## Mapping Statistics\nReads were mapped to the reference genome using BWA.
 For each sample the number of mapped reads as well as the overall mapping rate and the rate of duplicated reads are listed in the following table.
 Additionally, the genome coverage, the mean read depth and the rate of mapped reads are listed for each genome fragment."}`
 
@@ -549,12 +533,6 @@ df.output <- data.frame("sample" = unique(df.bamstat.data$sample),
 df.output$mapping.rate <- round((df.output$mapped / df.output$input)*100, digits = 2)
 colnames(df.output) <- c("sample", "reads in", "reads mapped", "mapping rate [%]")
 
-# save table as csv for later use
-write.csv(  x=df.output,
-            row.names = FALSE,
-            file = file.path(params$list_folder, "mapping_stats.csv")
-)
-
 # merge read per segment, duplication data with bamstats table
 df.mapping.table <- merge(df.output, dt.read.duplicates, by="sample")
 ##### bamstats coverage table from above is reused 
@@ -568,13 +546,13 @@ df.mapping.table <- sub.dots(df.mapping.table)
 seg_col_range <- seq(6,29, by=3) # taking every third segment column
 df.mapping.table[, c(seg_col_range)] <- lapply(df.mapping.table[, c(seg_col_range)], function(x) round((x / as.numeric(df.mapping.table$`reads mapped`)*100), digits = 2))
 
-df.mapping.table$`reads in` <- f.color_bar("lightgreen")(df.mapping.table$`reads in`)
-df.mapping.table$`reads mapped` <- f.color_bar("lightgreen")(df.mapping.table$`reads mapped`)
-
 write.csv(  x=df.mapping.table,
             row.names = FALSE,
-            file = file.path(params$list_folder, "mapping_statistics.csv")
+            file = "mapping_statistics.csv"
 )
+
+df.mapping.table$`reads in` <- f.color_bar("lightgreen")(df.mapping.table$`reads in`)
+df.mapping.table$`reads mapped` <- f.color_bar("lightgreen")(df.mapping.table$`reads mapped`)
 
 kbl(df.mapping.table,
     digits = 3,
@@ -628,7 +606,7 @@ sample.names <- unique(dt.coverage$sample)
 rm(dt.coverage)
 ```
 
-`r if(length(l.infiles.read.ranking.refs) != 0 || length(l.infiles.fasta.files) != 0){"### Consensus Sequence\n
+`r if(length(l.infiles.read.ranking.refs) != 0 || length(l.infiles.fasta.files) != 0){"## Consensus Sequence\n
 The consensus sequence was build using BCFtools. Only indels with a frequency above 90 %  were integrated into the consensus sequence. Positions with a coverage below the given threshold were masked with an N in the consensus sequence. 
 Variants that passed the filtering steps were explicitly integrated into the consensus sequence if they occurred with a frequency of 90 % or higher. Variants with a frequency between 10 and 90 % were depicted as ambiguous bases 
 and below 10 % the reference base was used. High quality Variants at the beginning or end of a genome segment, with an allele frequency above 90 % that failed the strand-bias filtering step were masked with N.
@@ -698,7 +676,7 @@ for (s in c(unique(dt.top.refs.na.filled$sample))) {
 rm(tmp, tmp.df)
 write.csv(  x=df.top.refs.reshaped,
           row.names = FALSE,
-          file = file.path(params$list_folder, "top5_consensus_sequence.csv")
+          file = "top5_references.csv"
 )
 
 ```
@@ -822,7 +800,7 @@ tmp_base.content.table <- tmp_base.content.table[order(tmp_base.content.table$Sa
 tmp_base.content.table$index <- 1:nrow(tmp_base.content.table)
 write.csv(x = tmp_base.content.table[,1:10],
           row.names = FALSE,
-          file = file.path(params$list_folder, "N_content_and_Ambigiuos_calls.csv")
+          file = "N_content_and_Ambiguous_calls.csv"
 )
 
 
