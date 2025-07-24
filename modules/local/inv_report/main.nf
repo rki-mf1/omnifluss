@@ -45,14 +45,17 @@ process INV_REPORT {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        report.rmd: \$(cat version.txt)
+        report.rmd: \$(grep 'version:' report_copied.rmd | cut -d ':' -f2)
     END_VERSIONS
     """
 
     stub:
     """
     touch qc_report.html
-    touch versions.yml
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        report.rmd: \$(grep 'version:' report_copied.rmd | cut -d ':' -f2)
+    END_VERSIONS
 
     #optional files
     touch read_statistics.csv

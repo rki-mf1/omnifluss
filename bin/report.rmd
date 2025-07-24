@@ -13,7 +13,6 @@ params:
   reference: "none"
   rki_sample_name: true
   information_json: "none"
-  print_version: FALSE
   version: "1.0.0"
 ---
 
@@ -47,15 +46,7 @@ params:
 }
 </style>
 
-`r if(params$print_version){
-print(paste0("report.rmd ", params$version)) 
-knitr::knit_exit()
-}`
-
 ```{r setup, include=FALSE}
-
-#write version file
-write(params$version, "version.txt")
 
 # turn off warnings
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, time_it = TRUE)
