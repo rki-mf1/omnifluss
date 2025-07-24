@@ -24,7 +24,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-24T08:32:28.175734993"
+        "timestamp": "2025-07-24T11:26:31.723937467"
     },
     "complete data stub": {
         "content": [
@@ -33,7 +33,7 @@
                     "qc_report.html:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "1": [
-                    "versions.yml:md5,efa6a4d53ed49017f770f004b2515348"
+                    "versions.yml:md5,4e9198990a3bb4697a29462a7995f747"
                 ],
                 "2": [
                     "read_statistics.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
@@ -69,7 +69,7 @@
                     "top5_references.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "versions": [
-                    "versions.yml:md5,efa6a4d53ed49017f770f004b2515348"
+                    "versions.yml:md5,4e9198990a3bb4697a29462a7995f747"
                 ]
             }
         ],
@@ -77,6 +77,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-24T08:35:32.15100416"
+        "timestamp": "2025-07-24T11:29:39.344390503"
     }
 }

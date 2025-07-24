@@ -51,6 +51,8 @@ process INV_REPORT {
 
     stub:
     """
+    cp -L ${script} report_copied.rmd
+    
     touch qc_report.html
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
