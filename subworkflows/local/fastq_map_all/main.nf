@@ -12,9 +12,10 @@ workflow FASTQ_MAP_ALL {
     ch_fai_index    // channel: [ val(meta), index ]
 
     main:
-    ch_bam              = Channel.empty()
-    ch_bai              = Channel.empty()
-    ch_versions         = Channel.empty()
+    ch_bam                    = Channel.empty()
+    ch_bai                    = Channel.empty()
+    ch_versions               = Channel.empty()
+    ch_markduplicates_metrics = Channel.empty()
     //for multiqc
     ch_multiqc_files    = Channel.empty()
 
