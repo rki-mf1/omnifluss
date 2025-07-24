@@ -49,6 +49,16 @@ workflow OMNIFLUSS {
     ch_report                   = Channel.empty()
 
     //
+    // Parameters' sanity check for those and their combinations that cannot be verified via nf-schema@2.3.0
+    //
+    if (params.reference_selection == "kma" && (params.reference != null || params.reference_selection_db == null)){
+        exit 1, "When selecting 'kma' as 'reference_selection' parameter, 'reference_selection_db' must be specified, 'reference' should not be specified."
+    }
+    else if (params.reference_selection == "static" && (params.reference == null || params.reference_selection_db != null)){
+        exit 1, "When selecting 'static' as 'reference_selection' parameter, 'reference' must be specified, 'reference_selection_db' should not be specified."
+    }
+
+    //
     // Read QC
     //
     if (! params.skip_read_qc) {

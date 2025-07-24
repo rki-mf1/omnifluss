@@ -1,0 +1,160 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf - INV - Illumina"
+    script "../main.nf"
+    tag "pipeline"
+    tag "ena"
+    tag "ena_invalid_parameter"
+    tag "invalid_parameter"
+    tag "INV"
+    tag "influenza"
+    profile "INV_test_default"
+
+
+    /*
+    @krannicht: Below I tested the scenarios before any parameter constraints were introduced to the workflow.
+    */
+            /***************************************************************
+            * Case1:     static + reference_selection_db
+            * Failure:  In the above case ch_final_topRefs is loaded with
+            *           param.reference (which is null) which will break
+            *           FASTA_PROCESS_REFERENCE_ALL:INV_PREPARE_REFERENCE
+            *           because the map's fasta value is missing.
+            * Result:   workflow.success == false
+            ***************************************************************/
+
+            /***************************************************************
+            * Case2:     kma + reference (provided a segment DB path)
+            * Failure:  Validation of pipeline parameters fails because
+            *           --reference is a directory here, not a file.
+            * Result:   Test FAILURE
+            ***************************************************************/
+
+            /***************************************************************
+            * Case3:     kma + reference (single FASTA file; single sequence)
+            * Failure:  There is no failure (commit c1a52602). The pipeline
+            *           silently does nothing. The only indicator is a very
+            *           very low suceeded workflow.trace.succeeded().size().
+            *           The are only 5 outputs:
+            *           2 (#samples) * 2 (fastp+fastqc) + 1 (multiqc)
+            * Result:   Test SUCCESS
+            ***************************************************************/
+
+
+    test("-profile INV_test_default - invalid parameter - static+reference_selection_db") {
+        /* Result: Invalid parameter combination is currently caught by omnifluss.nf parameter sanity check */
+
+        setup {
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
+
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                input                       = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta         = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                // !!! the following two should not work together
+                reference_selection         = 'static'
+                reference_selection_db      = "${launchDir}/segment_db"
+                consensus_mincov            = 5
+                skip_taxonomic_filtering    = true
+                skip_report                 = true
+                outdir                      = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                {assert snapshot(
+                        workflow.success == false,
+                        workflow.exitStatus == 1
+                ).match("Snapshot - Workflow status - static+reference_selection_db")
+                }
+            )
+        }
+    }
+
+    test("-profile INV_test_default - invalid parameter - kma+reference (provided a segment DB path)") {
+        /* Result: Invalid parameter value for reference is currently caught by nf-schema */
+
+        setup {
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
+
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                input                       = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta         = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                // !!! the following two should not work together
+                reference_selection         = 'kma'
+                reference                   = "${launchDir}/segment_db"
+                consensus_mincov            = 5
+                skip_taxonomic_filtering    = true
+                skip_report                 = true
+                outdir                      = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                {assert snapshot(
+                        workflow.success == false,
+                        workflow.exitStatus == 1
+                ).match("Snapshot - Workflow status - kma+reference (provided a segment DB path)")
+                }
+            )
+        }
+    }
+
+    test("-profile INV_test_default - invalid parameter - kma+reference (single FASTA file; single sequence)") {
+        /* Result: Invalid parameter combination is currently caught by omnifluss.nf parameter sanity check */
+
+        setup {
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/genome/PB2.MZ707484.1.fasta"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
+
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                input                       = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta         = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                // !!! the following two should not work together
+                reference_selection         = 'kma'
+                reference                   = "${launchDir}/PB2.MZ707484.1.fasta"
+                consensus_mincov            = 5
+                skip_taxonomic_filtering    = true
+                skip_report                 = true
+                outdir                      = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                {assert snapshot(
+                        workflow.success == false,
+                        workflow.exitStatus == 1
+                ).match("Snapshot - Workflow status - kma+reference (single FASTA file; single sequence)")
+                }
+            )
+        }
+    }
+}
