@@ -54,8 +54,13 @@ process KMA {
     touch ${prefix}.fsa \\
     touch ${prefix}.aln \\
     touch ${prefix}.frag.gz \\
-    touch ${prefix}.spa \\
     ${create_mat}
+
+    echo -e \
+        '#Template\tNum\tScore\tExpected\tTemplate_length\tQuery_Coverage\tTemplate_Coverage\tDepth\ttot_query_Coverage\ttot_template_Coverage\ttot_depth\tq_value\tp_value' > ${prefix}.spa
+    echo -e \
+        'ENA|PQ615339|PQ615339.1InfluenzaAvirus(A/California/173/2024(H5N1))segment7matrixprotein2(M2)andmatrixprotein1(M1)genescompletecds.\t4\t22907356\t9037744\t1974\t3.51\t46.61\t11604.54\t3.51\t46.61\t11604.54\t6021772.79\t1.0e-26' >> ${prefix}.spa
+
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
