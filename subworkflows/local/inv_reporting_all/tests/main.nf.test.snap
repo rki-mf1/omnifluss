@@ -1,0 +1,82 @@
+{
+    "complete data": {
+        "content": [
+            [
+                "N_content_and_Ambiguous_calls.csv:md5,7f173d58d0a2f71bde0933f29ccc8ea9"
+            ],
+            [
+                "kraken_classification.csv:md5,e7c1324fdd1e5705b8d3f548a0cab9f3"
+            ],
+            [
+                "mapping_statistics.csv:md5,5f50281a09ccc0373edde59061cf9ac3"
+            ],
+            [
+                "read_statistics.csv:md5,5e9eb833f14bcd57e7404df814ac90d3"
+            ],
+            [
+                "top5_references.csv:md5,eefb80b809c0619a29c6605ba9144661"
+            ],
+            [
+                "versions.yml:md5,4e9198990a3bb4697a29462a7995f747"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-24T11:26:31.723937467"
+    },
+    "complete data stub": {
+        "content": [
+            {
+                "0": [
+                    "qc_report.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "versions.yml:md5,4e9198990a3bb4697a29462a7995f747"
+                ],
+                "2": [
+                    "read_statistics.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "3": [
+                    "kraken_classification.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "4": [
+                    "mapping_statistics.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "5": [
+                    "top5_references.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "6": [
+                    "N_content_and_Ambiguous_calls.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "N_content_and_Ambiguous_calls": [
+                    "N_content_and_Ambiguous_calls.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "kraken_classification": [
+                    "kraken_classification.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "mapping_statistics": [
+                    "mapping_statistics.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "read_statistics": [
+                    "read_statistics.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "report": [
+                    "qc_report.html:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "top5_references": [
+                    "top5_references.csv:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "versions": [
+                    "versions.yml:md5,4e9198990a3bb4697a29462a7995f747"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-07-24T11:29:39.344390503"
+    }
+}

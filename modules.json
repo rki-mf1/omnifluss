@@ -100,17 +100,15 @@
                         "git_sha": "46eca555142d6e597729fcb682adcc791796f514",
                         "installed_by": ["bam_markduplicates_picard", "modules"]
                     },
-
                     "samtools/coverage": {
                         "branch": "master",
                         "git_sha": "2d20463181b1c38981a02e90d3084b5f9fa8d540",
                         "installed_by": ["modules"]
-
+                    },
                     "samtools/depth": {
                         "branch": "master",
                         "git_sha": "763d4b5c05ffda3ac1ac969dc67f7458cfb2eb1d",
                         "installed_by": ["bam_markduplicates_picard"]
-
                     },
                     "samtools/faidx": {
                         "branch": "master",
@@ -145,6 +143,11 @@
                     "seqkit/grep": {
                         "branch": "master",
                         "git_sha": "06c8865e36741e05ad32ef70ab3fac127486af48",
+                        "installed_by": ["modules"]
+                    },
+                    "seqkit/replace": {
+                        "branch": "master",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
                         "installed_by": ["modules"]
                     },
                     "tabix/tabix": {
