@@ -38,6 +38,9 @@ output:
       type: file
       description: File containing samtools flagstat output
       pattern: "*.{flagstat}"
+  - multiqc_files:
+      type: file
+      description: List of files eligible for a MultiQC report
   - versions:
       type: file
       description: |
