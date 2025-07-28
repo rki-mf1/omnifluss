@@ -1,4 +1,5 @@
-process INV_REPORT {
+process INV_REPORT_RMARKDOWN {
+    cache false
     tag "reporting"
     label 'process_single'
 
@@ -31,7 +32,7 @@ process INV_REPORT {
     script:
     """
     # create report
-    cp -L ${script} report_copied.rmd
+    cp -L ${script} inv_report_copied.rmd
 
     # distinguish between absolute and relative path
     if [[ ${outdir} == /* ]]; then
@@ -40,23 +41,23 @@ process INV_REPORT {
         full_outdir="${projectDir}/${outdir}"
     fi
 
-    Rscript -e "rmarkdown::render('report_copied.rmd', params=list(proj_folder='\${full_outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='\${full_outdir}/qc_report.html')"
+    Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(proj_folder='\${full_outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='\${full_outdir}/qc_report.html')"
     mv \${full_outdir}/qc_report.html .
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        report.rmd: \$(grep 'version:' report_copied.rmd | cut -d ':' -f2)
+        inv_report.rmd: \$(grep 'version:' inv_report_copied.rmd | cut -d ':' -f2)
     END_VERSIONS
     """
 
     stub:
     """
-    cp -L ${script} report_copied.rmd
+    cp -L ${script} inv_report_copied.rmd
     
     touch qc_report.html
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        report.rmd: \$(grep 'version:' report_copied.rmd | cut -d ':' -f2)
+        inv_report.rmd: \$(grep 'version:' inv_report_copied.rmd | cut -d ':' -f2)
     END_VERSIONS
 
     #optional files

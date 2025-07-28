@@ -1,4 +1,4 @@
-name: "INV_REPORT"
+name: "INV_REPORT_RMARKDOWN"
 description: Generate a RMarkdown report in html-format.
 keywords:
   - reporting

@@ -100,7 +100,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_top1fastas   = ch_top1fastas.mix(SEQKIT_GREP.out.filter)
 
         /****************************************************************/
-        /* STEP 4: Patch FASTA header Top1 refrences                    */
+        /* STEP 4: Append segment name to header of Top1 reference      */
         /****************************************************************/
         SEQKIT_REPLACE(
             ch_top1fastas
