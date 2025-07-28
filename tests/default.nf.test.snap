@@ -22,11 +22,11 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-02T09:16:53.785308684"
+        "timestamp": "2025-07-24T15:57:59.823660596"
     },
     "Snapshot - Stable content": {
         "content": [
-            113,
+            129,
             {
                 "BCFTOOLS_FILTER": {
                     "bcftools": 1.2
@@ -91,6 +91,9 @@
                 "SEQKIT_GREP": {
                     "seqkit": "2.8.0"
                 },
+                "SEQKIT_REPLACE": {
+                    "seqkit": "2.9.0"
+                },
                 "TABIX_TABIX": {
                     "tabix": "1.19.1"
                 },
@@ -144,8 +147,8 @@
                 "bwa/mem/SRR31143054_small.bam",
                 "bwa/mem/versions.yml",
                 "cat",
-                "cat/SRR31096286_medium.fa.gz",
-                "cat/SRR31143054_small.fa.gz",
+                "cat/SRR31096286_medium.fasta.gz",
+                "cat/SRR31143054_small.fasta.gz",
                 "fastp",
                 "fastp/SRR31096286_medium.fastp.html",
                 "fastp/SRR31096286_medium.fastp.json",
@@ -453,21 +456,37 @@
                 "samtools/stats/versions.yml",
                 "seqkit",
                 "seqkit/SRR31096286_medium.HA.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.HA.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31096286_medium.MP.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.MP.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31096286_medium.NA.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.NA.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31096286_medium.NP.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.NP.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31096286_medium.NS.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.NS.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31096286_medium.PA.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.PA.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31096286_medium.PB1.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.PB1.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31096286_medium.PB2.top1ref.fa.gz",
+                "seqkit/SRR31096286_medium.PB2.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.HA.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.HA.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.MP.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.MP.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.NA.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.NA.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.NP.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.NP.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.NS.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.NS.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.PA.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.PA.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.PB1.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.PB1.top1ref.standardized.fasta.gz",
                 "seqkit/SRR31143054_small.PB2.top1ref.fa.gz",
+                "seqkit/SRR31143054_small.PB2.top1ref.standardized.fasta.gz",
                 "tabix",
                 "tabix/SRR31096286_medium.adjusted_gt.vcf.gz.tbi",
                 "tabix/SRR31143054_small.adjusted_gt.vcf.gz.tbi",
@@ -493,7 +512,7 @@
                 "SRR31096286_medium.PA.top1id.txt:md5,858d28d112b0bc255c44b22f723d045b",
                 "SRR31096286_medium.PB1.top1id.txt:md5,59361bf8490c252a9d8bc4935c921edf",
                 "SRR31096286_medium.PB2.top1id.txt:md5,2b34aaa21abadaccbf8f6c79f47c9529",
-                "SRR31096286_medium.special_case_variant_mask.bed:md5,88bf2a97b2f3063c04e472ecc4f88517",
+                "SRR31096286_medium.special_case_variant_mask.bed:md5,2851442a1e943a847d46791aa1c388f8",
                 "SRR31143054_small.HA.top1id.txt:md5,3df9aca526dabef4bfd2a79a81b86125",
                 "SRR31143054_small.MP.top1id.txt:md5,8e2c5fb43b111698a8d23d9591d29c63",
                 "SRR31143054_small.NA.top1id.txt:md5,6d5153d42ade374ea43b72e0f12d65db",
@@ -561,21 +580,37 @@
                 "versions.yml:md5,b22bf6eb0b4e66abf1cd836a6ba2640d",
                 "versions.yml:md5,6514d4da1f2a9f3b4627afc2c6b05fb4",
                 "SRR31096286_medium.HA.top1ref.fa.gz:md5,63b6c8e526b50258042aef0cf5a314b3",
+                "SRR31096286_medium.HA.top1ref.standardized.fasta.gz:md5,010d0d5a01d1f801bc790e24ae5393c9",
                 "SRR31096286_medium.MP.top1ref.fa.gz:md5,3e2ee7287bca18575c8d8b0d94bcf938",
+                "SRR31096286_medium.MP.top1ref.standardized.fasta.gz:md5,c4fdecaa1fd277b88deab7fe296acc1d",
                 "SRR31096286_medium.NA.top1ref.fa.gz:md5,d2ed5a65ab950b9408a935b7d832bd6c",
+                "SRR31096286_medium.NA.top1ref.standardized.fasta.gz:md5,fbe02c20807b6ee745d90f8d611bbb18",
                 "SRR31096286_medium.NP.top1ref.fa.gz:md5,a0003f5c7ee2bea42124902da5e4fc43",
+                "SRR31096286_medium.NP.top1ref.standardized.fasta.gz:md5,5335a4cb05df644f4706c8efaac4bd29",
                 "SRR31096286_medium.NS.top1ref.fa.gz:md5,b16b17b2e97070a9b8c40782987d2bcd",
+                "SRR31096286_medium.NS.top1ref.standardized.fasta.gz:md5,4860d9678b7c0b040e9f5cff2321d3a9",
                 "SRR31096286_medium.PA.top1ref.fa.gz:md5,d70d2ac64447f5d41f8f8dfef0eeeaab",
+                "SRR31096286_medium.PA.top1ref.standardized.fasta.gz:md5,94d5479e46a53e7f2c3e16e1a1aaef06",
                 "SRR31096286_medium.PB1.top1ref.fa.gz:md5,991ad417174ae439c54c3b591afa2727",
+                "SRR31096286_medium.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
                 "SRR31096286_medium.PB2.top1ref.fa.gz:md5,29e4e4b26b57e01e30737f00b8dc70f2",
+                "SRR31096286_medium.PB2.top1ref.standardized.fasta.gz:md5,ca8b7d63269f304b093019af4652a2dd",
                 "SRR31143054_small.HA.top1ref.fa.gz:md5,63b6c8e526b50258042aef0cf5a314b3",
+                "SRR31143054_small.HA.top1ref.standardized.fasta.gz:md5,010d0d5a01d1f801bc790e24ae5393c9",
                 "SRR31143054_small.MP.top1ref.fa.gz:md5,3e2ee7287bca18575c8d8b0d94bcf938",
+                "SRR31143054_small.MP.top1ref.standardized.fasta.gz:md5,c4fdecaa1fd277b88deab7fe296acc1d",
                 "SRR31143054_small.NA.top1ref.fa.gz:md5,d2ed5a65ab950b9408a935b7d832bd6c",
+                "SRR31143054_small.NA.top1ref.standardized.fasta.gz:md5,fbe02c20807b6ee745d90f8d611bbb18",
                 "SRR31143054_small.NP.top1ref.fa.gz:md5,a0003f5c7ee2bea42124902da5e4fc43",
+                "SRR31143054_small.NP.top1ref.standardized.fasta.gz:md5,5335a4cb05df644f4706c8efaac4bd29",
                 "SRR31143054_small.NS.top1ref.fa.gz:md5,b16b17b2e97070a9b8c40782987d2bcd",
+                "SRR31143054_small.NS.top1ref.standardized.fasta.gz:md5,4860d9678b7c0b040e9f5cff2321d3a9",
                 "SRR31143054_small.PA.top1ref.fa.gz:md5,d70d2ac64447f5d41f8f8dfef0eeeaab",
+                "SRR31143054_small.PA.top1ref.standardized.fasta.gz:md5,94d5479e46a53e7f2c3e16e1a1aaef06",
                 "SRR31143054_small.PB1.top1ref.fa.gz:md5,991ad417174ae439c54c3b591afa2727",
+                "SRR31143054_small.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
                 "SRR31143054_small.PB2.top1ref.fa.gz:md5,57e24d9d701da129a28c8945d80891a8",
+                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f",
                 "versions.yml:md5,c6ecc5b5efa5f90219c6d216e4bb77a4"
             ]
         ],
@@ -583,11 +618,11 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-02T09:16:42.49383193"
+        "timestamp": "2025-07-24T15:57:47.181554438"
     },
     "Snapshot - Stub trace": {
         "content": [
-            113,
+            129,
             true,
             [
                 "SRR31096286_medium.normed.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -769,6 +804,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-02T09:17:57.440177196"
+        "timestamp": "2025-07-24T15:59:12.256462486"
     }
 }
