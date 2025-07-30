@@ -206,6 +206,7 @@ workflow OMNIFLUSS {
         )
         ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
         ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
+        ch_multiqc_files     = ch_multiqc_files.mix(BAM_SAMTOOLS_STATS_ALL.out.multiqc_files)
     }
 
     //
