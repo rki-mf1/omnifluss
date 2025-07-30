@@ -1,0 +1,27 @@
+name: gh-pages-deploy
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+    paths:
+      - 'docs/*.md'
+      - 'mkdocs.yml'
+
+jobs:
+  gh-pages-deploy-job:
+    name: build nf env
+    runs-on: "ubuntu-latest"
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Auto-deploy gh-pages          
+        uses: mhausenblas/mkdocs-deploy-gh-pages@1.26
+        env:
+          CONFIG_FILE: mkdocs.yml
+          GITHUB_TOKEN:  ${{ secrets.GITHUB_TOKEN }}

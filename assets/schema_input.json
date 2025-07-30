@@ -1,6 +1,6 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/rki-mf1/omnifluss/master/assets/schema_input.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/rki-mf1/omnifluss/main/assets/schema_input.json",
     "title": "rki-mf1/omnifluss pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",

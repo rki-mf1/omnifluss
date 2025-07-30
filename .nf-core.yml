@@ -1,44 +1,52 @@
 lint:
   files_exist:
-  - CODE_OF_CONDUCT.md
-  - assets/nf-core-omnifluss_logo_light.png
-  - docs/images/nf-core-omnifluss_logo_light.png
-  - docs/images/nf-core-omnifluss_logo_dark.png
-  - .github/ISSUE_TEMPLATE/config.yml
-  - .github/workflows/awstest.yml
-  - .github/workflows/awsfulltest.yml
-  - .github/workflows/branch.yml
-  - .github/workflows/ci.yml
-  - .github/workflows/linting_comment.yml
-  - .github/workflows/linting.yml
-  - .github/.dockstore.yml
-  - .github/CONTRIBUTING.md
-  - .github/PULL_REQUEST_TEMPLATE.md
-  - conf/igenomes.config
-  - conf/igenomes.config
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-omnifluss_logo_light.png
+    - docs/images/nf-core-omnifluss_logo_light.png
+    - docs/images/nf-core-omnifluss_logo_dark.png
+    - .github/ISSUE_TEMPLATE/config.yml
+    - .github/workflows/awstest.yml
+    - .github/workflows/awsfulltest.yml
+    - .github/workflows/branch.yml
+    - .github/workflows/ci.yml
+    - .github/workflows/linting_comment.yml
+    - .github/workflows/linting.yml
+    - .github/.dockstore.yml
+    - .github/CONTRIBUTING.md
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - conf/igenomes.config
+    - conf/igenomes_ignored.config
   files_unchanged:
-  - CODE_OF_CONDUCT.md
-  - assets/nf-core-omnifluss_logo_light.png
-  - docs/images/nf-core-omnifluss_logo_light.png
-  - docs/images/nf-core-omnifluss_logo_dark.png
-  - .github/ISSUE_TEMPLATE/bug_report.yml
+    - CODE_OF_CONDUCT.md
+    - assets/nf-core-omnifluss_logo_light.png
+    - docs/images/nf-core-omnifluss_logo_light.png
+    - docs/images/nf-core-omnifluss_logo_dark.png
+    - .github/ISSUE_TEMPLATE/bug_report.yml
   multiqc_config:
-  - report_comment
+    - report_comment
   nextflow_config:
-  - manifest.name
-  - manifest.homePage
-  - process.cpus
-  - process.memory
-  - process.time
-  - custom_config
+    - manifest.name
+    - manifest.homePage
+    - process.cpus
+    - process.memory
+    - process.time
+    - custom_config
   readme:
-  - nextflow_badge
-nf_core_version: 2.14.1
+    - nextflow_badge
+nf_core_version: 3.3.1
 repository_type: pipeline
 template:
-  prefix: rki-mf1
-  skip:
-  - ci
-  - github_badges
-  - igenomes
-  - nf_core_configs
+  author: me
+  description: Omnifluss is a genome reconstruction pipeline for different viruses;
+    it's a Nextflow pipeline based on the nf-core pipeline template.
+  force: false
+  is_nfcore: false
+  name: omnifluss
+  org: rki-mf1
+  outdir: .
+  skip_features:
+    - ci
+    - github_badges
+    - igenomes
+    - nf_core_configs
+  version: 1.0dev

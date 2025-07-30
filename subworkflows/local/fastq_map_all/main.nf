@@ -12,9 +12,10 @@ workflow FASTQ_MAP_ALL {
     ch_fai_index    // channel: [ val(meta), index ]
 
     main:
-    ch_bam              = Channel.empty()
-    ch_bai              = Channel.empty()
-    ch_versions         = Channel.empty()
+    ch_bam                    = Channel.empty()
+    ch_bai                    = Channel.empty()
+    ch_versions               = Channel.empty()
+    ch_markduplicates_metrics = Channel.empty()
     //for multiqc
     ch_multiqc_files    = Channel.empty()
 
@@ -41,6 +42,7 @@ workflow FASTQ_MAP_ALL {
         )
         ch_bam      = BAM_MARKDUPLICATES_PICARD.out.bam
         ch_bai      = BAM_MARKDUPLICATES_PICARD.out.bai
+        ch_markduplicates_metrics     = BAM_MARKDUPLICATES_PICARD.out.metrics
         ch_versions = ch_versions.mix(BAM_MARKDUPLICATES_PICARD.out.versions.first())
         //MultiQC
         ch_samtools_stats               = BAM_MARKDUPLICATES_PICARD.out.stats.map{it[1]}
@@ -52,11 +54,11 @@ workflow FASTQ_MAP_ALL {
     }
 
     emit:
-    bam           = ch_bam
-    bai           = ch_bai
-    versions      = ch_versions
+    bam                          = ch_bam
+    bai                          = ch_bai
+    markduplicates_metrics       = ch_markduplicates_metrics
+    versions                     = ch_versions
     //MultiQC
     multiqc_files = ch_multiqc_files
-
 }
 
