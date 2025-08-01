@@ -22,7 +22,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-24T15:57:59.823660596"
+        "timestamp": "2025-08-01T11:53:13.394079745"
     },
     "Snapshot - Stable content": {
         "content": [
@@ -59,9 +59,8 @@
                 "INV_GET_DELETIONS_PYVCF": {
                     "get_deletions.py": "1.0.1"
                 },
-                "INV_GET_TOP1_REFERENCE_GREP": {
-                    "GNU coreutils": null,
-                    "GNU grep": 3.4
+                "INV_GET_TOP1_REFERENCE_AWK": {
+                    "GNU coreutils": 9.5
                 },
                 "INV_PREPARE_REFERENCE": {
                     "prep_reference.py": "1.0.1"
@@ -618,7 +617,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-24T15:57:47.181554438"
+        "timestamp": "2025-08-01T11:53:02.328547956"
     },
     "Snapshot - Stub trace": {
         "content": [
@@ -804,6 +803,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-07-24T15:59:12.256462486"
+        "timestamp": "2025-08-01T11:54:15.73776246"
     }
 }
