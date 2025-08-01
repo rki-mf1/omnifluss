@@ -1,5 +1,5 @@
 include { KMA }                         from '../../../modules/local/inv_reference_selection_kma/main'
-include { INV_GET_TOP1_REFERENCE_GREP } from '../../../modules/local/inv_reference_selection_grep/main'
+include { INV_GET_TOP1_REFERENCE_AWK } from '../../../modules/local/inv_reference_selection_awk/main'
 include { CAT_CAT }                     from '../../../modules/nf-core/cat/cat/main'
 include { SEQKIT_GREP }                 from '../../../modules/nf-core/seqkit/grep/main.nf'
 include { SEQKIT_REPLACE }              from '../../../modules/nf-core/seqkit/replace/main.nf'
@@ -71,11 +71,11 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         /****************************************************************/
         /* STEP 2: Get ID of Top1 refrences                             */
         /****************************************************************/
-        INV_GET_TOP1_REFERENCE_GREP(
+        INV_GET_TOP1_REFERENCE_AWK(
             ch_kma_spa.valid
         )
-        ch_versions = ch_versions.mix(INV_GET_TOP1_REFERENCE_GREP.out.versions.first())
-        ch_top1ids  = ch_top1ids.mix(INV_GET_TOP1_REFERENCE_GREP.out.txt)
+        ch_versions = ch_versions.mix(INV_GET_TOP1_REFERENCE_AWK.out.versions.first())
+        ch_top1ids  = ch_top1ids.mix(INV_GET_TOP1_REFERENCE_AWK.out.txt)
 
         /****************************************************************/
         /* STEP 3: Get FASTA of Top1 refrences                          */

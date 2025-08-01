@@ -1,10 +1,10 @@
-process INV_GET_TOP1_REFERENCE_GREP {
+process INV_GET_TOP1_REFERENCE_AWK {
     tag "$meta.id"
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/grep:3.4--hf43ccf4_4' :
-        'biocontainers/grep:3.4--hf43ccf4_4' }"
+        'https://depot.galaxyproject.org/singularity/coreutils:9.5' :
+        'biocontainers/coreutils:9.5' }"
 
     input:
     tuple val(meta), path(spa)
@@ -21,14 +21,10 @@ process INV_GET_TOP1_REFERENCE_GREP {
     def prefix = task.ext.prefix ?: "${spa}".split('\\.').take(2).join('.')
 
     """
-    grep -v "#" ${spa} | \\
-        head -n 1 | \\
-        cut -f 1 \\
-        > ${prefix}.top1id.txt
+    awk -F'\t' '\$0 !~ /^#/ {print \$1; exit}' ${spa} > ${prefix}.top1id.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        GNU grep: \$(grep --version | head -n 1 | cut -d ')' -f 2)
         GNU coreutils: \$(cut --version | head -n 1 | cut -d ')' -f 2)
     END_VERSIONS
     """
@@ -41,7 +37,6 @@ process INV_GET_TOP1_REFERENCE_GREP {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        GNU grep: \$(grep --version | head -n 1 | cut -d ')' -f 2)
         GNU coreutils: \$(cut --version | head -n 1 | cut -d ')' -f 2)
     END_VERSIONS
     """
