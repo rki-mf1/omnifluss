@@ -22,7 +22,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-01T11:53:13.394079745"
+        "timestamp": "2025-08-01T13:20:16.408666033"
     },
     "Snapshot - Stable content": {
         "content": [
@@ -97,7 +97,7 @@
                     "tabix": "1.19.1"
                 },
                 "Workflow": {
-                    "rki-mf1/omnifluss": "v1.0dev"
+                    "rki-mf1/omnifluss": "v0.2.0"
                 }
             },
             [
@@ -617,7 +617,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-01T11:53:02.328547956"
+        "timestamp": "2025-08-01T13:20:05.445576724"
     },
     "Snapshot - Stub trace": {
         "content": [
@@ -803,6 +803,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-01T11:54:15.73776246"
+        "timestamp": "2025-08-01T13:21:15.948853707"
     }
 }
