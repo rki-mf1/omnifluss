@@ -1,5 +1,4 @@
 process KMA {
-    errorStrategy { task.exitStatus == 1 ? 'ignore' : 'terminate' } //allow errors (negative controls/bad samples)
     tag "$meta.id"
     label 'process_low'
 
