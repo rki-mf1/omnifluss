@@ -27,7 +27,7 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
 
     //filter out samples with no reads
     ch_extracted_kraken2_reads = ch_extracted_kraken2_reads.filter { _meta, reads ->
-        file(reads[0]).size() > 20 && file(reads[1]).size() > 20 //empty gzip files are normally of size 20
+        FileCheck.isFileEmpty(reads[0].toFile()) && FileCheck.isFileEmpty(reads[1].toFile())
     }
 
     emit:
