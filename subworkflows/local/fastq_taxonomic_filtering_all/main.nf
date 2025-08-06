@@ -26,8 +26,14 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
     }
 
     //filter out samples with no reads
-    ch_extracted_kraken2_reads = ch_extracted_kraken2_reads.filter { _meta, reads ->
-        file(reads[0]).size() > 20 && file(reads[1]).size() > 20 //empty gzip files are normally of size 20
+    ch_extracted_kraken2_reads = ch_extracted_kraken2_reads.filter { meta, reads ->
+        if (meta.single_end) {
+            // Single-end: check only one file
+            file(reads).size() > 20
+        } else {
+            // Paired-end: check both files
+            file(reads[0]).size() > 20 && file(reads[1]).size() > 20
+        }
     }
 
     emit:
