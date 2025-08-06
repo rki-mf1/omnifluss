@@ -25,9 +25,12 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         ch_versions                = ch_versions.mix(FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.versions)
     }
 
-    //filter out samples with no reads
+    // Filter all samples with no reads in at least one FASTQ file (to consider single-end/ paired-end NGS) of taxonomically classified reads.
+    // Mind the return logic: filter{} emits only items where the condition is true.
     ch_extracted_kraken2_reads = ch_extracted_kraken2_reads.filter { _meta, reads ->
-        FileCheck.isFileEmpty(reads[0].toFile()) && FileCheck.isFileEmpty(reads[1].toFile())
+        boolean firstInPairEmpty  = FileCheck.isFileEmpty(reads[0].toFile())
+        boolean secondInPairEmpty = (reads.size() > 1) ? FileCheck.isFileEmpty(reads[1].toFile()) : false
+        return !firstInPairEmpty && !secondInPairEmpty
     }
 
     emit:
