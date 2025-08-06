@@ -5,20 +5,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## unreleased
 
+## 0.1.0 - [2025-05-26]
+
 ### `Added`
 
-- read QC step
-  - added pipeline parameter for a custom adapter file for `fastp`
-- pipeline skeleton
+- analysis tailored to Influenza short-read data (Illumina) based on Flupipe
+  - updated automatic reference selection with `KMA`, instead of `minimap2`
 
 ## v1.0dev - [date]
 
 Initial release of rki-mf1/omnifluss, created with the [nf-core](https://nf-co.re/) template.
-
-### `Added`
-
-### `Fixed`
-
-### `Dependencies`
-
-### `Deprecated`
