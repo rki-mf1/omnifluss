@@ -87,7 +87,14 @@ nextflow_pipeline {
 
                 // (2)  Check if reference selection was done successfully
                 {
-                    def final_ref_selection_small   = path("$outputDir/inv/SRR31143054_small.prepared_preped.fasta").fasta
+                    def fastaPath = "$outputDir/prepare_reference/SRR31143054_small.prepared_preped.fasta"
+                    def fastaFile = new File(fastaPath)
+
+                    if (!fastaFile.exists()) {
+                        throw new FileNotFoundException("Fasta file not found at: $fastaPath")
+                    }
+
+                    def final_ref_selection_small   = path(fastaPath).fasta
 
                     // regular case
                     assert "ENA|HQ533879|HQ533879_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_|PB2" in final_ref_selection_small
