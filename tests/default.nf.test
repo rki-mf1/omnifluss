@@ -69,8 +69,16 @@ nextflow_pipeline {
                 // Special file handling
                 // (1) Final ref selection is sensitive to FASTA order; compare only consistency in headers
                 {
-                    def final_ref_selection_small   = path("$outputDir/inv/SRR31143054_small.prepared_preped.fasta").fasta
-                    def final_ref_selection_medium  = path("$outputDir/inv/SRR31096286_medium.prepared_preped.fasta").fasta
+                    def fastaPath_small  = "$outputDir/prepare_reference/SRR31143054_small.prepared_preped.fasta"
+                    def fastaPath_medium = "$outputDir/prepare_reference/SRR31096286_medium.prepared_preped.fasta"
+                    def fastaFile_small  = new File(fastaPath_small)
+                    def fastaFile_medium = new File(fastaPath_medium)
+
+                    if (!fastaFile_small.exists())  { throw new FileNotFoundException("Fasta file not found at: $fastaPath_small") }
+                    if (!fastaFile_medium.exists()) { throw new FileNotFoundException("Fasta file not found at: $fastaPath_medium") }
+
+                    def final_ref_selection_small  = path(fastaPath_small).fasta
+                    def final_ref_selection_medium = path(fastaPath_medium).fasta
 
                     assert "ENA|HQ533879|HQ533879_1_Influenza_A_virus__A/Beijing/7/2009_H1N1___segment_1_polymerase_PB2__PB2__gene_complete_cds_|PB2" in final_ref_selection_small
                     assert "ENA|PP877002|PP877002_1_Influenza_A_virus__A/Nebraska/14/2024_H3N2___segment_4_hemagglutinin__HA__gene_complete_cds_|HA" in final_ref_selection_small
