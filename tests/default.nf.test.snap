@@ -22,7 +22,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-06T16:10:45.761374789"
+        "timestamp": "2025-08-07T11:36:00.217101329"
     },
     "Snapshot - Stable content": {
         "content": [
@@ -576,8 +576,6 @@
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "versions.yml:md5,533234b31837cedcb2f3dc88fa52b9fa",
-                "SRR31096286_medium.prepared_preped.fasta:md5,7ee69d69ea00d9b787b2aeca3b959e1f",
-                "SRR31143054_small.prepared_preped.fasta:md5,b40fa8eb41c6710b433654c3a19aed2d",
                 "versions.yml:md5,e231fa4ea19736f379f913eb2b5040bd",
                 "versions.yml:md5,2ec585b2733c73676735258cc9d731c0",
                 "SRR31096286_medium.special_case_variant_mask.bed:md5,2851442a1e943a847d46791aa1c388f8",
@@ -627,7 +625,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-06T16:10:31.137531793"
+        "timestamp": "2025-08-07T11:35:48.602049538"
     },
     "Snapshot - Stub trace": {
         "content": [
@@ -816,6 +814,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-06T16:14:12.91365907"
+        "timestamp": "2025-08-07T11:38:57.765689971"
     }
 }
