@@ -29,17 +29,14 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         ch_versions                     = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions)
 
         // filter empty files
-        def isFastqEmptyFunctor = branchCriteria {_meta, reads ->
-            boolean firstInPairEmpty        = FileCheck.isFileEmpty(reads[0].toFile())
-            boolean secondInPairEmpty       = (reads.size() > 1) ? FileCheck.isFileEmpty(reads[1].toFile()) : false
-            boolean atLeastOneFastqEmpty    = firstInPairEmpty || secondInPairEmpty
-            // Here, the empty file channel can be used for logging/reporting
-            empty: atLeastOneFastqEmpty
-            nonempty: !atLeastOneFastqEmpty
+        def isFastqEmptyFunction = branchCriteria {_meta, reads ->
+            boolean isEmpty = (_meta.single_end) ? FileCheck.isFileEmpty(reads.toFile()) : FileCheck.isFileEmpty(reads[0].toFile()) && FileCheck.isFileEmpty(reads[1].toFile())
+            empty: isEmpty
+            nonempty: !isEmpty
         }
 
         // Scenario: KRAKEN returns empty FASTQ files because no reads got assigned with any given taxID
-        _ch_classified_reads_fastq = _ch_classified_reads_fastq.branch(isFastqEmptyFunctor)
+        _ch_classified_reads_fastq = _ch_classified_reads_fastq.branch(isFastqEmptyFunction)
 
         // KRAKENTOOLS
         KRAKENTOOLS_EXTRACTKRAKENREADS ( val_taxid, _ch_classified_reads_assignment, _ch_classified_reads_fastq.nonempty, ch_kraken2_report )
@@ -48,7 +45,7 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
 
         // filter empty files
         // Scenario: KRAKEN returned non-empty FASTQ files but all reads were assigned to off-target species w.r.t. taxIDs given to KRAKENTOOLS'
-        ch_extracted_kraken2_reads = ch_extracted_kraken2_reads.branch(isFastqEmptyFunctor)
+        ch_extracted_kraken2_reads = ch_extracted_kraken2_reads.branch(isFastqEmptyFunction)
     }
 
     emit:
