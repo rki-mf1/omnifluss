@@ -1,4 +1,6 @@
-include { FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS } from '../../nf-core/fastq_extract_kraken_krakentools/main'
+include { KRAKEN2_KRAKEN2 } from '../../../nf-core/kraken2/kraken2/main'
+include { KRAKENTOOLS_EXTRACTKRAKENREADS } from '../../../nf-core/krakentools/extractkrakenreads/main'
+
 
 workflow FASTQ_TAXONOMIC_FILTERING_ALL {
     take:
