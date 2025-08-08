@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - updated `CITATIONS.md`
 - fixed empty read file handling before and after `KRAKENTOOLS_EXTRACTKRAKENREADS`
 - fixed weird signaling error with `grep` replaced with `awk`
+- small output structure adjustments
 
 ### `Dependencies`
 
