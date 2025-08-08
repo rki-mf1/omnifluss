@@ -80,9 +80,7 @@
                     
                 ],
                 "2": [
-                    [
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
+                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "3": [
                     "versions.yml:md5,16f74c5631271ee9a681a9d291f04f2a",
@@ -101,9 +99,7 @@
                     ]
                 ],
                 "multiqc_files": [
-                    [
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
+                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "versions": [
                     "versions.yml:md5,16f74c5631271ee9a681a9d291f04f2a",
@@ -204,9 +200,7 @@
                     
                 ],
                 "2": [
-                    [
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
+                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "3": [
                     "versions.yml:md5,16f74c5631271ee9a681a9d291f04f2a",
@@ -225,9 +219,7 @@
                     ]
                 ],
                 "multiqc_files": [
-                    [
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
+                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
                 ],
                 "versions": [
                     "versions.yml:md5,16f74c5631271ee9a681a9d291f04f2a",
