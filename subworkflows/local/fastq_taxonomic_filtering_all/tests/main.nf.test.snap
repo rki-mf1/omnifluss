@@ -1,4 +1,65 @@
 {
+    "sarscov2 - single_end": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.extracted_kraken2_read.fastq.gz:md5,f4296dfe8313535ec8a6700073b96e27"
+                    ]
+                ],
+                "2": [
+                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                ],
+                "3": [
+                    "versions.yml:md5,1c34447f43f01ec27ddc7210fb499e05",
+                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
+                ],
+                "extracted_kraken2_reads": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.extracted_kraken2_read.fastq.gz:md5,f4296dfe8313535ec8a6700073b96e27"
+                    ]
+                ],
+                "kraken2_report": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": true
+                        },
+                        "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                    ]
+                ],
+                "multiqc_files": [
+                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                ],
+                "versions": [
+                    "versions.yml:md5,1c34447f43f01ec27ddc7210fb499e05",
+                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-08-08T15:27:22.903163282"
+    },
     "sarscov2 - single_end - stub": {
         "content": [
             {
@@ -42,9 +103,76 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
+            "nextflow": "24.10.4"
         },
-        "timestamp": "2025-08-08T14:21:18.526877682"
+        "timestamp": "2025-08-08T14:49:26.445121877"
+    },
+    "sarscov2 - paired_end": {
+        "content": [
+            {
+                "0": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                    ]
+                ],
+                "1": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        [
+                            "test.extracted_kraken2_read_1.fastq.gz:md5,f4296dfe8313535ec8a6700073b96e27",
+                            "test.extracted_kraken2_read_2.fastq.gz:md5,2126281657f12a19d697ac5940403e7e"
+                        ]
+                    ]
+                ],
+                "2": [
+                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                ],
+                "3": [
+                    "versions.yml:md5,1c34447f43f01ec27ddc7210fb499e05",
+                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
+                ],
+                "extracted_kraken2_reads": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        [
+                            "test.extracted_kraken2_read_1.fastq.gz:md5,f4296dfe8313535ec8a6700073b96e27",
+                            "test.extracted_kraken2_read_2.fastq.gz:md5,2126281657f12a19d697ac5940403e7e"
+                        ]
+                    ]
+                ],
+                "kraken2_report": [
+                    [
+                        {
+                            "id": "test",
+                            "single_end": false
+                        },
+                        "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                    ]
+                ],
+                "multiqc_files": [
+                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                ],
+                "versions": [
+                    "versions.yml:md5,1c34447f43f01ec27ddc7210fb499e05",
+                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "24.10.4"
+        },
+        "timestamp": "2025-08-08T14:49:10.712352845"
     },
     "sarscov2 - paired_end - stub": {
         "content": [
@@ -89,8 +217,8 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
+            "nextflow": "24.10.4"
         },
-        "timestamp": "2025-08-08T14:21:35.607263677"
+        "timestamp": "2025-08-08T14:49:42.182523732"
     }
 }
