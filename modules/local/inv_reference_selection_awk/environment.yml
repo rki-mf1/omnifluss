@@ -1,7 +1,6 @@
-name: "inv_get_top1_reference_grep"
+name: "inv_get_top1_reference_awk"
 channels:
   - conda-forge
   - bioconda
 dependencies:
-  - grep==3.4
   - gnu-coreutils==9.5

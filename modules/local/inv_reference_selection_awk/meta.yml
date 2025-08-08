@@ -1,4 +1,4 @@
-name: "INV_GET_TOP1_REFERENCE_GREP"
+name: "INV_GET_TOP1_REFERENCE_AWK"
 description: Read a SPA file (as returned from 'kma -Sparse') and return the ID of the single best reference
 keywords:
   - reference
