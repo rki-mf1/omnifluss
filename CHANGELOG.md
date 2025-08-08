@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - restrictions for input reference parameters
 - krakentools parameter to not include potential tax parents
 - updated `CITATIONS.md`
+- fixed empty read file handling before and after `KRAKENTOOLS_EXTRACTKRAKENREADS`
+- fixed weird signaling error with `grep` replaced with `awk`
 
 ### `Dependencies`
 
