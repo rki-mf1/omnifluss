@@ -17,7 +17,6 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
 
     _ch_classified_reads_assignment = Channel.empty()
     _ch_classified_reads_fastq      = Channel.empty()
-    _ch_kraken2_report              = Channel.empty()
 
     if (tools.split(',').contains('kraken2')) {
 
@@ -25,7 +24,8 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         KRAKEN2_KRAKEN2 ( ch_reads, ch_db, true, true )
         _ch_classified_reads_assignment = KRAKEN2_KRAKEN2.out.classified_reads_assignment
         _ch_classified_reads_fastq      = KRAKEN2_KRAKEN2.out.classified_reads_fastq
-        _ch_kraken2_report              = KRAKEN2_KRAKEN2.out.report
+        ch_kraken2_report               = KRAKEN2_KRAKEN2.out.report
+        ch_multiqc_files                = ch_kraken2_report.map{it[1]}
         ch_versions                     = ch_versions.mix(KRAKEN2_KRAKEN2.out.versions)
 
         // filter empty files
@@ -42,11 +42,9 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         _ch_classified_reads_fastq = _ch_classified_reads_fastq.branch(isFastqEmptyFunctor)
 
         // KRAKENTOOLS
-        KRAKENTOOLS_EXTRACTKRAKENREADS ( val_taxid, _ch_classified_reads_assignment, _ch_classified_reads_fastq.nonempty, _ch_kraken2_report )
-        ch_kraken2_report          = FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.kraken2_report
-        ch_extracted_kraken2_reads = FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.extracted_kraken2_reads
-        ch_multiqc_files           = ch_multiqc_files.mix(FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.multiqc_files.collect())
-        ch_versions                = ch_versions.mix(FASTQ_EXTRACT_KRAKEN_KRAKENTOOLS.out.versions)
+        KRAKENTOOLS_EXTRACTKRAKENREADS ( val_taxid, _ch_classified_reads_assignment, _ch_classified_reads_fastq.nonempty, ch_kraken2_report )
+        ch_extracted_kraken2_reads = KRAKENTOOLS_EXTRACTKRAKENREADS.out.extracted_kraken2_reads
+        ch_versions                = ch_versions.mix(KRAKENTOOLS_EXTRACTKRAKENREADS.out.versions)
 
         // filter empty files
         // Scenario: KRAKEN returned non-empty FASTQ files but all reads were assigned to off-target species w.r.t. taxIDs given to KRAKENTOOLS' 
