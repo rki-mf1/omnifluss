@@ -21,7 +21,7 @@ process INV_GET_TOP1_REFERENCE_AWK {
     def prefix = task.ext.prefix ?: "${spa}".split('\\.').take(2).join('.')
 
     """
-    awk -F'\t' '\$0 !~ /^#/ {print \$1; exit}' ${spa} > ${prefix}.top1id.txt
+    gawk -F'\t' '\$0 !~ /^#/ {print \$1; exit}' ${spa} > ${prefix}.top1id.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
