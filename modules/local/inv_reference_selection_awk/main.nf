@@ -25,7 +25,7 @@ process INV_GET_TOP1_REFERENCE_AWK {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        GNU coreutils: \$(cut --version | head -n 1 | cut -d ')' -f 2)
+        GNU Awk: \$(gawk --version | head -n 1 | cut -d ' ' -f 3 | cut -d ',' -f 1)
     END_VERSIONS
     """
 
@@ -37,7 +37,7 @@ process INV_GET_TOP1_REFERENCE_AWK {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        GNU coreutils: \$(cut --version | head -n 1 | cut -d ')' -f 2)
+        GNU Awk: \$(gawk --version | head -n 1 | cut -d ' ' -f 3 | cut -d ',' -f 1)
     END_VERSIONS
     """
 }
