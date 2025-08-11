@@ -49,4 +49,4 @@ template:
     - github_badges
     - igenomes
     - nf_core_configs
-  version: 1.0dev
+  version: 0.2.0
