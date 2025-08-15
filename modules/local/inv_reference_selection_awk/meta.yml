@@ -1,0 +1,39 @@
+name: "INV_GET_TOP1_REFERENCE_AWK"
+description: Read a SPA file (as returned from 'kma -Sparse') and return the ID of the single best reference
+keywords:
+  - reference
+  - selection
+  - influenza
+  - kma
+  - top1
+
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. `[ id:'sample' ]`
+  - spa:
+      type: file
+      description: SPA file (Top5 DB matches via KMA)
+      pattern: "*.spa"
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample ID
+        e.g. `[ id:'sample' ]`
+  - txt:
+      type: file
+      description: ID of the best matching reference
+      pattern: "*.top1id.txt"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+
+authors:
+  - "@krannich479"
+maintainers:
+  - "@krannich479"

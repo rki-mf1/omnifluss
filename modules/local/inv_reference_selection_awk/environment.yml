@@ -1,0 +1,5 @@
+name: "inv_get_top1_reference_awk"
+channels:
+  - conda-forge
+dependencies:
+  - gawk==5.3.1

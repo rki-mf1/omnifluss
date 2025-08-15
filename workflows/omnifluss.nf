@@ -8,12 +8,15 @@ include { FASTQ_TAXONOMIC_FILTERING_ALL       } from '../subworkflows/local/fast
 include { FASTA_REFERENCE_SELECTION_ALL       } from '../subworkflows/local/fasta_reference_selection_all/main.nf'
 include { FASTA_PROCESS_REFERENCE_ALL         } from '../subworkflows/local/fasta_process_reference_all'
 include { FASTQ_MAP_ALL                       } from '../subworkflows/local/fastq_map_all'
+include { BAM_GENOMECOV_ALL                   } from '../subworkflows/local/bam_genomecov_all'
 include { BAM_CALL_VARIANT_ALL                } from '../subworkflows/local/bam_call_variant_all'
 include { BAM_SPECIAL_VARIANTS_CASE_ALL       } from '../subworkflows/local/bam_special_variants_case_all'
+include { BAM_SAMTOOLS_STATS_ALL              } from '../subworkflows/local/bam_samtools_stats_all'
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
+include { INV_REPORTING_ALL                   } from '../subworkflows/local/inv_reporting_all'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
-include { paramsSummaryMap                    } from 'plugin/nf-validation'
+include { paramsSummaryMap                    } from 'plugin/nf-schema'
 include { paramsSummaryMultiqc                } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML              } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText              } from '../subworkflows/local/utils_nfcore_omnifluss_pipeline'
@@ -31,11 +34,29 @@ workflow OMNIFLUSS {
     ch_samplesheet                       // channel: [ meta, fastq ]
 
     main:
-    ch_reads            = ch_samplesheet
-    ch_versions         = Channel.empty()
-    ch_multiqc_files    = Channel.empty()
-    ch_final_topRefs    = Channel.empty()
-    ch_spa              = Channel.empty()
+    ch_reads                    = ch_samplesheet
+    ch_versions                 = Channel.empty()
+    ch_multiqc_files            = Channel.empty()
+    ch_final_topRefs            = Channel.empty()
+    ch_fastp_jsons              = Channel.empty() //from here: channels for reporting
+    ch_kraken_reports           = Channel.empty()
+    ch_kma_mapping_refs         = Channel.empty()
+    ch_markduplicates_metrics   = Channel.empty()
+    ch_bedtools_genomecov       = Channel.empty()
+    ch_samtools_coverage        = Channel.empty()
+    ch_samtools_flagstat        = Channel.empty()
+    ch_consensus_calls          = Channel.empty()
+    ch_report                   = Channel.empty()
+
+    //
+    // Parameters' sanity check for those and their combinations that cannot be verified via nf-schema@2.3.0
+    //
+    if (params.reference_selection == "kma" && (params.reference != null || params.reference_selection_db == null)){
+        exit 1, "When selecting 'kma' as 'reference_selection' parameter, 'reference_selection_db' must be specified, 'reference' should not be specified."
+    }
+    else if (params.reference_selection == "static" && (params.reference == null || params.reference_selection_db != null)){
+        exit 1, "When selecting 'static' as 'reference_selection' parameter, 'reference' must be specified, 'reference_selection_db' should not be specified."
+    }
 
     //
     // Read QC
@@ -49,6 +70,7 @@ workflow OMNIFLUSS {
         .trimmed_reads
         | set {ch_reads}
 
+        ch_fastp_jsons = FASTQ_QC_TRIMMING_ALL.out.fastp_jsons.collect{it[1]} //prepared for reporting
         ch_multiqc_files    = ch_multiqc_files.mix(FASTQ_QC_TRIMMING_ALL.out.multiqc_files.collect())
         ch_versions         = ch_versions.mix(FASTQ_QC_TRIMMING_ALL.out.versions)
     }
@@ -66,6 +88,7 @@ workflow OMNIFLUSS {
         .extracted_kraken2_reads
         | set {ch_reads}
 
+        ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]} //prepared for reporting
         ch_multiqc_files  = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
         ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
     }
@@ -79,13 +102,13 @@ workflow OMNIFLUSS {
     }
     else {
         ch_reference_db_fastas = Channel.fromPath("${params.reference_selection_db}/*.fasta")
-            .map{fasta -> 
+            .map{fasta ->
                 def id = fasta.getName().tokenize('.')[0]
                 return tuple([id: id], fasta)
             }
 
         ch_reference_db_index = Channel.fromPath("${params.reference_selection_db}/*.{length.b,seq.b,comp.b,name}")
-            .map{indexfile -> 
+            .map{indexfile ->
                 def id = indexfile.getName().tokenize('.')[0]
                 return [id, indexfile]
             }
@@ -101,8 +124,8 @@ workflow OMNIFLUSS {
             ch_reference_db_fastas,
             ch_reference_db_index
         )
-        ch_spa              = FASTA_REFERENCE_SELECTION_ALL.out.spa             // channel: [ val(meta), [file(spa)] ]      // nf-core style
-        ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs   // channel: [ val(meta), fasta ]            // nf-core style
+        ch_kma_mapping_refs = FASTA_REFERENCE_SELECTION_ALL.out.spa.collect{it[1]} //prepared for reporting
+        ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs
         ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
         // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
     }
@@ -130,11 +153,24 @@ workflow OMNIFLUSS {
         ch_ref,          // channel: [ val(meta), fasta ]
         ch_ref_index     // channel: [ val(meta), fai_index ]
     )
-    ch_mapping          = FASTQ_MAP_ALL.out.bam
-    ch_mapping_index    = FASTQ_MAP_ALL.out.bai
-    ch_versions         = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
-    ch_multiqc_files    = ch_multiqc_files.mix(FASTQ_MAP_ALL.out.multiqc_files)
+    ch_mapping                = FASTQ_MAP_ALL.out.bam
+    ch_mapping_index          = FASTQ_MAP_ALL.out.bai
+    ch_markduplicates_metrics = FASTQ_MAP_ALL.out.markduplicates_metrics.collect{it[1]} //prepared for reporting
+    ch_versions               = ch_versions.mix(FASTQ_MAP_ALL.out.versions)
+    ch_multiqc_files          = ch_multiqc_files.mix(FASTQ_MAP_ALL.out.multiqc_files)
 
+    //
+    // Collecting Data for Report (1/2)
+    //
+    if (! params.skip_report) {
+        BAM_GENOMECOV_ALL(
+            ch_mapping,
+            [],
+            "coverage.tsv",
+            true
+        )
+        ch_bedtools_genomecov = BAM_GENOMECOV_ALL.out.bedtools_cov.collect{it[1]}
+    }
     //
     // Primer clipping // thinking of moving this FASTQ_MAP_ALL (or adding an now subwf), as it's a post-mapping step like picard_remove_duplicates
     //
@@ -160,6 +196,20 @@ workflow OMNIFLUSS {
     ch_versions      = ch_versions.mix(BAM_CALL_VARIANT_ALL.out.versions)
 
     //
+    // Collecting Data for Report (2/2)
+    //
+    if (! params.skip_report) {
+        BAM_SAMTOOLS_STATS_ALL(
+            ch_bam,
+            ch_ref,
+            ch_ref_index
+        )
+        ch_samtools_coverage = BAM_SAMTOOLS_STATS_ALL.out.samtools_cov.collect{it[1]}
+        ch_samtools_flagstat = BAM_SAMTOOLS_STATS_ALL.out.samtools_flagstat.collect{it[1]}
+        ch_multiqc_files     = ch_multiqc_files.mix(BAM_SAMTOOLS_STATS_ALL.out.multiqc_files)
+    }
+
+    //
     // Special INV variant calling
     //
     ch_rescued_variants = Channel.empty()
@@ -180,13 +230,46 @@ workflow OMNIFLUSS {
         params.consensus_caller,
         params.consensus_mincov,
         ch_ref,                             // channel: [ val(meta), fasta ]
-        BAM_CALL_VARIANT_ALL.out.vcf,       // channel: [ val(meta), vcf   ]
-        BAM_CALL_VARIANT_ALL.out.bam,       // channel: [ val(meta), bam   ]
+        ch_vcf,                             // channel: [ val(meta), vcf   ]
+        ch_bam,                             // channel: [ val(meta), bam   ]
         ch_rescued_variants                 // channel: [ val(meta), bed   ]
     )
+    ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
-    // ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+    if (! params.skip_report) {
+        //collect files for report
+        ch_fastp_jsons = ch_fastp_jsons.ifEmpty([])
+        ch_kraken_reports = ch_kraken_reports.ifEmpty([])
+        ch_kma_mapping_refs = ch_kma_mapping_refs.ifEmpty([])
+        ch_markduplicates_metrics = ch_markduplicates_metrics.ifEmpty([])
+        ch_bedtools_genomecov = ch_bedtools_genomecov.ifEmpty([])
+        ch_samtools_coverage = ch_samtools_coverage.ifEmpty([])
+        ch_samtools_flagstat = ch_samtools_flagstat.ifEmpty([])
+        ch_consensus_calls = ch_consensus_calls.ifEmpty([])
+
+        //warning if all input channels for the Omnifluss Report are empty
+        if (ch_fastp_jsons == [] && ch_kraken_reports == [] && ch_kma_mapping_refs == [] && ch_markduplicates_metrics == [] && ch_bedtools_genomecov == [] && ch_samtools_coverage == [] && ch_samtools_flagstat == [] && ch_consensus_calls == []){
+            log.warn "Input for the Omnifluss Report is empty"
+        }
+        //
+        // Reporting
+        //
+        INV_REPORTING_ALL(
+            params.reporting_script,
+            ch_fastp_jsons,
+            ch_kraken_reports,
+            ch_kma_mapping_refs,
+            ch_markduplicates_metrics,
+            ch_bedtools_genomecov,
+            ch_samtools_coverage,
+            ch_samtools_flagstat,
+            ch_consensus_calls,
+            params.outdir
+        )
+        ch_report = INV_REPORTING_ALL.out.report
+        ch_versions = ch_versions.mix(INV_REPORTING_ALL.out.versions)
+    }
 
     //
     // Genome QC
@@ -212,7 +295,7 @@ workflow OMNIFLUSS {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'nf_core_pipeline_software_mqc_versions.yml',
+            name:  'omnifluss_software_'  + 'mqc_'  + 'versions.yml',
             sort: true,
             newLine: true
         ).set { ch_collated_versions }
@@ -220,6 +303,7 @@ workflow OMNIFLUSS {
     //
     // MODULE: MultiQC
     //
+    ch_multiqc_report = Channel.empty()
     if (!params.skip_multiqc) {
         ch_multiqc_config        = Channel.fromPath(
             "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
@@ -233,15 +317,14 @@ workflow OMNIFLUSS {
         summary_params      = paramsSummaryMap(
             workflow, parameters_schema: "nextflow_schema.json")
         ch_workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
-
+        ch_multiqc_files = ch_multiqc_files.mix(
+            ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
             file(params.multiqc_methods_description, checkIfExists: true) :
             file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
         ch_methods_description                = Channel.value(
             methodsDescriptionText(ch_multiqc_custom_methods_description))
 
-        ch_multiqc_files = ch_multiqc_files.mix(
-            ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
         ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
         ch_multiqc_files = ch_multiqc_files.mix(
             ch_methods_description.collectFile(
@@ -250,22 +333,19 @@ workflow OMNIFLUSS {
             )
         )
 
-
-        // ch_multiqc_files.view()
-        // ch_multiqc_config.view()
-        // ch_multiqc_custom_config.view()
-        // ch_multiqc_logo.view()
-
         MULTIQC (
             ch_multiqc_files.collect(),
             ch_multiqc_config.toList(),
             ch_multiqc_custom_config.toList(),
-            ch_multiqc_logo.toList()
+            ch_multiqc_logo.toList(),
+            [],
+            []
         )
-        multiqc_report = MULTIQC.out.report.toList()
+        ch_multiqc_report = MULTIQC.out.report.toList()
     }
     emit:
-    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    multiqc_report = ch_multiqc_report           // channel: /path/to/multiqc_report.html
+    report         = ch_report                   // channel: /path/to/qc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
 }
 

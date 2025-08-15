@@ -1,10 +1,12 @@
 .nextflow*
 work/
-data/
-!data/test_data/*
 results/
 .DS_Store
 testing/
 testing*
 *.pyc
-.nf-test*
+null/
+.vscode/
+.nf-test/
+.nf-test.log*
+site/

@@ -1,0 +1,16 @@
+name: R
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base == 4.4.2
+  - pandoc == 3.6.2
+  - r-data.table == 1.15.4
+  - r-formattable == 0.2.1
+  - r-ggplot2 == 3.5.1
+  - r-kableextra == 1.4.0
+  - r-plyr == 1.8.9
+  - r-rjson == 0.2.23
+  - r-reshape2 == 1.4.4
+  - bioconductor-shortread == 1.64.0
+  - r-dplyr == 1.1.4
