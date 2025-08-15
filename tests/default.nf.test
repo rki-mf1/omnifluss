@@ -42,13 +42,28 @@ nextflow_pipeline {
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             // bam_files: All bam files
-            def bam_files  = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            //def bam_files  = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
             // vcf_files: All vcf files
-            def vcf_files  = getAllFilesFromDir(params.outdir, include: ['**/*.vcf', '**/*.vcf.gz'])
+            //def vcf_files  = getAllFilesFromDir(params.outdir, include: ['**/*.vcf', '**/*.vcf.gz'])
+
+            // Normalize versions - convert outputDir string to File object first
+            def normalizedVersions = [:]
+            def outputDirFile = new File(outputDir)
+            outputDirFile.eachFileRecurse { file ->
+                if (file.name == "versions.yml" && file.exists()) {
+                    def versions = new org.yaml.snakeyaml.Yaml().load(file.text)
+                    versions.each { processPath, toolVersions ->
+                        def processName = processPath.split(':').last()
+                        normalizedVersions[processName] = toolVersions
+                    }
+                }
+            }
+            // Sort the map by keys (process names) for consistent ordering
+            def sortedNormalizedVersions = normalizedVersions.sort()
 
             assertAll(
-                {assert workflow.success},
-                {assert snapshot(
+                { assert workflow.success },
+                { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
@@ -65,6 +80,9 @@ nextflow_pipeline {
 
                     ).match("Snapshot - Stable content")
                 },
+
+                // Versions snapshot as separate assertion
+                { assert snapshot(sortedNormalizedVersions).match("Snapshot - Stable versions") },
 
                 // Special file handling
                 // (1) Final ref selection is sensitive to FASTA order; compare only consistency in headers
@@ -206,14 +224,31 @@ nextflow_pipeline {
             // unstable in the non-stub case since they should be present but empty in the stub case.
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore-stub')
 
+            // Normalize versions - convert outputDir string to File object first
+            def normalizedVersions = [:]
+            def outputDirFile = new File(outputDir)
+            outputDirFile.eachFileRecurse { file ->
+                if (file.name == "versions.yml" && file.exists()) {
+                    def versions = new org.yaml.snakeyaml.Yaml().load(file.text)
+                    versions.each { processPath, toolVersions ->
+                        def processName = processPath.split(':').last()
+                        normalizedVersions[processName] = toolVersions
+                    }
+                }
+            }
+            // Sort the map by keys (process names) for consistent ordering
+            def sortedNormalizedVersions = normalizedVersions.sort()
+
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(
                     workflow.trace.succeeded().size(),
                     workflow.trace.failed().size() == 0,
                     stable_path.isEmpty() ? 'No stable content' : stable_path
-
-                ).match("Snapshot - Stub trace") }
+                    ).match("Snapshot - Stub trace")
+                },
+                // Versions snapshot as separate assertion
+                { assert snapshot(sortedNormalizedVersions).match("Snapshot - Stub versions") }
             )
         }
     }

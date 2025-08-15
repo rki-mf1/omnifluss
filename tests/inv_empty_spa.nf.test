@@ -58,9 +58,24 @@ nextflow_pipeline {
             // vcf_files: All vcf files
             def vcf_files  = getAllFilesFromDir(params.outdir, include: ['**/*.vcf', '**/*.vcf.gz'])
 
+            // Normalize versions - convert outputDir string to File object first
+            def normalizedVersions = [:]
+            def outputDirFile = new File(outputDir)
+            outputDirFile.eachFileRecurse { file ->
+                if (file.name == "versions.yml" && file.exists()) {
+                    def versions = new org.yaml.snakeyaml.Yaml().load(file.text)
+                    versions.each { processPath, toolVersions ->
+                        def processName = processPath.split(':').last()
+                        normalizedVersions[processName] = toolVersions
+                    }
+                }
+            }
+            // Sort the map by keys (process names) for consistent ordering
+            def sortedNormalizedVersions = normalizedVersions.sort()
+
             assertAll(
-                {assert workflow.success},
-                {assert snapshot(
+                { assert workflow.success },
+                { assert snapshot(
                     // Number of successful tasks
                     workflow.trace.succeeded().size(),
                     // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
@@ -72,6 +87,9 @@ nextflow_pipeline {
 
                     ).match("Snapshot - Stable content")
                 },
+
+                // Versions snapshot as separate assertion
+                { assert snapshot(sortedNormalizedVersions).match("Snapshot - Stable versions") },
 
                 // Special file handling
                 // (1)  Check if spa files do or do not have content as expected.

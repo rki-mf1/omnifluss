@@ -1,6 +1,5 @@
 name: "inv_get_top1_reference_awk"
 channels:
   - conda-forge
-  - bioconda
 dependencies:
-  - gnu-coreutils==9.5
+  - gawk==5.3.1
