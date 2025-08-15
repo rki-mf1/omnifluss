@@ -25,7 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed empty read file handling before and after `KRAKENTOOLS_EXTRACTKRAKENREADS`
 - fixed weird signaling error with `grep` replaced with `gawk`
 - small output structure adjustments
-- fixed module versions check; now robust w.r.t. module order and include path
+- fixed module versions test; now robust w.r.t. module order and include path
 
 ### `Dependencies`
 
