@@ -3,8 +3,8 @@ process INV_GET_TOP1_REFERENCE_AWK {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/coreutils:9.5' :
-        'biocontainers/coreutils:9.5' }"
+        'https://depot.galaxyproject.org/singularity/gawk:5.3.1' :
+        'biocontainers/gawk:5.3.1' }"
 
     input:
     tuple val(meta), path(spa)
@@ -21,11 +21,11 @@ process INV_GET_TOP1_REFERENCE_AWK {
     def prefix = task.ext.prefix ?: "${spa}".split('\\.').take(2).join('.')
 
     """
-    awk -F'\t' '\$0 !~ /^#/ {print \$1; exit}' ${spa} > ${prefix}.top1id.txt
+    gawk -F'\t' '\$0 !~ /^#/ {print \$1; exit}' ${spa} > ${prefix}.top1id.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        GNU coreutils: \$(cut --version | head -n 1 | cut -d ')' -f 2)
+        GNU Awk: \$(gawk --version | head -n 1 | cut -d ' ' -f 3 | cut -d ',' -f 1)
     END_VERSIONS
     """
 
@@ -37,7 +37,7 @@ process INV_GET_TOP1_REFERENCE_AWK {
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
-        GNU coreutils: \$(cut --version | head -n 1 | cut -d ')' -f 2)
+        GNU Awk: \$(gawk --version | head -n 1 | cut -d ' ' -f 3 | cut -d ',' -f 1)
     END_VERSIONS
     """
 }

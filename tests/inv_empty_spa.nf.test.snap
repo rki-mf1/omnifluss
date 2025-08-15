@@ -22,7 +22,68 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-07T11:19:26.269569087"
+        "timestamp": "2025-08-14T15:02:17.090228306"
+    },
+    "Snapshot - Stable versions": {
+        "content": [
+            {
+                "BCFTOOLS_CONSENSUS": {
+                    "bcftools": 1.2
+                },
+                "BCFTOOLS_FILTER": {
+                    "bcftools": 1.2
+                },
+                "BWA_MEM": {
+                    "bwa": "0.7.18-r1243-dirty",
+                    "samtools": 1.2
+                },
+                "INV_CREATE_CONSENSUS_MASK_BEDTOOLS": {
+                    "bedtools": "2.31.1"
+                },
+                "INV_GET_DELETIONS_PYVCF": {
+                    "get_deletions.py": "1.0.1"
+                },
+                "INV_GET_TOP1_REFERENCE_AWK": {
+                    "GNU Awk": "5.3.1"
+                },
+                "INV_PREPARE_REFERENCE": {
+                    "prep_reference.py": "1.0.1"
+                },
+                "INV_RESCUE_VARIANTS_PYTHON": {
+                    "rescue_variants.py": "1.0.2"
+                },
+                "INV_SET_GT_BCFTOOLS": {
+                    "add_fake_gt.sh": "1.0.0",
+                    "bcftools": 1.2
+                },
+                "PICARD_MARKDUPLICATES": {
+                    "picard": "3.2.0-1-g3948afb6b"
+                },
+                "SAMTOOLS_FLAGSTAT": {
+                    "samtools": 1.2
+                },
+                "SAMTOOLS_IDXSTATS": {
+                    "samtools": 1.2
+                },
+                "SAMTOOLS_INDEX": {
+                    "samtools": 1.2
+                },
+                "SAMTOOLS_SORT": {
+                    "samtools": 1.2
+                },
+                "SAMTOOLS_STATS": {
+                    "samtools": 1.2
+                },
+                "TABIX_TABIX": {
+                    "tabix": "1.19.1"
+                }
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.3"
+        },
+        "timestamp": "2025-08-14T15:02:06.064807386"
     },
     "Snapshot - Stable content": {
         "content": [
@@ -60,7 +121,7 @@
                     "get_deletions.py": "1.0.1"
                 },
                 "INV_GET_TOP1_REFERENCE_AWK": {
-                    "GNU coreutils": 9.5
+                    "GNU Awk": "5.3.1"
                 },
                 "INV_PREPARE_REFERENCE": {
                     "prep_reference.py": "1.0.1"
@@ -491,11 +552,6 @@
                 "tabix/versions.yml"
             ],
             [
-                "versions.yml:md5,605677c9a9d59a7163744ccf7c58d671",
-                "versions.yml:md5,b29945452a0198cae4e7ee5328737353",
-                "versions.yml:md5,6bd951b3e2194f18e3a560850937d23e",
-                "versions.yml:md5,6866f17957a68c0c275091d845ac1498",
-                "versions.yml:md5,b57c5113d33e036d4359d75ea821c563",
                 "SRR31096286_medium.fastp.json:md5,b17aba999002d03fc6711f0a60513127",
                 "SRR31096286_medium_1.fastp.fastq.gz:md5,1b55381fcb76c38687c0188303e1ad76",
                 "SRR31096286_medium_2.fastp.fastq.gz:md5,35a30d17396a36c7b4352bc609adaa7a",
@@ -516,7 +572,6 @@
                 "SRR31143054_small.PA.top1id.txt:md5,858d28d112b0bc255c44b22f723d045b",
                 "SRR31143054_small.PB1.top1id.txt:md5,59361bf8490c252a9d8bc4935c921edf",
                 "SRR31143054_small.PB2.top1id.txt:md5,80a04c8799cd9aa24a7816a73ee7e7c1",
-                "versions.yml:md5,772a5f6e6730981f21e0ff21db597b65",
                 "SRR31096286_medium.HA.kma.spa:md5,34b691fa04c6f7037ce55762f8931a45",
                 "SRR31096286_medium.MP.kma.spa:md5,b901ad8ac2b6adeab8e6c975692ba087",
                 "SRR31096286_medium.NA.kma.spa:md5,2aa37b6b07373fd0c58916fd27a52d5c",
@@ -567,17 +622,8 @@
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "versions.yml:md5,533234b31837cedcb2f3dc88fa52b9fa",
-                "versions.yml:md5,e231fa4ea19736f379f913eb2b5040bd",
-                "versions.yml:md5,2ec585b2733c73676735258cc9d731c0",
                 "SRR31096286_medium.special_case_variant_mask.bed:md5,2851442a1e943a847d46791aa1c388f8",
                 "SRR31143054_small.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "versions.yml:md5,20b223b531619536cd9cc69d0c1d164b",
-                "versions.yml:md5,d2d620177fb06895580310d5755c6796",
-                "versions.yml:md5,1be689146b822dc66bc039dfe9276b84",
-                "versions.yml:md5,fd48e5f77ffad6aee1615693cfcbbd05",
-                "versions.yml:md5,b22bf6eb0b4e66abf1cd836a6ba2640d",
-                "versions.yml:md5,6514d4da1f2a9f3b4627afc2c6b05fb4",
                 "SRR31096286_medium.MP.top1ref.fa.gz:md5,3e2ee7287bca18575c8d8b0d94bcf938",
                 "SRR31096286_medium.MP.top1ref.standardized.fasta.gz:md5,c4fdecaa1fd277b88deab7fe296acc1d",
                 "SRR31096286_medium.NA.top1ref.fa.gz:md5,d2ed5a65ab950b9408a935b7d832bd6c",
@@ -605,14 +651,13 @@
                 "SRR31143054_small.PB1.top1ref.fa.gz:md5,991ad417174ae439c54c3b591afa2727",
                 "SRR31143054_small.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
                 "SRR31143054_small.PB2.top1ref.fa.gz:md5,57e24d9d701da129a28c8945d80891a8",
-                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f",
-                "versions.yml:md5,c6ecc5b5efa5f90219c6d216e4bb77a4"
+                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-07T11:19:14.655322492"
+        "timestamp": "2025-08-14T15:01:55.180406512"
     }
 }
