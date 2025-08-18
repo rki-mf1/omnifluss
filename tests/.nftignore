@@ -32,6 +32,9 @@ prepare_reference/*.prepared_preped.fasta
 cat/*.fasta.gz
 samtools/*.prepared_preped.fasta.fai
 
+*/versions.yml
+*/*/versions.yml
+
 multiqc/multiqc_data/samtools_alignment_plot.txt
 multiqc/multiqc_data/samtools-stats-dp.txt
 multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt

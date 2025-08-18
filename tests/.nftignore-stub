@@ -11,4 +11,7 @@ fastqc/*_fastqc.{html,zip}
 fastp/*.fastp.{html,log}
 pipeline_info/*.{html,json,txt,yml}
 
+*/versions.yml
+*/*/versions.yml
+
 **/*.gz
