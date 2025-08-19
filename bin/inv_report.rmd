@@ -661,7 +661,7 @@ for (s in c(unique(dt.top.refs.na.filled$sample))) {
 
     ref_content <- setNames(lapply(final_cols, function(x) {
         na.omit(tmp[tmp$segment == x, ]$taxid)
-    }), final_cols)
+    }), final_cols_taxid)
 
   tmp.df <- tibble('sample' = head(tmp$sample,5),
                     'reference hit' = 1:5) %>% add_column(!!!ref_content)
@@ -712,6 +712,9 @@ names(dt.fasta) <- gsub(pattern = "_L00\\d{0,9}_", replacement = "§$%&%", names
 sample_str <- unlist(strsplit(names(dt.fasta), "§$%&%", fixed=TRUE))
 sample.names = unlist(lapply(names(dt.fasta), infer_sample_name))
 segment.names <- unlist(lapply(names(dt.fasta), infer_segment_name))
+
+ordered_segments <- c("HA","NA","MP","NP","NS","PA","PB1","PB2")
+final_cols <- ordered_segments[ordered_segments %in% unique(segment.names)]
 
 # Base Content Probability
 l.res <- baseContent(dt.fasta)
