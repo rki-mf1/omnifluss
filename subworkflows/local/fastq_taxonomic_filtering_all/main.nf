@@ -30,7 +30,7 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
 
         // filter empty files
         def isFastqEmptyFunction = branchCriteria {_meta, reads ->
-            boolean isEmpty = (_meta.single_end) ? FileCheck.isFileEmpty(reads.toFile()) : FileCheck.isFileEmpty(reads[0].toFile()) && FileCheck.isFileEmpty(reads[1].toFile())
+            boolean isEmpty = (_meta.single_end) ? file(reads).countFastq() == 0: file(reads[0]).countFastq() == 0  && file(reads[1]).countFastq() == 0
             empty: isEmpty
             nonempty: !isEmpty
         }
