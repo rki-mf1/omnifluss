@@ -52,6 +52,7 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
 
     kraken2_report          = ch_kraken2_report
     extracted_kraken2_reads = ch_extracted_kraken2_reads.nonempty
+    empty_kraken2_reads     = _ch_classified_reads_fastq.empty
     multiqc_files           = ch_multiqc_files
     versions                = ch_versions
 

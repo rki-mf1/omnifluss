@@ -18,6 +18,8 @@ process INV_REPORT_RMARKDOWN {
     path(samtools_coverage)
     path(samtools_flagstat)
     path(consensus_calls)
+    path(empty_kraken2_reads)
+    path(empty_spa_files)
     val(outdir)
 
     output:
@@ -40,6 +42,11 @@ process INV_REPORT_RMARKDOWN {
     else
         full_outdir="${projectDir}/${outdir}"
     fi
+
+    # move invalid files to sub directory
+    mkdir invalid_files
+    mv ${empty_kraken2_reads} invalid_files
+    mv ${empty_spa_files} invalid_files
 
     Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(proj_folder='\${full_outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='\${full_outdir}/qc_report.html')"
     mv \${full_outdir}/qc_report.html .

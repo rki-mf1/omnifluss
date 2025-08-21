@@ -11,16 +11,18 @@ workflow INV_REPORTING_ALL {
     samtools_coverage
     samtools_flagstat
     consensus_calls
-    outdir
+    empty_kraken2_reads
+    empty_spa_files
 
+    outdir
     main:
-    report                        = Channel.empty()
-    versions                      = Channel.empty()
-    read_statistics               = Channel.empty() //from here on, optional files that are only produced if the necessary input is available
-    kraken_classification         = Channel.empty()
-    mapping_statistics            = Channel.empty()
-    top5_references               = Channel.empty()
-    N_content_and_Ambigiuos_calls = Channel.empty()
+    report                         = Channel.empty()
+    versions                       = Channel.empty()
+    read_statistics                = Channel.empty() //from here on, optional files that are only produced if the necessary input is available
+    kraken_classification          = Channel.empty()
+    mapping_statistics             = Channel.empty()
+    top5_references                = Channel.empty()
+    N_content_and_Ambigiuous_calls = Channel.empty()
 
     INV_REPORT_RMARKDOWN(
         reporting_script,
@@ -32,6 +34,8 @@ workflow INV_REPORTING_ALL {
         samtools_coverage,
         samtools_flagstat,
         consensus_calls,
+        empty_kraken2_reads,
+        empty_spa_files,
         outdir
     )
     report                        = INV_REPORT_RMARKDOWN.out.report

@@ -40,7 +40,9 @@ workflow OMNIFLUSS {
     ch_final_topRefs            = Channel.empty()
     ch_fastp_jsons              = Channel.empty() //from here: channels for reporting
     ch_kraken_reports           = Channel.empty()
+    ch_empty_kraken2_reads      = Channel.empty()
     ch_kma_mapping_refs         = Channel.empty()
+    ch_empty_spa_files          = Channel.empty()
     ch_markduplicates_metrics   = Channel.empty()
     ch_bedtools_genomecov       = Channel.empty()
     ch_samtools_coverage        = Channel.empty()
@@ -88,9 +90,10 @@ workflow OMNIFLUSS {
         .extracted_kraken2_reads
         | set {ch_reads}
 
-        ch_kraken_reports = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]} //prepared for reporting
-        ch_multiqc_files  = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
-        ch_versions       = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
+        ch_empty_kraken2_reads     = FASTQ_TAXONOMIC_FILTERING_ALL.out.empty_kraken2_reads.collect{[1]}//prepared for reporting
+        ch_kraken_reports          = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]} //prepared for reporting
+        ch_multiqc_files           = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
+        ch_versions                = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
     }
 
     //
@@ -125,6 +128,7 @@ workflow OMNIFLUSS {
             ch_reference_db_index
         )
         ch_kma_mapping_refs = FASTA_REFERENCE_SELECTION_ALL.out.spa.collect{it[1]} //prepared for reporting
+        ch_empty_spa_files  = FASTA_REFERENCE_SELECTION_ALL.out.spa_invalid.collect{it[1]} //prepared for reporting
         ch_final_topRefs    = FASTA_REFERENCE_SELECTION_ALL.out.final_topRefs
         ch_versions         = ch_versions.mix(FASTA_REFERENCE_SELECTION_ALL.out.versions)
         // ch_multiqc_files = ch_multiqc_files.mix(FASTA_SELECT_REFERENCE_ALL.out.multiqc_files.collect())
@@ -265,6 +269,8 @@ workflow OMNIFLUSS {
             ch_samtools_coverage,
             ch_samtools_flagstat,
             ch_consensus_calls,
+            ch_empty_kraken2_reads,
+            ch_empty_spa_files,
             params.outdir
         )
         ch_report = INV_REPORTING_ALL.out.report
