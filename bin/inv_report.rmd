@@ -392,6 +392,7 @@ if (length(samples)>stepsize) {
         guides(fill = guide_legend(label.position = "bottom",
                                     title.position = "left", title.vjust = 1)) +
         scale_fill_brewer(palette="Set1", labels = c("Homo Sapiens", "Influenza A", "Influenza B", "unclassified", "Orthomyxoviridae"))
+    print(g)
   }
 } else {
   ggplot(data=df.kraken.barplot, aes(fill=tax, y=Sample, x=ratio)) +
@@ -456,9 +457,9 @@ if (ncol(dt.bamstats_coverage) != 25 ) {
     for (s in ls.segment){
       if (Reduce("|",grepl(s, names(dt.bamstats_coverage)))) {}
       else {
-        dt.bamstats_coverage[,paste("reads mapped [%].", substrRight(s, 2))] <- NA
-        dt.bamstats_coverage[,paste("coverage [%].", substrRight(s, 2))] <- NA
-        dt.bamstats_coverage[,paste("mean depth [bp].", substrRight(s, 2))] <- NA
+        dt.bamstats_coverage[,paste("reads mapped [%].", substrRight(s, nchar(s)-1))] <- NA
+        dt.bamstats_coverage[,paste("coverage [%].", substrRight(s, nchar(s)-1))] <- NA
+        dt.bamstats_coverage[,paste("mean depth [bp].", substrRight(s, nchar(s)-1))] <- NA
         }
   }
 }
@@ -494,7 +495,7 @@ for (s in unique(dt.coverage$sample)){
   for (l in ls.segment){
     if (Reduce("|",grepl(l, unique(tmp$chromosome)))) {}
     else {
-      new_row <- list(s, substrRight(l,2), 0, NA, NA, 50, 1)
+      new_row <- list(s, substrRight(l,nchar(l)-1), 0, NA, NA, 50, 1)
       dt.coverage <- rbind(dt.coverage, new_row)
     }
   }
