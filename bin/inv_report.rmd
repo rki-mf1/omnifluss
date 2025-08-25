@@ -824,7 +824,7 @@ base.content.table <- base.content.table[, names(base.content.table) %in% c("Sam
 ```{r table_base_content, eval = length(l.infiles.fasta.files) != 0}
 # https://stackoverflow.com/questions/2288485/how-to-convert-a-data-frame-column-to-numeric-type
 # Format table
-base.content.table[,1:(length(final_cols)+2)] %>% 
+base.content.table[,1:(length(final_cols)+2)] %>% #length(final_cols)+2 = Sample, base_freq + 1 col per segment
   group_by(Sample) %>% 
   slice(1:4) %>% 
   select(Sample, everything()) %>% 
