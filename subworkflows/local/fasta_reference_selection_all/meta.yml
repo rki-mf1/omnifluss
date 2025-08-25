@@ -61,6 +61,12 @@ output:
         File containing the ranking of top matching references.
         Structure: [ val(meta), path(spa) ]
       pattern: "*.kma.spa"
+  - spa_invalid:
+      type: file
+      description: |
+        File containing only a header (unsuccessful reference selection).
+        Structure: [ val(meta), path(spa) ]
+      pattern: "*.kma.spa"
   - meta:
       type: map
       description: |

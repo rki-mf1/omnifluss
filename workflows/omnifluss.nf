@@ -40,9 +40,9 @@ workflow OMNIFLUSS {
     ch_final_topRefs            = Channel.empty()
     ch_fastp_jsons              = Channel.empty() //from here: channels for reporting
     ch_kraken_reports           = Channel.empty()
-    ch_empty_kraken2_reads      = Channel.empty()
+    ch_empty_kraken2_reads      = Channel.empty() //samples with unsuccessfull read extraction
     ch_kma_mapping_refs         = Channel.empty()
-    ch_empty_spa_files          = Channel.empty()
+    ch_empty_spa_files          = Channel.empty() //samples with unsuccessful reference selection
     ch_markduplicates_metrics   = Channel.empty()
     ch_bedtools_genomecov       = Channel.empty()
     ch_samtools_coverage        = Channel.empty()
@@ -90,7 +90,7 @@ workflow OMNIFLUSS {
         .extracted_kraken2_reads
         | set {ch_reads}
 
-        ch_empty_kraken2_reads     = FASTQ_TAXONOMIC_FILTERING_ALL.out.empty_kraken2_reads.collect{[1]}//prepared for reporting
+        ch_empty_kraken2_reads     = FASTQ_TAXONOMIC_FILTERING_ALL.out.empty_kraken2_reads.collect{it[1]} //prepared for reporting
         ch_kraken_reports          = FASTQ_TAXONOMIC_FILTERING_ALL.out.kraken2_report.collect{it[1]} //prepared for reporting
         ch_multiqc_files           = ch_multiqc_files.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.multiqc_files.collect())
         ch_versions                = ch_versions.mix(FASTQ_TAXONOMIC_FILTERING_ALL.out.versions)
