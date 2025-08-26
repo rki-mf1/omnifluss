@@ -65,6 +65,7 @@ library("tibble")
 
 stepsize=20
 n_content_threshold=5
+ordered_segments <- c("HA","NA","MP","NP","NS","PA","PB1","PB2")
 ```
 ```{r def_functions}
 # input of file listing. requires file names like /path/to/nCoV1.bamstats.txt
@@ -631,7 +632,6 @@ dt.top.refs <- dt.top.refs %>% arrange(sample, segment)
 dt.top.refs <- dt.top.refs[,-3]
 
 present_segments <- unique(dt.top.refs$segment)
-ordered_segments <- c("HA","NA","MP","NP","NS","PA","PB1","PB2")
 final_cols <- ordered_segments[ordered_segments %in% present_segments]
 final_cols_taxid <- paste0("taxid_", final_cols)
 
@@ -713,7 +713,6 @@ sample_str <- unlist(strsplit(names(dt.fasta), "§$%&%", fixed=TRUE))
 sample.names = unlist(lapply(names(dt.fasta), infer_sample_name))
 segment.names <- unlist(lapply(names(dt.fasta), infer_segment_name))
 
-ordered_segments <- c("HA","NA","MP","NP","NS","PA","PB1","PB2")
 final_cols <- ordered_segments[ordered_segments %in% unique(segment.names)]
 
 # Base Content Probability
