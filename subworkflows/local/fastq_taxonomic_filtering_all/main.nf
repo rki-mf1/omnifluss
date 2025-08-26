@@ -31,21 +31,26 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         // filter empty files
         def isFastqEmptyFunction = branchCriteria {meta, reads ->
             boolean isEmpty
-            boolean failedSizeCheck
 
             if (meta.single_end) {
-                if (file(reads).size() == 0){                                                               //filter out files of size 0, otherwise countFastq() crashes
+                if (file(reads).size() == 0){                       //filter out files of size 0, otherwise countFastq() crashes
                     isEmpty = true
                 } else {
-                    failedSizeCheck = file(reads).size() < 500                                              //prefilter files with a small number of reads for counting
-                    isEmpty = (failedSizeCheck) ? file(reads).countFastq() == 0: failedSizeCheck
+                    if (file(reads).size() < 500){                  //prefilter files with a low number of reads
+                        isEmpty = file(reads).countFastq() == 0
+                    } else {
+                        isEmpty = false
+                    }                                   
                 }
             } else {
                 if (file(reads[0]).size() == 0 && file(reads[1]).size() == 0){
                     isEmpty = true
                 } else {
-                    failedSizeCheck = file(reads[0]).size() < 500 && file(reads[1]).size() < 500
-                    isEmpty = (failedSizeCheck) ? file(reads[0]).countFastq() == 0  && file(reads[1]).countFastq() == 0: failedSizeCheck
+                    if (file(reads[0]).size() < 500 && file(reads[1]).size() < 500) {
+                        isEmpty = file(reads[0]).countFastq() == 0  && file(reads[1]).countFastq() == 0
+                    } else {
+                        isEmpty = false
+                    }
                 }
             }
             empty: isEmpty
