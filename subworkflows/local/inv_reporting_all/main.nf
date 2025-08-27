@@ -3,6 +3,7 @@ include { INV_REPORT_RMARKDOWN } from '../../../modules/local/inv_report_rmarkdo
 workflow INV_REPORTING_ALL {
     take:
     reporting_script
+    sample_sheet
     fastp_jsons
     kraken_reports
     mapping_references
@@ -26,6 +27,7 @@ workflow INV_REPORTING_ALL {
 
     INV_REPORT_RMARKDOWN(
         reporting_script,
+        sample_sheet,
         fastp_jsons,
         kraken_reports,
         mapping_references,

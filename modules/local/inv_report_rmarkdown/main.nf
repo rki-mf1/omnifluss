@@ -10,6 +10,7 @@ process INV_REPORT_RMARKDOWN {
 
     input:
     path(script)
+    path(sample_sheet)
     path(fastp_jsons)
     path(kraken_reports)
     path(mapping_references)
@@ -45,10 +46,14 @@ process INV_REPORT_RMARKDOWN {
 
     # move invalid files to sub directory
     mkdir invalid_files
-    mv ${empty_kraken2_reads} invalid_files
-    mv ${empty_spa_files} invalid_files
+    if [[ "${empty_kraken2_reads}" != "" ]]; then
+        mv ${empty_kraken2_reads} invalid_files
+    fi
+    if [[ "${empty_spa_files}" != "" ]]; then
+        mv ${empty_spa_files} invalid_files
+    fi
 
-    Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(proj_folder='\${full_outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}'), output_file='\${full_outdir}/qc_report.html')"
+    Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(proj_folder='\${full_outdir}', min_cov=${params.consensus_mincov}, reference='${params.reference_selection}', information_json='${params.reporting_information}', sample_sheet='${sample_sheet}'), output_file='\${full_outdir}/qc_report.html')"
     mv \${full_outdir}/qc_report.html .
 
     cat <<-END_VERSIONS > versions.yml

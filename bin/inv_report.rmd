@@ -13,6 +13,7 @@ params:
   reference: "none"
   rki_sample_name: true
   information_json: "none"
+  sample_sheet: "none"
   version: "1.0.0"
 ---
 
@@ -127,14 +128,63 @@ collapse_rows_df <- function(df, variable){
 
 ```
 
-`r if (params$information_json != "none") {"## Sequencing Run Information"}`
+`r if (params$information_json != "none" || length(list.files("invalid_files") != 0)) {"## Sequencing Run Information"}`
 ```{r sequencing_information, results="asis"}
+#prints information specified in the JSON file
 if (params$information_json != "none") {
   json_data = unlist(fromJSON(file = params$information_json))
 
   for (key in names(json_data)){
     cat(paste0("<span style='font-size:16px; font-weight:bold'>",key,"</span>: ", "<span style='font-size:16px'>",json_data[key],"</span><br>"))
   }
+}
+
+#prints information about excluded samples
+if (length(list.files("invalid_files") != 0)) {
+
+  samples <- read.csv(file=params$sample_sheet)
+  samples_number <- nrow(samples)
+
+
+  empty_kma <- list.files(path="invalid_files",
+                        pattern = "*.kma.spa$",
+                        full.names = T,
+                        recursive = F)
+
+  empty_fasta <- list.files(path="invalid_files",
+                          pattern = ".gz$",
+                          full.names = T,
+                          recursive = F)
+
+  len_empty_fasta = length(empty_fasta)
+  len_empty_kma = length(empty_kma)
+
+#process empty kma
+if (len_empty_kma != 0) {
+    samples_empty_kma <- sapply(strsplit(sub("invalid_files/","",empty_kma),"\\."),'[',1:2)
+
+    parts <- strsplit(sub("invalid_files/", "", empty_kma),"\\.")
+    samples_empty_kma <- sapply(parts, function(v) sprintf("%s (%s)", v[1], v[2]))
+
+    samples_empty_kma <- sort(samples_empty_kma)
+    samples_empty_kma_string <- paste(samples_empty_kma, collapse=", ")
+    length(samples_empty_kma_string)
+
+    cat(paste0("<br><span style='font-size:16px; font-weight:bold'>", len_empty_kma,"/",samples_number*8," potential sample-segment pairs failed during reference inference:<br></span>"))
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>",samples_empty_kma_string,"<br></span>"))
+}
+
+#process empty fasta
+if (len_empty_fasta != 0) {
+    samples_empty_fasta <- unique(sapply(strsplit(sub("invalid_files/", "", empty_fasta),"\\."),'[',1))
+    len_empty_fasta <- length(samples_empty_fasta)
+    samples_empty_fasta <- sort(samples_empty_fasta)
+    samples_empty_fasta_string <- paste(samples_empty_fasta, sep=", ")
+
+    cat(paste0("<br><span style='font-size:16px; font-weight:bold'>", len_empty_fasta,"/", samples_number, " samples failed during read extraction:<br></span>"))
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>",samples_empty_fasta_string,"<br></span>"))
+}
+
 }
 ```
 

@@ -252,6 +252,9 @@ workflow OMNIFLUSS {
         ch_samtools_flagstat = ch_samtools_flagstat.ifEmpty([])
         ch_consensus_calls = ch_consensus_calls.ifEmpty([])
 
+        ch_empty_kraken2_reads = ch_empty_kraken2_reads.ifEmpty([])
+        ch_empty_spa_files = ch_empty_spa_files.ifEmpty([])
+
         //warning if all input channels for the Omnifluss Report are empty
         if (ch_fastp_jsons == [] && ch_kraken_reports == [] && ch_kma_mapping_refs == [] && ch_markduplicates_metrics == [] && ch_bedtools_genomecov == [] && ch_samtools_coverage == [] && ch_samtools_flagstat == [] && ch_consensus_calls == []){
             log.warn "Input for the Omnifluss Report is empty"
@@ -261,6 +264,7 @@ workflow OMNIFLUSS {
         //
         INV_REPORTING_ALL(
             params.reporting_script,
+            params.input,
             ch_fastp_jsons,
             ch_kraken_reports,
             ch_kma_mapping_refs,
