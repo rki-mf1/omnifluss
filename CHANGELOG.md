@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## unreleased
 
+## 0.2.1 - [2025-08-27]
+
+### `Added`
+
+- fixed filtering function to correctly exclude files without reads after Kraken 2 classification or taxonomic read extraction
+
 ## 0.2.0 - [2025-08-15]
 
 ### `Added`

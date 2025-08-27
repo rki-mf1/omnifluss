@@ -61,9 +61,11 @@ library("rjson")
 library("reshape2")
 library("ShortRead")
 library("dplyr")
+library("tibble")
 
 stepsize=20
 n_content_threshold=5
+ordered_segments <- c("HA","NA","MP","NP","NS","PA","PB1","PB2")
 ```
 ```{r def_functions}
 # input of file listing. requires file names like /path/to/nCoV1.bamstats.txt
@@ -464,15 +466,12 @@ if (ncol(dt.bamstats_coverage) != 25 ) {
   }
 }
 
+segment_order = c(".HA",".NA",".MP",".NP",".NS",".PA",".PB1",".PB2")
+col_order <- unlist(lapply(segment_order, function(seg) { grep(paste0("\\", seg, "$"), names(dt.bamstats_coverage), value = TRUE) }))
+final_order <- c("sample", col_order)
+
 # reorder dataframe columns
-dt.bamstats_coverage <- dt.bamstats_coverage[, c( "sample","reads mapped [%].HA","coverage [%].HA","mean depth [bp].HA",
-                                                  "reads mapped [%].NA","coverage [%].NA","mean depth [bp].NA",
-                                                  "reads mapped [%].MP","coverage [%].MP","mean depth [bp].MP",
-                                                  "reads mapped [%].NP","coverage [%].NP","mean depth [bp].NP",
-                                                  "reads mapped [%].NS","coverage [%].NS","mean depth [bp].NS",
-                                                  "reads mapped [%].PA","coverage [%].PA","mean depth [bp].PA",
-                                                  "reads mapped [%].PB1","coverage [%].PB1","mean depth [bp].PB1",
-                                                  "reads mapped [%].PB2","coverage [%].PB2","mean depth [bp].PB2" )]
+dt.bamstats_coverage <- dt.bamstats_coverage[, ..final_order]
 
 ###################### Joining the 2 datasets ##################################
 colnames(dt.output) <- c("sample", "ref.coverage [bp]", "genome.length", "ref.coverage [fraction]")
@@ -544,7 +543,7 @@ sub.dots <- function(df) {names(df) <- sub("\\.", " ", names(df));df}
 df.mapping.table <- sub.dots(df.mapping.table)
 
 # convert reads mapped per segment column values to mapping rate
-seg_col_range <- seq(6,29, by=3) # taking every third segment column
+seg_col_range <- seq(6,ncol(dt.bamstats_coverage)+4, by=3) # taking every third segment column
 df.mapping.table[, c(seg_col_range)] <- lapply(df.mapping.table[, c(seg_col_range)], function(x) round((x / as.numeric(df.mapping.table$`reads mapped`)*100), digits = 2))
 
 write.csv(  x=df.mapping.table,
@@ -633,6 +632,10 @@ dt.top.refs <- dt.top.refs %>% group_by(sample, segment) %>% arrange(desc(`magic
 dt.top.refs <- dt.top.refs %>% arrange(sample, segment)
 dt.top.refs <- dt.top.refs[,-3]
 
+present_segments <- unique(dt.top.refs$segment)
+final_cols <- ordered_segments[ordered_segments %in% present_segments]
+final_cols_taxid <- paste0("taxid_", final_cols)
+
 dt.top.refs.na.filled <- data.table(sample = as.character(), taxid = as.character(), segment = as.character())
 
 # add placeholder for missing top ref 
@@ -651,29 +654,22 @@ for (smpl in unique(dt.top.refs$sample)) {
 
 df.top.refs.reshaped <- tibble('sample' = character(),
                                 'reference hit' = numeric(),
-                                'taxid_HA' = character(),
-                                'taxid_NA' = character(),
-                                'taxid_MP' = character(),
-                                'taxid_NP' = character(),
-                                'taxid_NS' = character(),
-                                'taxid_PA' = character(),
-                                'taxid_PB1' = character(),
-                                'taxid_PB2' = character())
+                                !!!setNames(lapply(final_cols_taxid, function(x) character()), final_cols_taxid)
+)
 
 for (s in c(unique(dt.top.refs.na.filled$sample))) {
   tmp <- dt.top.refs.na.filled[dt.top.refs.na.filled$sample == s,]
+
+    ref_content <- setNames(lapply(final_cols, function(x) {
+        na.omit(tmp[tmp$segment == x, ]$taxid)
+    }), final_cols_taxid)
+
   tmp.df <- tibble('sample' = head(tmp$sample,5),
-                    'reference hit' = 1:5,
-                    'taxid_HA' = na.omit(tmp[tmp$segment == 'HA',]$taxid),
-                    'taxid_NA' = tmp[tmp$segment == 'NA',]$taxid,
-                    'taxid_MP' = na.omit(tmp[tmp$segment == 'MP',]$taxid),
-                    'taxid_NP' = na.omit(tmp[tmp$segment == 'NP',]$taxid),
-                    'taxid_NS' = na.omit(tmp[tmp$segment == 'NS',]$taxid),
-                    'taxid_PA' = na.omit(tmp[tmp$segment == 'PA',]$taxid),
-                    'taxid_PB1' = na.omit(tmp[tmp$segment == 'PB1',]$taxid),
-                    'taxid_PB2' = na.omit(tmp[tmp$segment == 'PB2',]$taxid))
+                    'reference hit' = 1:5) %>% add_column(!!!ref_content)
+
   df.top.refs.reshaped = rbind(df.top.refs.reshaped, tmp.df)
 }
+
 rm(tmp, tmp.df)
 write.csv(  x=df.top.refs.reshaped,
           row.names = FALSE,
@@ -695,11 +691,10 @@ df.top.refs.reshaped %>%
       escape = T, linesep = NA) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T,
                 full_width = T) %>%
-  add_header_above(c("Sample","Reference Hit","HA"=1,"NA"=1,"MP"=1,"NP"=1,
-                      "NS"=1,"PA"=1,"PB1"=1,"PB2"=1)) %>%
+  add_header_above(c("Sample","Reference Hit",final_cols)) %>%
   row_spec(seq(1,nrow(df.top.refs.reshaped),5), background="#EEEEEE") %>% 
   column_spec(1, color = "black" , background = "#EEEEEE")  %>%
-  column_spec(3:10, width_min = '5in')  %>%
+  column_spec(3:(length(final_cols)+2), width_min = '5in')  %>%
   scroll_box(height = "400px")
 ```
 
@@ -718,6 +713,8 @@ names(dt.fasta) <- gsub(pattern = "_L00\\d{0,9}_", replacement = "§$%&%", names
 sample_str <- unlist(strsplit(names(dt.fasta), "§$%&%", fixed=TRUE))
 sample.names = unlist(lapply(names(dt.fasta), infer_sample_name))
 segment.names <- unlist(lapply(names(dt.fasta), infer_segment_name))
+
+final_cols <- ordered_segments[ordered_segments %in% unique(segment.names)]
 
 # Base Content Probability
 l.res <- baseContent(dt.fasta)
@@ -799,7 +796,10 @@ tmp_base.content.table <- rbind(tmp_base.N.table, tmp_base.non.base.table)
 
 tmp_base.content.table <- tmp_base.content.table[order(tmp_base.content.table$Sample),]
 tmp_base.content.table$index <- 1:nrow(tmp_base.content.table)
-write.csv(x = tmp_base.content.table[,1:10],
+
+tmp_base.content.table <- tmp_base.content.table[, names(tmp_base.content.table) %in% c("Sample","base_freq",final_cols)]
+
+write.csv(x = tmp_base.content.table[,1:(length(final_cols)+2)],
           row.names = FALSE,
           file = "N_content_and_Ambiguous_calls.csv"
 )
@@ -818,12 +818,13 @@ base.content.table <- rbind(base.N.table, base.non.base.table)
 
 base.content.table <- base.content.table[order(base.content.table$Sample),]
 base.content.table$index <- 1:nrow(base.content.table)
+base.content.table <- base.content.table[, names(base.content.table) %in% c("Sample","base_freq",final_cols)]
 
 ```
 ```{r table_base_content, eval = length(l.infiles.fasta.files) != 0}
 # https://stackoverflow.com/questions/2288485/how-to-convert-a-data-frame-column-to-numeric-type
 # Format table
-base.content.table[,1:10] %>% 
+base.content.table[,1:(length(final_cols)+2)] %>% #length(final_cols)+2 = Sample, base_freq + 1 col per segment
   group_by(Sample) %>% 
   slice(1:4) %>% 
   select(Sample, everything()) %>% 
@@ -832,8 +833,7 @@ base.content.table[,1:10] %>%
   kbl(col.names = NULL, align = c("l"), escape = F) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T,
                 full_width = F) %>%
-  add_header_above(c("Sample"=2,"HA"=1,"NA"=1,"MP"=1,"NP"=1,
-                      "NS"=1,"PA"=1,"PB1"=1,"PB2"=1)) %>%
+  add_header_above(c("Sample"=2,final_cols)) %>%
   row_spec(seq(1,nrow(base.content.table),4), background="#EEEEEE") %>% 
   column_spec(1, color = "black" , background = "#EEEEEE")  #%>%
   #scroll_box(height = "400px")
