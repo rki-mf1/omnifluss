@@ -1,6 +1,5 @@
 
-include { FASTQ_ALIGN_BWA        } from '../../nf-core/fastq_align_bwa/main'
-include { SAMTOOLS_FAIDX         } from '../../../modules/nf-core/samtools/faidx/main'
+include { FASTQ_ALIGN_BWA           } from '../../nf-core/fastq_align_bwa/main'
 include { BAM_MARKDUPLICATES_PICARD } from '../../nf-core/bam_markduplicates_picard/main'
 
 workflow FASTQ_MAP_ALL {
@@ -61,4 +60,3 @@ workflow FASTQ_MAP_ALL {
     //MultiQC
     multiqc_files = ch_multiqc_files
 }
-
