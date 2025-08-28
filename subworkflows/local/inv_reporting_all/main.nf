@@ -2,7 +2,9 @@ include { INV_REPORT_RMARKDOWN } from '../../../modules/local/inv_report_rmarkdo
 
 workflow INV_REPORTING_ALL {
     take:
-    reporting_script
+    consensus_mincov
+    reference_selection
+    reporting_information
     fastp_jsons
     kraken_reports
     mapping_references
@@ -11,7 +13,6 @@ workflow INV_REPORTING_ALL {
     samtools_coverage
     samtools_flagstat
     consensus_calls
-    outdir
 
     main:
     report                        = Channel.empty()
@@ -20,10 +21,12 @@ workflow INV_REPORTING_ALL {
     kraken_classification         = Channel.empty()
     mapping_statistics            = Channel.empty()
     top5_references               = Channel.empty()
-    N_content_and_Ambigiuos_calls = Channel.empty()
+    N_content_and_Ambiguous_calls = Channel.empty()
 
     INV_REPORT_RMARKDOWN(
-        reporting_script,
+        consensus_mincov,
+        reference_selection,
+        reporting_information,
         fastp_jsons,
         kraken_reports,
         mapping_references,
@@ -31,8 +34,7 @@ workflow INV_REPORTING_ALL {
         bedtools_genomecov,
         samtools_coverage,
         samtools_flagstat,
-        consensus_calls,
-        outdir
+        consensus_calls
     )
     report                        = INV_REPORT_RMARKDOWN.out.report
     versions                      = INV_REPORT_RMARKDOWN.out.versions
