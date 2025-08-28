@@ -28,9 +28,12 @@ picard/markduplicates/*.{bam,MarkDuplicates.metrics.txt}
 tabix/*.vcf.gz.tbi
 bwa/mem/*.bam
 bwa/index/*/*{_small,_medium}.prepared_preped.{amb,ann,bwt,pac,sa}
-inv/*.prepared_preped.fasta
-cat/*.fa.gz
+prepare_reference/*.prepared_preped.fasta
+cat/*.fasta.gz
 samtools/*.prepared_preped.fasta.fai
+
+*/versions.yml
+*/*/versions.yml
 
 multiqc/multiqc_data/samtools_alignment_plot.txt
 multiqc/multiqc_data/samtools-stats-dp.txt

@@ -1,73 +1,56 @@
+[![GitHub Release](https://img.shields.io/github/v/release/rki-mf1/omnifluss)](https://github.com/rki-mf1/omnifluss/releases)
+[![Static Badge](https://img.shields.io/badge/Documentation%20-%20website%20-%20brightgreen?logo=Github%20Pages&link=https%3A%2F%2Frki-mf1.github.io%2Fomnifluss%2F)](https://rki-mf1.github.io/omnifluss/)
+![GitHub Actions Workflow Status](<https://img.shields.io/github/actions/workflow/status/rki-mf1/omnifluss/nf-test.yml?branch=main&logo=githubactions&label=tests%20(%40main)>)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/y/rki-mf1/omnifluss?logo=Github)
+
 # rki-mf1/omnifluss
 
 ## Introduction
 
-**rki-mf1/omnifluss** is a bioinformatics pipeline that ...
+**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes.
 
-<!-- TODO nf-core:
-   Complete this sentence with a 2-3 sentence summary of what types of data the pipeline ingests, a brief overview of the
-   major pipeline sections and the types of output it produces. You're giving an overview to someone new
-   to nf-core here, in 15-20 seconds. For an example, see https://github.com/nf-core/rnaseq/blob/master/README.md#introduction
--->
+Omnifluss takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.
+The specific algorithms and software selected for these operations primarily depend on two parameters: virus type and sequencing technology.
+Beside these two parameters many settings and subroutines can be finetuned.
+After a successful run `omnifluss` returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
 
 ## Usage
 
-> [!NOTE]
-> If you are new to Nextflow, please refer to [this page](https://nf-co.re/docs/usage/installation#nextflow) on how to set-up Nextflow.
+Please visit our **[omnifluss website](https://rki-mf1.github.io/omnifluss/)** for our full documentation.
 
-### Quick test
+<details><summary> TL;DR (setup environment) </summary>
+
+You need Nextflow and at least one package manager (conda) or container engine (singularity, docker) available.
+You can install Nextflow via conda:
 
 ```bash
-nextflow ... -profile test
+conda create -n omnifluss -c bioconda -c conda-forge nextflow==25.04.3
+conda activate omnifluss
 ```
 
-### Quick start
+</details>
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
-First, prepare a samplesheet with your input data that looks as follows:
-
-`samplesheet.csv`:
-
-```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-```
-
-Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
-
-Now, you can run the pipeline using:
-
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
+<details><summary> TL;DR (run) </summary>
 
 ```bash
 nextflow run rki-mf1/omnifluss \
-   -profile <docker/singularity/.../institute> \
+   -profile <docker/singularity/.../institute/virus> \
    --input samplesheet.csv \
    --outdir <OUTDIR>
 ```
 
-> [!WARNING]
-> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).
+</details>
 
 ## Credits
 
 rki-mf1/omnifluss was originally written by the RKI MF1 Viroinf team.
 
-TODO credit for nf-core community; pipeline based on pipeline template, ...
+## Funding
 
-TODO see cff file
-
-
-## Contributions and Support
-
-If you would like to contribute to this pipeline, please see the TODO -> link.
+This project was supported by co-funding from the European Union’s EU4Health programme under project no. 101113012 (IMS-HERA2).
 
 ## Citations
 
-An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
+\<WIP\>
 
-TODO see cff file or see GH toolbar on the right
+An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.

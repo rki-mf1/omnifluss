@@ -80,6 +80,7 @@ def prepare_reference(fasta, length, out):
                     .replace(".", "_")
                     .replace("[", "_")
                     .replace("]", "_")
+                    .replace(",", "_")
                 )
                 
                 header = re.sub(r'kraken_taxid\|\d+_',"", header)
