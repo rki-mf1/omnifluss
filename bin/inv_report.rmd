@@ -61,9 +61,9 @@ library("ShortRead")
 library("dplyr")
 library("tibble")
 
-stepsize=20
-n_content_threshold=5
-ordered_segments <- c("HA","NA","MP","NP","NS","PA","PB1","PB2")
+stepsize <- 20
+n_content_threshold <- 5
+ordered_segments <- c("HA", "NA", "MP", "NP", "NS", "PA", "PB1", "PB2")
 ```
 ```{r def_functions}
 # input of file listing. requires file names like /path/to/nCoV1.bamstats.txt
@@ -504,8 +504,10 @@ if (ncol(dt.bamstats_coverage) != 25) {
   }
 }
 
-segment_order = c(".HA",".NA",".MP",".NP",".NS",".PA",".PB1",".PB2")
-col_order <- unlist(lapply(segment_order, function(seg) { grep(paste0("\\", seg, "$"), names(dt.bamstats_coverage), value = TRUE) }))
+segment_order <- c(".HA", ".NA", ".MP", ".NP", ".NS", ".PA", ".PB1", ".PB2")
+col_order <- unlist(lapply(segment_order, function(seg) {
+  grep(paste0("\\", seg, "$"), names(dt.bamstats_coverage), value = TRUE)
+}))
 final_order <- c("sample", col_order)
 
 # reorder dataframe columns
@@ -584,14 +586,15 @@ df.mapping.table <- sub.dots(df.mapping.table)
 
 # convert reads mapped per segment column values to mapping rate
 
-seg_col_range <- seq(6,ncol(dt.bamstats_coverage)+4, by=3) # taking every third segment column
-df.mapping.table[, c(seg_col_range)] <- lapply(df.mapping.table[, c(seg_col_range)], function(x) round((x / as.numeric(df.mapping.table$`reads mapped`)*100), digits = 2))
+seg_col_range <- seq(6, ncol(dt.bamstats_coverage) + 4, by = 3) # taking every third segment column
+df.mapping.table[, c(seg_col_range)] <- lapply(df.mapping.table[, c(seg_col_range)], function(x) round((x / as.numeric(df.mapping.table$`reads mapped`) * 100), digits = 2))
 
 dir.create(params$data_output_dir)
 write.csv(
   x = df.mapping.table,
   row.names = FALSE,
-  file = file.path(params$data_output_dir, "mapping_statistics.csv)
+  file = file.path(params$data_output_dir, "mapping_statistics.csv")
+)
 
 df.mapping.table$`reads in` <- f.color_bar("lightgreen")(df.mapping.table$`reads in`)
 df.mapping.table$`reads mapped` <- f.color_bar("lightgreen")(df.mapping.table$`reads mapped`)
@@ -709,22 +712,25 @@ for (smpl in unique(dt.top.refs$sample)) {
   }
 }
 
-df.top.refs.reshaped <- tibble('sample' = character(),
-                                'reference hit' = numeric(),
-                                !!!setNames(lapply(final_cols_taxid, function(x) character()), final_cols_taxid)
+df.top.refs.reshaped <- tibble(
+  "sample" = character(),
+  "reference hit" = numeric(),
+  !!!setNames(lapply(final_cols_taxid, function(x) character()), final_cols_taxid)
 )
 
 for (s in c(unique(dt.top.refs.na.filled$sample))) {
-  tmp <- dt.top.refs.na.filled[dt.top.refs.na.filled$sample == s,]
+  tmp <- dt.top.refs.na.filled[dt.top.refs.na.filled$sample == s, ]
 
-    ref_content <- setNames(lapply(final_cols, function(x) {
-        na.omit(tmp[tmp$segment == x, ]$taxid)
-    }), final_cols_taxid)
+  ref_content <- setNames(lapply(final_cols, function(x) {
+    na.omit(tmp[tmp$segment == x, ]$taxid)
+  }), final_cols_taxid)
 
-  tmp.df <- tibble('sample' = head(tmp$sample,5),
-                    'reference hit' = 1:5) %>% add_column(!!!ref_content)
+  tmp.df <- tibble(
+    "sample" = head(tmp$sample, 5),
+    "reference hit" = 1:5
+  ) %>% add_column(!!!ref_content)
 
-  df.top.refs.reshaped = rbind(df.top.refs.reshaped, tmp.df)
+  df.top.refs.reshaped <- rbind(df.top.refs.reshaped, tmp.df)
 }
 
 rm(tmp, tmp.df)
@@ -746,15 +752,18 @@ df.top.refs.reshaped %>%
   select(sample, everything()) %>%
   collapse_rows_df(sample) %>%
   formattable() %>%
-
-  kbl(digits = 3, col.names = NULL, align = c("r"), format = "html",
-      escape = T, linesep = NA) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T,
-                full_width = T) %>%
-  add_header_above(c("Sample","Reference Hit",final_cols)) %>%
-  row_spec(seq(1,nrow(df.top.refs.reshaped),5), background="#EEEEEE") %>% 
-  column_spec(1, color = "black" , background = "#EEEEEE")  %>%
-  column_spec(3:(length(final_cols)+2), width_min = '5in')  %>%
+  kbl(
+    digits = 3, col.names = NULL, align = c("r"), format = "html",
+    escape = T, linesep = NA
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover"), fixed_thead = T,
+    full_width = T
+  ) %>%
+  add_header_above(c("Sample", "Reference Hit", final_cols)) %>%
+  row_spec(seq(1, nrow(df.top.refs.reshaped), 5), background = "#EEEEEE") %>%
+  column_spec(1, color = "black", background = "#EEEEEE") %>%
+  column_spec(3:(length(final_cols) + 2), width_min = "5in") %>%
   scroll_box(height = "400px")
 ```
 
@@ -865,12 +874,13 @@ tmp_base.content.table <- rbind(tmp_base.N.table, tmp_base.non.base.table)
 tmp_base.content.table <- tmp_base.content.table[order(tmp_base.content.table$Sample), ]
 tmp_base.content.table$index <- 1:nrow(tmp_base.content.table)
 
-tmp_base.content.table <- tmp_base.content.table[, names(tmp_base.content.table) %in% c("Sample","base_freq",final_cols)]
+tmp_base.content.table <- tmp_base.content.table[, names(tmp_base.content.table) %in% c("Sample", "base_freq", final_cols)]
 dir.create(params$data_output_dir)
-write.csv(x = tmp_base.content.table[,1:(length(final_cols)+2)],
+write.csv(
+  x = tmp_base.content.table[, 1:(length(final_cols) + 2)],
   row.names = FALSE,
   file = file.path(params$data_output_dir, "N_content_and_Ambiguous_calls.csv")
-
+)
 
 ############# marking samples with over 5% N content ###########################
 for (s in segments) {
@@ -885,24 +895,26 @@ base.content.table <- rbind(base.N.table, base.non.base.table)
 
 base.content.table <- base.content.table[order(base.content.table$Sample), ]
 base.content.table$index <- 1:nrow(base.content.table)
-base.content.table <- base.content.table[, names(base.content.table) %in% c("Sample","base_freq",final_cols)]
+base.content.table <- base.content.table[, names(base.content.table) %in% c("Sample", "base_freq", final_cols)]
 ```
 ```{r table_base_content, eval = length(l.infiles.fasta.files) != 0}
 # https://stackoverflow.com/questions/2288485/how-to-convert-a-data-frame-column-to-numeric-type
 # Format table
-base.content.table[,1:(length(final_cols)+2)] %>% #length(final_cols)+2 = Sample, base_freq + 1 col per segment
-  group_by(Sample) %>% 
-  slice(1:4) %>% 
-  select(Sample, everything()) %>% 
+base.content.table[, 1:(length(final_cols) + 2)] %>% # length(final_cols)+2 = Sample, base_freq + 1 col per segment
+  group_by(Sample) %>%
+  slice(1:4) %>%
+  select(Sample, everything()) %>%
   collapse_rows_df(Sample) %>%
   formattable() %>%
   kbl(col.names = NULL, align = c("l"), escape = F) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T,
-                full_width = F) %>%
-  add_header_above(c("Sample"=2,final_cols)) %>%
-  row_spec(seq(1,nrow(base.content.table),4), background="#EEEEEE") %>% 
-  column_spec(1, color = "black" , background = "#EEEEEE")  #%>%
-  #scroll_box(height = "400px")
+  kable_styling(
+    bootstrap_options = c("striped", "hover"), fixed_thead = T,
+    full_width = F
+  ) %>%
+  add_header_above(c("Sample" = 2, final_cols)) %>%
+  row_spec(seq(1, nrow(base.content.table), 4), background = "#EEEEEE") %>%
+  column_spec(1, color = "black", background = "#EEEEEE") # %>%
+# scroll_box(height = "400px")
 ```
 
 ```{r base_content_cleanup, eval = length(l.infiles.fasta.files) != 0}
