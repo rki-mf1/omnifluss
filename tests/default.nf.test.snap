@@ -1077,7 +1077,7 @@
                     "tabix": "1.19.1"
                 },
                 "Workflow": {
-                    "rki-mf1/omnifluss": "v0.2.0"
+                    "rki-mf1/omnifluss": "v0.2.1"
                 }
             },
             [
@@ -1540,8 +1540,6 @@
                 "tabix/versions.yml"
             ],
             [
-                "SRR31096286_medium.coverage.tsv:md5,8b0bd1a5d001abc21d52da18e3ca6c53",
-                "SRR31143054_small.coverage.tsv:md5,250bf874c5db145360a9e69ab68c1257",
                 "SRR31096286_medium.fastp.json:md5,b17aba999002d03fc6711f0a60513127",
                 "SRR31096286_medium_1.fastp.fastq.gz:md5,1b55381fcb76c38687c0188303e1ad76",
                 "SRR31096286_medium_2.fastp.fastq.gz:md5,35a30d17396a36c7b4352bc609adaa7a",
@@ -1611,26 +1609,14 @@
                 "fastqc_sequence_duplication_levels_plot.txt:md5,85f574c3376f0f598bfbb7e9b5229147",
                 "multiqc_citations.txt:md5,cb0af5742fcca71046657214f709b3d7",
                 "multiqc_fastqc.txt:md5,9ce86050bf1136d9f9ecfbc5b35c2245",
-                "multiqc_samtools_coverage.txt:md5,991a6a2a4067add2d8b80d08c4efaa7a",
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "samtools-coverage-table.txt:md5,9733f4bf7a76009c66ee9f4c13be0ce0",
-                "samtools-coverage_BQ.txt:md5,c97bd47220ad0e78fb07ee9afb18741a",
-                "samtools-coverage_Bases.txt:md5,75ce11302d0bf9ddf69afa1cfc7ff207",
-                "samtools-coverage_Coverage.txt:md5,f2e09c9e394bade8d58341883d4cd6cc",
-                "samtools-coverage_MQ.txt:md5,ddedbb92a6e1884a0df6445b5227e264",
-                "samtools-coverage_Mean_depth.txt:md5,120824c8895df8a141a2804ccace8272",
-                "samtools-coverage_Reads.txt:md5,8299205381cd892b2831cf3a34189ccf",
-                "qc_report.html:md5,e2ba7b629195b4510cd1dac1013e12d1",
                 "N_content_and_Ambiguous_calls.csv:md5,983f9fc145207afeafc714444b217d66",
-                "mapping_statistics.csv:md5,1c79618fbd3004e4b979619e3bf1be6f",
                 "read_statistics.csv:md5,61cf20d1d0b7cabb9a4f1dc60db3a78e",
                 "top5_references.csv:md5,eefb80b809c0619a29c6605ba9144661",
                 "SRR31096286_medium.special_case_variant_mask.bed:md5,2851442a1e943a847d46791aa1c388f8",
                 "SRR31143054_small.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "SRR31096286_medium.samtools_coverage.txt:md5,9986d8b6e3bc7b784481e9699364e664",
-                "SRR31143054_small.samtools_coverage.txt:md5,00affc5fe2c1a59afbd8c8d76edb75dd",
                 "SRR31096286_medium.HA.top1ref.fa.gz:md5,63b6c8e526b50258042aef0cf5a314b3",
                 "SRR31096286_medium.HA.top1ref.standardized.fasta.gz:md5,010d0d5a01d1f801bc790e24ae5393c9",
                 "SRR31096286_medium.MP.top1ref.fa.gz:md5,3e2ee7287bca18575c8d8b0d94bcf938",
@@ -1669,6 +1655,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.6"
         },
-        "timestamp": "2025-08-28T15:25:23.225374852"
+        "timestamp": "2025-09-01T09:21:54.357948664"
     }
 }

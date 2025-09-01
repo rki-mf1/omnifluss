@@ -49,3 +49,9 @@ multiqc/multiqc_data/multiqc_samtools_flagstat.txt
 multiqc/multiqc_data/multiqc_picard_dups.txt
 multiqc/multiqc_data/multiqc_general_stats.txt
 
+multiqc/multiqc_data/multiqc_samtools_coverage.txt
+multiqc/multiqc_data/samtools-coverage{-table,_BQ,_Bases,_Coverage,_MQ,_Mean_depth,_Reads}.txt
+report/qc_report.html
+report/qc_report_data/mapping_statistics.csv
+bedtools/genomecov/*{_small,_medium}.coverage.tsv
+samtools/coverage/*{_small,_medium}.samtools_coverage.txt
