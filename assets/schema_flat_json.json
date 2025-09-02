@@ -1,0 +1,20 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/rki-mf1/omnifluss/main/assets/schema_flat_json.json",
+    "title": "Flat JSON validation schema",
+    "description": "Schema to ensure JSON object is flat with no nested structures",
+    "type": "object",
+    "additionalProperties": {
+        "anyOf": [
+            { "type": "string" },
+            { "type": "number" },
+            { "type": "integer" },
+            { "type": "boolean" },
+            { "type": "null" }
+        ],
+        "not": {
+            "anyOf": [{ "type": "object" }, { "type": "array" }]
+        }
+    },
+    "errorMessage": "All values must be primitive types. Nested objects and arrays are not allowed."
+}

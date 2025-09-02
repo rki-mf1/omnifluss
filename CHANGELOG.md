@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## unreleased
 
+### `Fixed`
+
+- fixed input parameter validation
+
 ## 0.2.1 - [2025-08-27]
 
 ### `Added`

@@ -8,10 +8,19 @@ keywords:
   - RMarkdown
 
 input:
-  - script:
+  - consensus_mincov:
+      type: int
+      description: |
+        Threshold of minimum number of reads to call reference or alternate alleles.
+  - reference_selection:
+      type: string
+      description: |
+        String indicating the reference selection modus.
+  - reporting_information:
       type: file
       description: |
-        Relative path to the script. Needed to copy the script in Nextflows temporary directory, to avoid issues with the working directory. 
+        A unnested JSON file containing additional information for the report.
+      pattern: "*.json"
   - fastp_jsons:
       type: file(s)
       description: |
@@ -82,9 +91,8 @@ output:
       pattern: "top5_references.csv"
   - N_content_and_Ambiguous_calls:
       type: file
-      description: Underlying csv-file for N-/Ambiguous contents file 
+      description: Underlying csv-file for N-/Ambiguous contents file
       pattern: "N_content_and_Ambiguous_calls.csv"
-    
 
 authors:
   - "@DimitriTernovoj"
