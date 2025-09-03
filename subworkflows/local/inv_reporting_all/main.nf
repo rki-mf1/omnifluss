@@ -2,8 +2,10 @@ include { INV_REPORT_RMARKDOWN } from '../../../modules/local/inv_report_rmarkdo
 
 workflow INV_REPORTING_ALL {
     take:
-    reporting_script
     sample_sheet
+    consensus_mincov
+    reference_selection
+    reporting_information
     fastp_jsons
     kraken_reports
     mapping_references
@@ -15,19 +17,20 @@ workflow INV_REPORTING_ALL {
     empty_kraken2_reads
     empty_spa_files
 
-    outdir
     main:
-    report                         = Channel.empty()
-    versions                       = Channel.empty()
-    read_statistics                = Channel.empty() //from here on, optional files that are only produced if the necessary input is available
-    kraken_classification          = Channel.empty()
-    mapping_statistics             = Channel.empty()
-    top5_references                = Channel.empty()
-    N_content_and_Ambigiuous_calls = Channel.empty()
+    report                        = Channel.empty()
+    versions                      = Channel.empty()
+    read_statistics               = Channel.empty() //from here on, optional files that are only produced if the necessary input is available
+    kraken_classification         = Channel.empty()
+    mapping_statistics            = Channel.empty()
+    top5_references               = Channel.empty()
+    N_content_and_Ambiguous_calls = Channel.empty()
 
     INV_REPORT_RMARKDOWN(
-        reporting_script,
         sample_sheet,
+        consensus_mincov,
+        reference_selection,
+        reporting_information,
         fastp_jsons,
         kraken_reports,
         mapping_references,
@@ -37,8 +40,7 @@ workflow INV_REPORTING_ALL {
         samtools_flagstat,
         consensus_calls,
         empty_kraken2_reads,
-        empty_spa_files,
-        outdir
+        empty_spa_files
     )
     report                        = INV_REPORT_RMARKDOWN.out.report
     versions                      = INV_REPORT_RMARKDOWN.out.versions

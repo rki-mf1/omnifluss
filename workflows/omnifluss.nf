@@ -263,8 +263,10 @@ workflow OMNIFLUSS {
         // Reporting
         //
         INV_REPORTING_ALL(
-            params.reporting_script,
             params.input,
+            params.consensus_mincov,
+            params.reference_selection,
+            params.reporting_additional_information ? file(params.reporting_additional_information, checkIfExists: true) : [],
             ch_fastp_jsons,
             ch_kraken_reports,
             ch_kma_mapping_refs,
@@ -274,8 +276,7 @@ workflow OMNIFLUSS {
             ch_samtools_flagstat,
             ch_consensus_calls,
             ch_empty_kraken2_reads,
-            ch_empty_spa_files,
-            params.outdir
+            ch_empty_spa_files
         )
         ch_report = INV_REPORTING_ALL.out.report
         ch_versions = ch_versions.mix(INV_REPORTING_ALL.out.versions)

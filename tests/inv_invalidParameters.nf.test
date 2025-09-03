@@ -34,7 +34,7 @@ nextflow_pipeline {
             * Case3:     kma + reference (single FASTA file; single sequence)
             * Failure:  There is no failure (commit c1a52602). The pipeline
             *           silently does nothing. The only indicator is a very
-            *           very low suceeded workflow.trace.succeeded().size().
+            *           very low succeeded workflow.trace.succeeded().size().
             *           The are only 5 outputs:
             *           2 (#samples) * 2 (fastp+fastqc) + 1 (multiqc)
             * Result:   Test SUCCESS
@@ -154,6 +154,86 @@ nextflow_pipeline {
                         workflow.exitStatus == 1
                 ).match("Snapshot - Workflow status - kma+reference (single FASTA file; single sequence)")
                 }
+            )
+        }
+    }
+
+    test("-profile INV_test_default - invalid parameter - invalid json file for report (not a json file)") {
+
+        setup {
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
+
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                input                            = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta              = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                reference_selection              = 'kma'
+                reference_selection_db           = "${launchDir}/segment_db"
+                consensus_mincov                 = 5
+                skip_taxonomic_filtering         = true
+                skip_report                      = false
+                reporting_additional_information = "${launchDir}/PB2.MZ707484.1.fasta"
+                outdir                           = "$outputDir"
+            }
+        }
+        then {
+            assertAll(
+                // workflow.stderr and workflow.stdout returns a list with one string for each line of the error message
+                // workflow.stderr.contains() would only match a complete line (as a list element)
+                // -> check contains() on each line separately
+                { assert workflow.stdout.any { it.contains('ERROR ~ Validation of pipeline parameters failed!') } },
+                { assert workflow.stderr.any { it.contains('The following invalid input values have been detected:') } },
+                { assert workflow.stderr.any { it.contains('does not match regular expression') } },
+                { assert workflow.success == false }
+            )
+        }
+    }
+
+    test("-profile INV_test_default - invalid parameter - invalid json file for report (nested json)") {
+
+        setup {
+            def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/databases/segment_db/ena_segment_db.tar.gz"
+            def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+            def omnifluss_data_proc = omnifluss_data_command.execute()
+            omnifluss_data_proc.waitFor()
+
+            if (omnifluss_data_proc.exitValue() != 0) {
+                throw new RuntimeException("Error - failed to download segment db: ${omnifluss_data_proc.err.text}")
+            }
+        }
+
+        when {
+            params {
+                input                            = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/samplesheets/sample_sheet.ENA.csv'
+                fastp_adapter_fasta              = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/NexteraTransposase.fasta'
+                reference_selection              = 'kma'
+                reference_selection_db           = "${launchDir}/segment_db"
+                consensus_mincov                 = 5
+                skip_taxonomic_filtering         = true
+                skip_report                      = false
+                reporting_additional_information = 'https://github.com/rki-mf1/omnifluss_data/raw/INV_illumina/json/invalid_nested_json.json'
+                outdir                           = "$outputDir"
+            }
+        }
+        then {
+            assertAll(
+                { assert workflow.stdout.any { it.contains('ERROR ~ Validation of pipeline parameters failed!') } },
+                { assert workflow.stderr.any { it.contains('Value matches against given schema but it must not') } },
+                { assert workflow.stderr.any { it.contains('Value is [array] but should be [string]') } },
+                { assert workflow.stderr.any { it.contains('Value is [array] but should be [number]') } },
+                { assert workflow.stderr.any { it.contains('Value is [array] but should be [integer]') } },
+                { assert workflow.stderr.any { it.contains('Value is [array] but should be [boolean]') } },
+                { assert workflow.stderr.any { it.contains('Value is [array] but should be [null]') } },
+                { assert workflow.stderr.any { it.contains('Value does not match against any of the schema') } },
+                { assert workflow.success == false }
             )
         }
     }

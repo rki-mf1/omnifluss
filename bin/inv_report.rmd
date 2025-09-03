@@ -8,12 +8,11 @@ output:
     mathjax: null
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 params:
-  proj_folder: "none"
   min_cov: "none"
   reference: "none"
-  rki_sample_name: true
   information_json: "none"
   sample_sheet: "none"
+  data_output_dir: "qc_report_data"
   version: "1.0.0"
 ---
 
@@ -24,7 +23,7 @@ params:
   }
 
   .superwideimage img{
-     max-width: none;
+      max-width: none;
   }
 
 </style>
@@ -48,7 +47,6 @@ params:
 </style>
 
 ```{r setup, include=FALSE}
-
 # turn off warnings
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, error = FALSE, time_it = TRUE)
 
@@ -64,79 +62,84 @@ library("ShortRead")
 library("dplyr")
 library("tibble")
 
-stepsize=20
-n_content_threshold=5
-ordered_segments <- c("HA","NA","MP","NP","NS","PA","PB1","PB2")
+stepsize <- 20
+n_content_threshold <- 5
+ordered_segments <- c("HA", "NA", "MP", "NP", "NS", "PA", "PB1", "PB2")
 ```
 ```{r def_functions}
 # input of file listing. requires file names like /path/to/nCoV1.bamstats.txt
-f.get_filenames <- function(l.input, segment=FALSE){
-    sapply(l.input, function(x){
-        if (!segment){
-            filename <- unlist(strsplit(x, '/'))[length(unlist(strsplit(x, '/')))]
-            samplename <- unlist(strsplit(filename, '\\.'))[1]
-        } else {
-            filename <- unlist(strsplit(x, '/'))[length(unlist(strsplit(x, '/')))]
-            parts <- unlist(strsplit(filename, '\\.'))
-            samplename <- paste(parts[1], parts[2], sep="_separator_")
-        }
-        return(samplename)
-    })
-    #returns named character vector of sample names, e.g. nCoV1
+f.get_filenames <- function(l.input, segment = FALSE) {
+  sapply(l.input, function(x) {
+    if (!segment) {
+      filename <- unlist(strsplit(x, "/"))[length(unlist(strsplit(x, "/")))]
+      samplename <- unlist(strsplit(filename, "\\."))[1]
+    } else {
+      filename <- unlist(strsplit(x, "/"))[length(unlist(strsplit(x, "/")))]
+      parts <- unlist(strsplit(filename, "\\."))
+      samplename <- paste(parts[1], parts[2], sep = "_separator_")
+    }
+    return(samplename)
+  })
+  # returns named character vector of sample names, e.g. nCoV1
 }
 
 # modified color_bar to fix direction from "rtl" to "ltr"
-f.color_bar <- function (color = "lightgray", fun = "proportion",
-    ...)
-{
-    fun <- match.fun(fun)
-    formattable::formatter("span", style = function(x) style(display = "inline-block",
-        direction = "ltr", `border-radius` = "4px",
-        `padding-right` = "2px", `background-color` = csscolor(color),
-        width = percent(fun(as.numeric(x), ...))))
+f.color_bar <- function(
+    color = "lightgray", fun = "proportion",
+    ...) {
+  fun <- match.fun(fun)
+  formattable::formatter("span", style = function(x) {
+    style(
+      display = "inline-block",
+      direction = "ltr", `border-radius` = "4px",
+      `padding-right` = "2px", `background-color` = csscolor(color),
+      width = percent(fun(as.numeric(x), ...))
+    )
+  })
 }
 
 baseContent <- function(x) {
-  alf <- as.data.frame(alphabetFrequency(x, as.prob=TRUE)*100)
+  alf <- as.data.frame(alphabetFrequency(x, as.prob = TRUE) * 100)
   return(alf)
 }
 
 baseContentCount <- function(x) {
-  alf <- as.data.frame(alphabetFrequency(x, as.prob=FALSE))
+  alf <- as.data.frame(alphabetFrequency(x, as.prob = FALSE))
   return(alf)
 }
 
 infer_segment_name <- function(x) {
-  split = unlist(strsplit(x,"\\|"))
+  split <- unlist(strsplit(x, "\\|"))
   return(split[length(split)])
 }
 
 infer_sample_name <- function(x) {
-  return(strsplit(x,"\\|ref:")[[1]][1])
+  return(strsplit(x, "\\|ref:")[[1]][1])
 }
 
-collapse_rows_df <- function(df, variable){
-    group_var <- enquo(variable)
-    df %>%
-      group_by(!! group_var) %>%
-      mutate(groupRow = 1:n()) %>%
-      ungroup() %>%
-      mutate(!!quo_name(group_var) := ifelse(groupRow == 1, 
-      as.character(!! group_var), "")) %>%
-      select(-c(groupRow))
+collapse_rows_df <- function(df, variable) {
+  group_var <- enquo(variable)
+  df %>%
+    group_by(!!group_var) %>%
+    mutate(groupRow = 1:n()) %>%
+    ungroup() %>%
+    mutate(!!quo_name(group_var) := ifelse(groupRow == 1,
+      as.character(!!group_var), ""
+    )) %>%
+    select(-c(groupRow))
 }
-
 ```
 
 `r if (params$information_json != "none" || length(list.files("invalid_files") != 0)) {"## Sequencing Run Information"}`
 ```{r sequencing_information, results="asis"}
 #prints information specified in the JSON file
 if (params$information_json != "none") {
-  json_data = unlist(fromJSON(file = params$information_json))
+  json_data <- unlist(fromJSON(file = params$information_json))
 
-  for (key in names(json_data)){
-    cat(paste0("<span style='font-size:16px; font-weight:bold'>",key,"</span>: ", "<span style='font-size:16px'>",json_data[key],"</span><br>"))
+  for (key in names(json_data)) {
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>", key, "</span>: ", "<span style='font-size:16px'>", json_data[key], "</span><br>"))
   }
+  cat("<br>")
 }
 
 #prints information about excluded samples
@@ -159,6 +162,18 @@ if (length(list.files("invalid_files") != 0)) {
   len_empty_fasta = length(empty_fasta)
   len_empty_kma = length(empty_kma)
 
+#process empty fasta
+if (len_empty_fasta != 0) {
+    samples_empty_fasta <- unique(sapply(strsplit(sub("invalid_files/", "", empty_fasta),"\\."),'[',1))
+    len_empty_fasta <- length(samples_empty_fasta)
+    samples_empty_fasta <- sort(samples_empty_fasta)
+    samples_empty_fasta_string <- paste(samples_empty_fasta, sep=", ")
+
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>", len_empty_fasta,"/", samples_number, " samples failed during read extraction:<br></span>"))
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>",samples_empty_fasta_string,"<br></span>"))
+    cat("<br>")
+  }
+
 #process empty kma
 if (len_empty_kma != 0) {
     samples_empty_kma <- sapply(strsplit(sub("invalid_files/","",empty_kma),"\\."),'[',1:2)
@@ -170,21 +185,10 @@ if (len_empty_kma != 0) {
     samples_empty_kma_string <- paste(samples_empty_kma, collapse=", ")
     length(samples_empty_kma_string)
 
-    cat(paste0("<br><span style='font-size:16px; font-weight:bold'>", len_empty_kma,"/",samples_number*8," potential sample-segment pairs failed during reference inference:<br></span>"))
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>", len_empty_kma,"/",samples_number*8," potential sample-segment pairs failed during reference inference:<br></span>"))
     cat(paste0("<span style='font-size:16px; font-weight:bold'>",samples_empty_kma_string,"<br></span>"))
-}
-
-#process empty fasta
-if (len_empty_fasta != 0) {
-    samples_empty_fasta <- unique(sapply(strsplit(sub("invalid_files/", "", empty_fasta),"\\."),'[',1))
-    len_empty_fasta <- length(samples_empty_fasta)
-    samples_empty_fasta <- sort(samples_empty_fasta)
-    samples_empty_fasta_string <- paste(samples_empty_fasta, sep=", ")
-
-    cat(paste0("<br><span style='font-size:16px; font-weight:bold'>", len_empty_fasta,"/", samples_number, " samples failed during read extraction:<br></span>"))
-    cat(paste0("<span style='font-size:16px; font-weight:bold'>",samples_empty_fasta_string,"<br></span>"))
-}
-
+    cat("<br>")
+  }
 }
 ```
 
@@ -192,87 +196,103 @@ if (len_empty_fasta != 0) {
 min.coverage <- as.numeric(params$min_cov)
 
 # for read counts
-l.infiles.trimming <- list.files(path=".",
-                                pattern = "*.fastp.json$",
-                                full.names = T,
-                                recursive = F)
+l.infiles.trimming <- list.files(
+  path = ".",
+  pattern = "*.fastp.json$",
+  full.names = T,
+  recursive = F
+)
 
 names(l.infiles.trimming) <- f.get_filenames(l.infiles.trimming)
 
 # for taxonomic read classification
 l.infiles.kraken <- list()
-l.infiles.kraken <- list.files(path=".",
-                                pattern = "*.report.txt$",
-                                full.names = T,
-                                recursive = F)
+l.infiles.kraken <- list.files(
+  path = ".",
+  pattern = "*.report.txt$",
+  full.names = T,
+  recursive = F
+)
 
 names(l.infiles.kraken) <- f.get_filenames(l.infiles.kraken)
 
 # for mapping statistics
-l.infiles.bamstats <- list.files(path=".",
-                                pattern = "*.sorted.bam.flagstat$",
-                                full.names = T,
-                                recursive = F)
+l.infiles.bamstats <- list.files(
+  path = ".",
+  pattern = "*.sorted.bam.flagstat$",
+  full.names = T,
+  recursive = F
+)
 
 names(l.infiles.bamstats) <- f.get_filenames(l.infiles.bamstats)
 
 ## processing & save files
-if (length(l.infiles.bamstats) != 0){
-  for (name in names(l.infiles.bamstats)){
+if (length(l.infiles.bamstats) != 0) {
+  for (name in names(l.infiles.bamstats)) {
+    lines <- readLines(l.infiles.bamstats[[name]])
+    lines <- sub(" \\+ ", "|", lines)
+    lines <- sub(" ", "|", lines)
 
-      lines <- readLines(l.infiles.bamstats[[name]])
-      lines <- sub(" \\+ ","|", lines)
-      lines <- sub(" ", "|", lines)
-
-      write(lines, sub("\\.flagstat$",".piped.flagstat",l.infiles.bamstats[[name]]))
+    write(lines, sub("\\.flagstat$", ".piped.flagstat", l.infiles.bamstats[[name]]))
   }
 
   ## read in the processed files
   l.infiles.bamstats <- list.files(
-                                  pattern = "*.piped.flagstat$",
-                                  full.names = T,
-                                  recursive = T)
+    pattern = "*.piped.flagstat$",
+    full.names = T,
+    recursive = T
+  )
 
   names(l.infiles.bamstats) <- f.get_filenames(l.infiles.bamstats)
 }
 
 # for mapping statistics
-l.infiles.read.duplicates <- list.files(path=".",
-                                pattern = "*.MarkDuplicates.metrics.txt$",
-                                full.names = T,
-                                recursive = F)
+l.infiles.read.duplicates <- list.files(
+  path = ".",
+  pattern = "*.MarkDuplicates.metrics.txt$",
+  full.names = T,
+  recursive = F
+)
 
 names(l.infiles.read.duplicates) <- f.get_filenames(l.infiles.read.duplicates)
 
 # for mapping statistics/coverage distribution
-l.infiles.coverage <- list.files(path=".",
-                                pattern = "*.coverage.tsv$",
-                                full.names = T,
-                                recursive = T)
+l.infiles.coverage <- list.files(
+  path = ".",
+  pattern = "*.coverage.tsv$",
+  full.names = T,
+  recursive = T
+)
 
 names(l.infiles.coverage) <- f.get_filenames(l.infiles.coverage)
 
 # for mapping statistics/coverage distribution
-l.infiles.bamstats_coverage <- list.files(path=".",
-                                pattern = "*.samtools_coverage.txt$",
-                                full.names = T,
-                                recursive = T)
+l.infiles.bamstats_coverage <- list.files(
+  path = ".",
+  pattern = "*.samtools_coverage.txt$",
+  full.names = T,
+  recursive = T
+)
 
 names(l.infiles.bamstats_coverage) <- f.get_filenames(l.infiles.bamstats_coverage)
 
 # for consensus sequence
-l.infiles.read.ranking.refs <- list.files(path=".",
-                                pattern = ".kma.spa$",
-                                full.names = T,
-                                recursive = F)
+l.infiles.read.ranking.refs <- list.files(
+  path = ".",
+  pattern = ".kma.spa$",
+  full.names = T,
+  recursive = F
+)
 
 names(l.infiles.read.ranking.refs) <- f.get_filenames(l.infiles.read.ranking.refs, TRUE)
 
 # for consensus sequence
-l.infiles.fasta.files <- list.files(path = ".",
-                                pattern = ".fa$",
-                                full.names = T,
-                                recursive = F)
+l.infiles.fasta.files <- list.files(
+  path = ".",
+  pattern = ".fa$",
+  full.names = T,
+  recursive = F
+)
 
 names(l.infiles.fasta.files) <- f.get_filenames(l.infiles.fasta.files)
 ```
@@ -280,20 +300,22 @@ names(l.infiles.fasta.files) <- f.get_filenames(l.infiles.fasta.files)
 `r if(length(l.infiles.trimming) != 0){"## Read Counts\n Raw reads were subjected to adapter clipping. The following table summarizes the read count per sample before and after trimming. Additionally, the percentage of remaining reads after trimming is listed."}`
 
 ```{r read_trimming, eval = length(l.infiles.trimming) != 0}
-l.trimming.data.json <- lapply(l.infiles.trimming, function(x){
-    fromJSON(file = x)
+l.trimming.data.json <- lapply(l.infiles.trimming, function(x) {
+  fromJSON(file = x)
 })
 
-df.trimming.data <- ldply(l.trimming.data.json, function(e){
-    df.before <- as.data.frame(do.call(rbind, e$summary$before_filtering))
-    colnames(df.before) <- c("before.trimming")
-    df.after  <- as.data.frame(do.call(rbind, e$summary$after_filtering))
-    colnames(df.after) <- c("after.trimming")
+df.trimming.data <- ldply(l.trimming.data.json, function(e) {
+  df.before <- as.data.frame(do.call(rbind, e$summary$before_filtering))
+  colnames(df.before) <- c("before.trimming")
+  df.after <- as.data.frame(do.call(rbind, e$summary$after_filtering))
+  colnames(df.after) <- c("after.trimming")
 
-    df.output <- data.frame(feature = rownames(df.before),
-                            before = df.before$before.trimming,
-                            after = df.after$after.trimming)
-    return(df.output)
+  df.output <- data.frame(
+    feature = rownames(df.before),
+    before = df.before$before.trimming,
+    after = df.after$after.trimming
+  )
+  return(df.output)
 })
 
 # rename 1st column
@@ -301,15 +323,15 @@ tmp <- colnames(df.trimming.data)
 tmp[1] <- c("sample")
 colnames(df.trimming.data) <- tmp
 
-df.filter.data <- ldply(l.trimming.data.json, function(e){
-
-    df.output <- data.frame(passed_filter = e$filtering_result$passed_filter_reads,
-                            low_qual = e$filtering_result$low_quality_reads,
-                            high_N = e$filtering_result$too_many_N_reads,
-                            low_complex = e$filtering_result$low_complexity_reads,
-                            short = e$filtering_result$too_short_reads
-                            )
-    return(df.output)
+df.filter.data <- ldply(l.trimming.data.json, function(e) {
+  df.output <- data.frame(
+    passed_filter = e$filtering_result$passed_filter_reads,
+    low_qual = e$filtering_result$low_quality_reads,
+    high_N = e$filtering_result$too_many_N_reads,
+    low_complex = e$filtering_result$low_complexity_reads,
+    short = e$filtering_result$too_short_reads
+  )
+  return(df.output)
 })
 
 # rename 1st column
@@ -319,49 +341,54 @@ colnames(df.filter.data) <- tmp
 ```
 
 ```{r table_trimming, eval = length(l.infiles.trimming) != 0}
-df.summary <- data.frame(sample = unique(df.trimming.data$sample),
-                        reads.before.clip = df.trimming.data$before[grepl("total_reads", df.trimming.data$feature)],
-                        reads.after.clip  = df.trimming.data$after[grepl("total_reads", df.trimming.data$feature)],
-                        percentage.after.clip = df.trimming.data$after[grepl("total_reads", df.trimming.data$feature)]*100/df.trimming.data$before[grepl("total_reads", df.trimming.data$feature)]
+df.summary <- data.frame(
+  sample = unique(df.trimming.data$sample),
+  reads.before.clip = df.trimming.data$before[grepl("total_reads", df.trimming.data$feature)],
+  reads.after.clip = df.trimming.data$after[grepl("total_reads", df.trimming.data$feature)],
+  percentage.after.clip = df.trimming.data$after[grepl("total_reads", df.trimming.data$feature)] * 100 / df.trimming.data$before[grepl("total_reads", df.trimming.data$feature)]
 )
 df.table <- df.summary
 # add coloured bar charts to table
 df.table$reads.before.clip <- f.color_bar("lightgreen")(df.table$reads.before.clip)
 df.table$reads.after.clip <- f.color_bar("lightgreen")(df.table$reads.after.clip)
-df.table$percentage.after.clip <- Map(paste,format(round(df.table$percentage.after.clip,2),nsmall=2),"%")
+df.table$percentage.after.clip <- Map(paste, format(round(df.table$percentage.after.clip, 2), nsmall = 2), "%")
 
-kbl(x = df.table,
-    col.names = c("sample", "reads before trim", "reads after trim", "% of reads after trimming"),
-    digits = 2,
-    escape = F) %>%
+kbl(
+  x = df.table,
+  col.names = c("sample", "reads before trim", "reads after trim", "% of reads after trimming"),
+  digits = 2,
+  escape = F
+) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T, full_width = T) %>%
   scroll_box(height = "400px")
 
 # save table as csv for later use
-write.csv(  x=df.summary,
-            row.names = FALSE,
-            file = "read_statistics.csv"
-          )
+dir.create(params$data_output_dir)
+write.csv(
+  x = df.summary,
+  row.names = FALSE,
+  file = file.path(params$data_output_dir, "read_statistics.csv")
+)
 ```
 
-`r if(length(l.infiles.kraken) != 0){"## Taxonomic Read Classification\nThe taxonomic classification of reads can not only serve to identify contamination, 
-  but also enable the filtering of reads assigned to certain taxa. In this step influena A, influenza B and Orthomyxoviridae reads were filtered and used for the 
+`r if(length(l.infiles.kraken) != 0){"## Taxonomic Read Classification\nThe taxonomic classification of reads can not only serve to identify contamination,
+  but also enable the filtering of reads assigned to certain taxa. In this step influena A, influenza B and Orthomyxoviridae reads were filtered and used for the
   next analysis step. Remaining reads were excluded from further analysis. The assigned taxa are listed by sample n the following table."}`
 
 ```{r read_kraken, eval = length(l.infiles.kraken) != 0}
-  # Kraken2 output column labels.
-  # Percentage of fragments covered by the clade rooted at this taxon
-  # Number of fragments covered by the clade rooted at this taxon
-  # Number of fragments assigned directly to this taxon
-  # A rank code, indicating (U)nclassified, (R)oot, (D)omain, (K)ingdom, (P)hylum, (C)lass, (O)rder, (F)amily, (G)enus, or (S)pecies. Taxa that are not at any of these 10 ranks have a rank code that is formed by using the rank code of the closest ancestor rank with a number indicating the distance from that rank. E.g., "G2" is a rank code indicating a taxon is between genus and species and the grandparent taxon is at the genus rank.
-  # NCBI taxonomic ID number
-  # Indented scientific name
+# Kraken2 output column labels.
+# Percentage of fragments covered by the clade rooted at this taxon
+# Number of fragments covered by the clade rooted at this taxon
+# Number of fragments assigned directly to this taxon
+# A rank code, indicating (U)nclassified, (R)oot, (D)omain, (K)ingdom, (P)hylum, (C)lass, (O)rder, (F)amily, (G)enus, or (S)pecies. Taxa that are not at any of these 10 ranks have a rank code that is formed by using the rank code of the closest ancestor rank with a number indicating the distance from that rank. E.g., "G2" is a rank code indicating a taxon is between genus and species and the grandparent taxon is at the genus rank.
+# NCBI taxonomic ID number
+# Indented scientific name
 
 df.kraken_output <- data.frame()
 dt.kraken_data <- ldply(l.infiles.kraken, fread)
 colnames(dt.kraken_data) <- c("Sample", "read_ratio", "read_count", "read_count_specific", "rank", "ncbi_taxid", "sciname")
 # select unclassified and tax id's for Orthomyxoviridae (11308), Influenza A (11320) and B (11520), and Human (9606)
-df.kraken_output <- dt.kraken_data[dt.kraken_data$ncbi_taxid %in% c(0,"11308","11320","11520","9606"), c("Sample", "read_ratio", "read_count", "ncbi_taxid", "sciname")]
+df.kraken_output <- dt.kraken_data[dt.kraken_data$ncbi_taxid %in% c(0, "11308", "11320", "11520", "9606"), c("Sample", "read_ratio", "read_count", "ncbi_taxid", "sciname")]
 
 # make tables wide for absolute and relative read counts
 dt.kraken.count <- data.table::dcast(as.data.table(df.kraken_output), Sample ~ sciname, value.var = c("read_count"))
@@ -369,58 +396,60 @@ dt.kraken.count[is.na(dt.kraken.count)] <- 0
 df.kraken_output <- data.table::dcast(as.data.table(df.kraken_output), Sample ~ sciname, value.var = c("read_ratio"))
 df.kraken_output[is.na(df.kraken_output)] <- 0
 
-# Add placeholder for missing columns 
-species <- c("Sample","Homo sapiens", "Influenza A virus", "Influenza B virus", "Orthomyxoviridae", "unclassified")
-#df.kraken_output
+# Add placeholder for missing columns
+species <- c("Sample", "Homo sapiens", "Influenza A virus", "Influenza B virus", "Orthomyxoviridae", "unclassified")
+# df.kraken_output
 for (sp in species) {
-  if (Reduce("|",grepl(sp, colnames(df.kraken_output)))) {
+  if (Reduce("|", grepl(sp, colnames(df.kraken_output)))) {
     # do nothing if column exist
-  }
-  else {
+  } else {
     df.kraken_output <- cbind(df.kraken_output, new_col = 0)
     colnames(df.kraken_output)[which(names(df.kraken_output) == "new_col")] <- sp
-    }
-}
-#dt.kraken.count
-for (sp in species) {
-  if (Reduce("|",grepl(sp, colnames(dt.kraken.count)))) {
-    # do nothing if column exist
   }
-  else {
+}
+# dt.kraken.count
+for (sp in species) {
+  if (Reduce("|", grepl(sp, colnames(dt.kraken.count)))) {
+    # do nothing if column exist
+  } else {
     dt.kraken.count <- cbind(dt.kraken.count, new_col = 0)
     colnames(dt.kraken.count)[which(names(dt.kraken.count) == "new_col")] <- sp
-    }
-}  
-colnames(df.kraken_output) <- paste0(colnames(df.kraken_output), c("", " [%]", " [%]", " [%]", " [%]", " [%]" ))
+  }
+}
+colnames(df.kraken_output) <- paste0(colnames(df.kraken_output), c("", " [%]", " [%]", " [%]", " [%]", " [%]"))
 
-df.kraken_output$`filter passed` <- rowSums(dt.kraken.count[,c("Homo sapiens", "Influenza A virus", "Influenza B virus")]) *2
+df.kraken_output$`filter passed` <- rowSums(dt.kraken.count[, c("Homo sapiens", "Influenza A virus", "Influenza B virus")]) * 2
 df.kraken_output <- df.kraken_output[, c("Sample", "filter passed", "Homo sapiens [%]", "Influenza A virus [%]", "Influenza B virus [%]", "Orthomyxoviridae [%]", "unclassified [%]")]
 ```
 
 ```{r table_kraken, fix.cap="Read counts after species binning using Kraken.", eval = length(l.infiles.kraken) != 0}
 # save table as csv for later use
-write.csv(  x=df.kraken_output,
-            row.names = FALSE,
-            file = "kraken_classification.csv"
+dir.create(params$data_output_dir)
+write.csv(
+  x = df.kraken_output,
+  row.names = FALSE,
+  file = file.path(params$data_output_dir, "kraken_classification.csv")
 )
 
 kbl(df.kraken_output) %>%
-    kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T) %>%
-    scroll_box(height = "400px")
+  kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T) %>%
+  scroll_box(height = "400px")
 ```
 
 ```{r reshape_kraken_barchart, eval = length(l.infiles.kraken) != 0}
 # reshape dataframe for  plotting
-    # add column for diff of ortho and infA + infB (for barplot)
-df.kraken_output$diff_orthomyxoviridae  <- df.kraken_output$`Orthomyxoviridae [%]`-(df.kraken_output$`Influenza A virus [%]` + df.kraken_output$`Influenza B virus [%]`)
+# add column for diff of ortho and infA + infB (for barplot)
+df.kraken_output$diff_orthomyxoviridae <- df.kraken_output$`Orthomyxoviridae [%]` - (df.kraken_output$`Influenza A virus [%]` + df.kraken_output$`Influenza B virus [%]`)
 
 df.kraken_output.reshaped <- reshape(df.kraken_output,
-                  varying=names(df.kraken_output)[3:8],
-                  direction="long", idvar=c("Sample"),
-                  v.names="ratio", timevar="tax")
+  varying = names(df.kraken_output)[3:8],
+  direction = "long", idvar = c("Sample"),
+  v.names = "ratio", timevar = "tax"
+)
 df.kraken_output.reshaped$tax <- factor(df.kraken_output.reshaped$tax,
-                                  levels = c(1, 2, 3, 4, 5, 6),
-                                  labels = names(df.kraken_output)[3:8])
+  levels = c(1, 2, 3, 4, 5, 6),
+  labels = names(df.kraken_output)[3:8]
+)
 df.kraken_output.reshaped$Sample <- factor(df.kraken_output.reshaped$Sample)
 df.kraken_output.reshaped$tax <- factor(df.kraken_output.reshaped$tax)
 ```
@@ -429,32 +458,42 @@ df.kraken_output.reshaped$tax <- factor(df.kraken_output.reshaped$tax)
 df.kraken.barplot <- df.kraken_output.reshaped[df.kraken_output.reshaped$tax %in% c("Homo sapiens [%]", "Influenza A virus [%]", "Influenza B virus [%]", "unclassified [%]", "diff_orthomyxoviridae"), ]
 
 samples <- unique(df.kraken.barplot$Sample)
-if (length(samples)>stepsize) {
-  for (s in 0:(ceiling(length(samples)/stepsize)-1)){
-    x = s*stepsize
-    y = ((s+1)*stepsize)-1
-    if (y>length(samples)){y = length(samples)}
+if (length(samples) > stepsize) {
+  for (s in 0:(ceiling(length(samples) / stepsize) - 1)) {
+    x <- s * stepsize
+    y <- ((s + 1) * stepsize) - 1
+    if (y > length(samples)) {
+      y <- length(samples)
+    }
     df.subset <- subset(df.kraken.barplot, Sample %in% samples[x:y])
-    
-    g <- ggplot(data=df.subset, aes(fill=tax, y=Sample, x=ratio)) +
-        geom_bar(position="stack", stat="identity", width = 0.6) +
-        labs(title = "Taxanomic Classification", fill = "") +
-        theme(legend.position = 'top', legend.text = element_text(size = 7),
-              legend.title = element_text(size=8)) +
-        guides(fill = guide_legend(label.position = "bottom",
-                                    title.position = "left", title.vjust = 1)) +
-        scale_fill_brewer(palette="Set1", labels = c("Homo Sapiens", "Influenza A", "Influenza B", "unclassified", "Orthomyxoviridae"))
+
+    g <- ggplot(data = df.subset, aes(fill = tax, y = Sample, x = ratio)) +
+      geom_bar(position = "stack", stat = "identity", width = 0.6) +
+      labs(title = "Taxanomic Classification", fill = "") +
+      theme(
+        legend.position = "top", legend.text = element_text(size = 7),
+        legend.title = element_text(size = 8)
+      ) +
+      guides(fill = guide_legend(
+        label.position = "bottom",
+        title.position = "left", title.vjust = 1
+      )) +
+      scale_fill_brewer(palette = "Set1", labels = c("Homo Sapiens", "Influenza A", "Influenza B", "unclassified", "Orthomyxoviridae"))
     print(g)
   }
 } else {
-  ggplot(data=df.kraken.barplot, aes(fill=tax, y=Sample, x=ratio)) +
-        geom_bar(position="stack", stat="identity", width = 0.6) +
-        labs(title = "Taxanomic Classification", fill = "") +
-        theme(legend.position = 'top', legend.text = element_text(size = 7),
-              legend.title = element_text(size=8)) +
-        guides(fill = guide_legend(label.position = "bottom",
-                                    title.position = "left", title.vjust = 1)) +
-        scale_fill_brewer(palette="Set1", labels = c("Homo Sapiens", "Influenza A", "Influenza B", "unclassified", "Orthomyxoviridae"))
+  ggplot(data = df.kraken.barplot, aes(fill = tax, y = Sample, x = ratio)) +
+    geom_bar(position = "stack", stat = "identity", width = 0.6) +
+    labs(title = "Taxanomic Classification", fill = "") +
+    theme(
+      legend.position = "top", legend.text = element_text(size = 7),
+      legend.title = element_text(size = 8)
+    ) +
+    guides(fill = guide_legend(
+      label.position = "bottom",
+      title.position = "left", title.vjust = 1
+    )) +
+    scale_fill_brewer(palette = "Set1", labels = c("Homo Sapiens", "Influenza A", "Influenza B", "unclassified", "Orthomyxoviridae"))
 }
 ```
 `r if(length(l.infiles.kraken) != 0){"</div>"}`
@@ -469,32 +508,32 @@ rm(df.kraken.barplot)
 ```{r read_coverage_preanalyses, eval = length(l.infiles.coverage) != 0 && length(l.infiles.bamstats_coverage) != 0}
 # for mapping statistics/coverage distribution
 # dt.coverage is used again later for plotting
-dt.coverage <- as.data.table(ldply(l.infiles.coverage, fread, sep='\t'))
-colnames(dt.coverage) <- c("sample","chromosome", "position", "depth")
+dt.coverage <- as.data.table(ldply(l.infiles.coverage, fread, sep = "\t"))
+colnames(dt.coverage) <- c("sample", "chromosome", "position", "depth")
 
 # rename chromosome column values
-dt.coverage$chromosome <- sapply(dt.coverage$chromosome, function(x){
-  segment <- tail(unlist(strsplit(x,"|",fixed=TRUE)), n=1)
+dt.coverage$chromosome <- sapply(dt.coverage$chromosome, function(x) {
+  segment <- tail(unlist(strsplit(x, "|", fixed = TRUE)), n = 1)
   segment <- toString(segment)
   return(segment)
 })
 
 dt.output <- dt.coverage[, sum(depth > 10), by = sample]
 setnames(dt.output, "V1", "covered.bases")
-dt.output$genome.length <- dt.coverage[,length(depth), by = sample]$V1
+dt.output$genome.length <- dt.coverage[, length(depth), by = sample]$V1
 dt.output$genome.coverage <- dt.output$covered.bases / dt.output$genome.length
 
 ### taking directly the per chromosome results from bamstats coverage
 ### this data frame is used again later for the whole table including all samples
 
-dt.bamstats_coverage <- as.data.table(ldply(l.infiles.bamstats_coverage, fread, sep='\t', select=c(1,4,6,7)))
-dt.bamstats_coverage[,("coverage") := round(.SD,2), .SDcols="coverage"]
-dt.bamstats_coverage[,("meandepth") := round(.SD,0), .SDcols="meandepth"]
-colnames(dt.bamstats_coverage) <- c("sample","chromosome","reads mapped [%]", "coverage [%]", "mean depth [bp]")
+dt.bamstats_coverage <- as.data.table(ldply(l.infiles.bamstats_coverage, fread, sep = "\t", select = c(1, 4, 6, 7)))
+dt.bamstats_coverage[, ("coverage") := round(.SD, 2), .SDcols = "coverage"]
+dt.bamstats_coverage[, ("meandepth") := round(.SD, 0), .SDcols = "meandepth"]
+colnames(dt.bamstats_coverage) <- c("sample", "chromosome", "reads mapped [%]", "coverage [%]", "mean depth [bp]")
 
 # rename chromosome column values
-dt.bamstats_coverage$chromosome <- sapply(dt.bamstats_coverage$chromosome, function(x){
-  segment <- tail(unlist(strsplit(x,"|",fixed=TRUE)), n=1)
+dt.bamstats_coverage$chromosome <- sapply(dt.bamstats_coverage$chromosome, function(x) {
+  segment <- tail(unlist(strsplit(x, "|", fixed = TRUE)), n = 1)
   segment <- toString(segment)
   return(segment)
 })
@@ -502,22 +541,25 @@ dt.bamstats_coverage$chromosome <- sapply(dt.bamstats_coverage$chromosome, funct
 dt.bamstats_coverage <- reshape(dt.bamstats_coverage, idvar = "sample", timevar = "chromosome", direction = "wide")
 
 # adding placeholder column(s) for missing segment(s)
-ls.segment <- list("*HA","*NA","*MP","*NP","*NS","*PA","*PB1","*PB2")
-substrRight <- function(x, n){substr(x, nchar(x)-n+1, nchar(x))}
+ls.segment <- list("*HA", "*NA", "*MP", "*NP", "*NS", "*PA", "*PB1", "*PB2")
+substrRight <- function(x, n) {
+  substr(x, nchar(x) - n + 1, nchar(x))
+}
 
-if (ncol(dt.bamstats_coverage) != 25 ) {
-    for (s in ls.segment){
-      if (Reduce("|",grepl(s, names(dt.bamstats_coverage)))) {}
-      else {
-        dt.bamstats_coverage[,paste("reads mapped [%].", substrRight(s, nchar(s)-1))] <- NA
-        dt.bamstats_coverage[,paste("coverage [%].", substrRight(s, nchar(s)-1))] <- NA
-        dt.bamstats_coverage[,paste("mean depth [bp].", substrRight(s, nchar(s)-1))] <- NA
-        }
+if (ncol(dt.bamstats_coverage) != 25) {
+  for (s in ls.segment) {
+    if (Reduce("|", grepl(s, names(dt.bamstats_coverage)))) {} else {
+      dt.bamstats_coverage[, paste("reads mapped [%].", substrRight(s, nchar(s) - 1))] <- NA
+      dt.bamstats_coverage[, paste("coverage [%].", substrRight(s, nchar(s) - 1))] <- NA
+      dt.bamstats_coverage[, paste("mean depth [bp].", substrRight(s, nchar(s) - 1))] <- NA
+    }
   }
 }
 
-segment_order = c(".HA",".NA",".MP",".NP",".NS",".PA",".PB1",".PB2")
-col_order <- unlist(lapply(segment_order, function(seg) { grep(paste0("\\", seg, "$"), names(dt.bamstats_coverage), value = TRUE) }))
+segment_order <- c(".HA", ".NA", ".MP", ".NP", ".NS", ".PA", ".PB1", ".PB2")
+col_order <- unlist(lapply(segment_order, function(seg) {
+  grep(paste0("\\", seg, "$"), names(dt.bamstats_coverage), value = TRUE)
+}))
 final_order <- c("sample", col_order)
 
 # reorder dataframe columns
@@ -532,19 +574,18 @@ dt.output <- merge(dt.output, dt.bamstats_coverage, by = "sample")
 # for mapping statistics/coverage distribution
 
 # reduce amount of data points to be plotted
-dt.coverage[, bin:=rep(seq(1, ceiling(length(position) / 100)), each = 100, length.out = length(position)), by = "sample"]
-dt.coverage[, mid.bin:=seq(1,length(position)) %% 100 ]
-dt.coverage[, mean.cov:=mean(depth), by=c("sample", "bin")]
+dt.coverage[, bin := rep(seq(1, ceiling(length(position) / 100)), each = 100, length.out = length(position)), by = "sample"]
+dt.coverage[, mid.bin := seq(1, length(position)) %% 100]
+dt.coverage[, mean.cov := mean(depth), by = c("sample", "bin")]
 
 # adding placeholder row(s) for missing segment(s)
-ls.segment <- list("*HA","*NA","*MP","*NP","*NS","*PA","*PB1","*PB2")
+ls.segment <- list("*HA", "*NA", "*MP", "*NP", "*NS", "*PA", "*PB1", "*PB2")
 
-for (s in unique(dt.coverage$sample)){
-  tmp <- dt.coverage[dt.coverage$sample == as.character(s),]
-  for (l in ls.segment){
-    if (Reduce("|",grepl(l, unique(tmp$chromosome)))) {}
-    else {
-      new_row <- list(s, substrRight(l,nchar(l)-1), 0, NA, NA, 50, 1)
+for (s in unique(dt.coverage$sample)) {
+  tmp <- dt.coverage[dt.coverage$sample == as.character(s), ]
+  for (l in ls.segment) {
+    if (Reduce("|", grepl(l, unique(tmp$chromosome)))) {} else {
+      new_row <- list(s, substrRight(l, nchar(l) - 1), 0, NA, NA, 50, 1)
       dt.coverage <- rbind(dt.coverage, new_row)
     }
   }
@@ -552,9 +593,9 @@ for (s in unique(dt.coverage$sample)){
 }
 
 dt.coverage <- dt.coverage %>% group_by(chromosome)
-dt.coverage <- dt.coverage %>% arrange(factor(chromosome, levels = c("HA","NA","MP","NP","NS","PA","PB1","PB2")))
+dt.coverage <- dt.coverage %>% arrange(factor(chromosome, levels = c("HA", "NA", "MP", "NP", "NS", "PA", "PB1", "PB2")))
 dt.coverage <- dt.coverage %>% group_by(sample)
-dt.coverage$chromosome = factor(dt.coverage$chromosome, levels=c("HA","NA","MP","NP","NS","PA","PB1","PB2"))
+dt.coverage$chromosome <- factor(dt.coverage$chromosome, levels = c("HA", "NA", "MP", "NP", "NS", "PA", "PB1", "PB2"))
 ```
 
 `r if(length(l.infiles.bamstats) != 0 && length(l.infiles.read.duplicates) != 0 && exists("dt.bamstats_coverage")){"## Mapping Statistics\nReads were mapped to the reference genome using BWA.
@@ -562,51 +603,58 @@ For each sample the number of mapped reads as well as the overall mapping rate a
 Additionally, the genome coverage, the mean read depth and the rate of mapped reads are listed for each genome fragment."}`
 
 ```{r read_mappingstats, eval = length(l.infiles.bamstats) != 0 && length(l.infiles.read.duplicates) != 0 && exists("dt.bamstats_coverage")}
-
-df.bamstat.data <- ldply(l.infiles.bamstats, fread, sep = '|')
+df.bamstat.data <- ldply(l.infiles.bamstats, fread, sep = "|")
 colnames(df.bamstat.data) <- c("sample", "count", "unknown", "description")
 ```
 
 ```{r read_duplicates, eval = length(l.infiles.bamstats) != 0 && length(l.infiles.read.duplicates) != 0 && exists("dt.bamstats_coverage")}
-
 # read file content
-dt.read.duplicates <- as.data.table(ldply(l.infiles.read.duplicates, fread, sep='\t', select = c(9), skip=6, nrow=1)) 
-colnames(dt.read.duplicates) <- c("sample","reads duplicated [%]")
+dt.read.duplicates <- as.data.table(ldply(l.infiles.read.duplicates, fread, sep = "\t", select = c(9), skip = 6, nrow = 1))
+colnames(dt.read.duplicates) <- c("sample", "reads duplicated [%]")
 dt.read.duplicates$`reads duplicated [%]` <- round(dt.read.duplicates$`reads duplicated [%]` * 100, digits = 2)
 ```
 
 ```{r table_bamstats, eval = exists("dt.read.duplicates") && exists("df.bamstat.data") && exists("dt.bamstats_coverage")}
-df.output <- data.frame("sample" = unique(df.bamstat.data$sample),
-                        "input" = df.bamstat.data$count[grepl("in total", df.bamstat.data$description)],
-                        "mapped" = df.bamstat.data$count[grepl("properly paired", df.bamstat.data$description)])
+df.output <- data.frame(
+  "sample" = unique(df.bamstat.data$sample),
+  "input" = df.bamstat.data$count[grepl("in total", df.bamstat.data$description)],
+  "mapped" = df.bamstat.data$count[grepl("properly paired", df.bamstat.data$description)]
+)
 
-df.output$mapping.rate <- round((df.output$mapped / df.output$input)*100, digits = 2)
+df.output$mapping.rate <- round((df.output$mapped / df.output$input) * 100, digits = 2)
 colnames(df.output) <- c("sample", "reads in", "reads mapped", "mapping rate [%]")
 
 # merge read per segment, duplication data with bamstats table
-df.mapping.table <- merge(df.output, dt.read.duplicates, by="sample")
-##### bamstats coverage table from above is reused 
-df.mapping.table <- merge(df.mapping.table, dt.bamstats_coverage, by="sample")
+df.mapping.table <- merge(df.output, dt.read.duplicates, by = "sample")
+##### bamstats coverage table from above is reused
+df.mapping.table <- merge(df.mapping.table, dt.bamstats_coverage, by = "sample")
 
 # replace dots in column names with space
-sub.dots <- function(df) {names(df) <- sub("\\.", " ", names(df));df}
+sub.dots <- function(df) {
+  names(df) <- sub("\\.", " ", names(df))
+  df
+}
 df.mapping.table <- sub.dots(df.mapping.table)
 
 # convert reads mapped per segment column values to mapping rate
-seg_col_range <- seq(6,ncol(dt.bamstats_coverage)+4, by=3) # taking every third segment column
-df.mapping.table[, c(seg_col_range)] <- lapply(df.mapping.table[, c(seg_col_range)], function(x) round((x / as.numeric(df.mapping.table$`reads mapped`)*100), digits = 2))
 
-write.csv(  x=df.mapping.table,
-            row.names = FALSE,
-            file = "mapping_statistics.csv"
+seg_col_range <- seq(6, ncol(dt.bamstats_coverage) + 4, by = 3) # taking every third segment column
+df.mapping.table[, c(seg_col_range)] <- lapply(df.mapping.table[, c(seg_col_range)], function(x) round((x / as.numeric(df.mapping.table$`reads mapped`) * 100), digits = 2))
+
+dir.create(params$data_output_dir)
+write.csv(
+  x = df.mapping.table,
+  row.names = FALSE,
+  file = file.path(params$data_output_dir, "mapping_statistics.csv")
 )
 
 df.mapping.table$`reads in` <- f.color_bar("lightgreen")(df.mapping.table$`reads in`)
 df.mapping.table$`reads mapped` <- f.color_bar("lightgreen")(df.mapping.table$`reads mapped`)
 
 kbl(df.mapping.table,
-    digits = 3,
-    escape = F) %>%
+  digits = 3,
+  escape = F
+) %>%
   kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T) %>%
   scroll_box(height = "400px")
 ```
@@ -628,27 +676,38 @@ In each bin the mean of the depths were then calculated and plotted. Please be a
 
 `r if(exists("dt.coverage")){"<div class=superhighimage>"}`
 ```{r plot_coverage, fig.width=10, fig.height=3, eval = exists("dt.coverage")}
-
 # https://stackoverflow.com/questions/39119917/how-to-add-a-legend-to-hline
 sample.names <- unique(dt.coverage$sample)
- for (s in c(sample.names)){
-   plt <- ggplot(dt.coverage[(dt.coverage$sample == s) & (dt.coverage$mid.bin == 50),],
-         aes(x=position, y=mean.cov, fill = chromosome, colour = chromosome)) +
-         labs(title = paste("coverage distribution of", s, sep = " "), y = "mean coverage",
-               fill = "chromosome") +
-         geom_bar(stat = "identity", width = 1) +
-         facet_grid(~chromosome, switch = 'y', scales = "free_x") +
-         scale_x_continuous(limits = c(0,NA)) +
-         theme(axis.text.x = element_text(angle = 45, size = 10, hjust = 1)) +
-         geom_hline(aes(yintercept=min.coverage,
-               linetype = paste("minimal coverage = ",as.character(min.coverage))),
-               colour = "red", linewidth = 0.5) +
-         scale_linetype_manual(name = "threshold", values = c(2),
-               guide = guide_legend(override.aes = list(color = c("red")))) +
-         theme(legend.key.size = unit(0.5, 'cm'), legend.title = element_text(size = 10),
-               legend.text = element_text(size=8))
-    print(plt)
- }
+for (s in c(sample.names)) {
+  plt <- ggplot(
+    dt.coverage[(dt.coverage$sample == s) & (dt.coverage$mid.bin == 50), ],
+    aes(x = position, y = mean.cov, fill = chromosome, colour = chromosome)
+  ) +
+    labs(
+      title = paste("coverage distribution of", s, sep = " "), y = "mean coverage",
+      fill = "chromosome"
+    ) +
+    geom_bar(stat = "identity", width = 1) +
+    facet_grid(~chromosome, switch = "y", scales = "free_x") +
+    scale_x_continuous(limits = c(0, NA)) +
+    theme(axis.text.x = element_text(angle = 45, size = 10, hjust = 1)) +
+    geom_hline(
+      aes(
+        yintercept = min.coverage,
+        linetype = paste("minimal coverage = ", as.character(min.coverage))
+      ),
+      colour = "red", linewidth = 0.5
+    ) +
+    scale_linetype_manual(
+      name = "threshold", values = c(2),
+      guide = guide_legend(override.aes = list(color = c("red")))
+    ) +
+    theme(
+      legend.key.size = unit(0.5, "cm"), legend.title = element_text(size = 10),
+      legend.text = element_text(size = 8)
+    )
+  print(plt)
+}
 ```
 `r if(exists("dt.coverage")){"</div>"}`
 
@@ -657,30 +716,33 @@ rm(dt.coverage)
 ```
 
 `r if(length(l.infiles.read.ranking.refs) != 0 || length(l.infiles.fasta.files) != 0){"## Consensus Sequence\n
-The consensus sequence was build using BCFtools. Only indels with a frequency above 90 %  were integrated into the consensus sequence. Positions with a coverage below the given threshold were masked with an N in the consensus sequence. 
-Variants that passed the filtering steps were explicitly integrated into the consensus sequence if they occurred with a frequency of 90 % or higher. Variants with a frequency between 10 and 90 % were depicted as ambiguous bases 
+The consensus sequence was build using BCFtools. Only indels with a frequency above 90 %  were integrated into the consensus sequence. Positions with a coverage below the given threshold were masked with an N in the consensus sequence.
+Variants that passed the filtering steps were explicitly integrated into the consensus sequence if they occurred with a frequency of 90 % or higher. Variants with a frequency between 10 and 90 % were depicted as ambiguous bases
 and below 10 % the reference base was used. High quality Variants at the beginning or end of a genome segment, with an allele frequency above 90 % that failed the strand-bias filtering step were masked with N.
 "}`
 
 `r if(params$reference != "static" && length(l.infiles.read.ranking.refs) != 0){"Reads are compared against reference sequence databases for each segment during the automatic reference detection step. The following table lists the five best references per segment. On the first position is the reference that was used for the mapping."}`
 
 ```{r read_ranking_top5_refs, eval = params$reference != "static" && length(l.infiles.read.ranking.refs) != 0}
-
 # read file content
-dt.top.refs <- as.data.table(ldply(l.infiles.read.ranking.refs, fread, sep='\t', 
-                                    select = c(1,3), na.strings = ""))
+dt.top.refs <- as.data.table(ldply(l.infiles.read.ranking.refs, fread,
+  sep = "\t",
+  select = c(1, 3), na.strings = ""
+))
 
-dt.top.refs$segment <- sapply(strsplit(dt.top.refs$'.id', "_separator_"), function(x) tail(x, 1))
-dt.top.refs$".id" <- sapply(strsplit(dt.top.refs$".id", "_separator_"), `[`, 1)                          
-colnames(dt.top.refs) <- c("sample","taxid", "magic number", "segment") #reading in "Score" as "magic number" ( little reference to an earlier approach to this :) )
+dt.top.refs$segment <- sapply(strsplit(dt.top.refs$".id", "_separator_"), function(x) tail(x, 1))
+dt.top.refs$".id" <- sapply(strsplit(dt.top.refs$".id", "_separator_"), `[`, 1)
+colnames(dt.top.refs) <- c("sample", "taxid", "magic number", "segment") # reading in "Score" as "magic number" ( little reference to an earlier approach to this :) )
 
-#in house adapatation - remove the "kraken:taxid" part + remove the "|segment" ending
+# in house adapatation - remove the "kraken:taxid" part + remove the "|segment" ending
 dt.top.refs$taxid <- ifelse(!grepl("^kraken:taxid\\|", dt.top.refs$taxid), dt.top.refs$taxid, substr(dt.top.refs$taxid, 20, nchar(dt.top.refs$taxid)))
-dt.top.refs$taxid <- ifelse(!grepl("\\|PB1$|\\|PB2$", dt.top.refs$taxid), substr(dt.top.refs$taxid,1,nchar(dt.top.refs$taxid)-3), substr(dt.top.refs$taxid,1,nchar(dt.top.refs$taxid)-4))
+dt.top.refs$taxid <- ifelse(!grepl("\\|PB1$|\\|PB2$", dt.top.refs$taxid), substr(dt.top.refs$taxid, 1, nchar(dt.top.refs$taxid) - 3), substr(dt.top.refs$taxid, 1, nchar(dt.top.refs$taxid) - 4))
 
-dt.top.refs <- dt.top.refs %>% group_by(sample, segment) %>% arrange(desc(`magic number`))
+dt.top.refs <- dt.top.refs %>%
+  group_by(sample, segment) %>%
+  arrange(desc(`magic number`))
 dt.top.refs <- dt.top.refs %>% arrange(sample, segment)
-dt.top.refs <- dt.top.refs[,-3]
+dt.top.refs <- dt.top.refs[, -3]
 
 present_segments <- unique(dt.top.refs$segment)
 final_cols <- ordered_segments[ordered_segments %in% present_segments]
@@ -688,63 +750,72 @@ final_cols_taxid <- paste0("taxid_", final_cols)
 
 dt.top.refs.na.filled <- data.table(sample = as.character(), taxid = as.character(), segment = as.character())
 
-# add placeholder for missing top ref 
+# add placeholder for missing top ref
 for (smpl in unique(dt.top.refs$sample)) {
   for (sgmnt in unique(dt.top.refs$segment)) {
-      dt.group <- dt.top.refs[which( dt.top.refs$sample == smpl & dt.top.refs$segment == sgmnt) ,]
-      while (nrow(dt.group)<5) {
-        dt.group = rbind(dt.group, c(sample = smpl, taxid = "n/a", segment = sgmnt))
-      }
-      #set number of refs per segment to 5
-      dt.group <- head(dt.group,5)
-      dt.top.refs.na.filled <- rbind(dt.top.refs.na.filled, dt.group)
-      rm(dt.group)
+    dt.group <- dt.top.refs[which(dt.top.refs$sample == smpl & dt.top.refs$segment == sgmnt), ]
+    while (nrow(dt.group) < 5) {
+      dt.group <- rbind(dt.group, c(sample = smpl, taxid = "n/a", segment = sgmnt))
+    }
+    # set number of refs per segment to 5
+    dt.group <- head(dt.group, 5)
+    dt.top.refs.na.filled <- rbind(dt.top.refs.na.filled, dt.group)
+    rm(dt.group)
   }
 }
 
-df.top.refs.reshaped <- tibble('sample' = character(),
-                                'reference hit' = numeric(),
-                                !!!setNames(lapply(final_cols_taxid, function(x) character()), final_cols_taxid)
+df.top.refs.reshaped <- tibble(
+  "sample" = character(),
+  "reference hit" = numeric(),
+  !!!setNames(lapply(final_cols_taxid, function(x) character()), final_cols_taxid)
 )
 
 for (s in c(unique(dt.top.refs.na.filled$sample))) {
-  tmp <- dt.top.refs.na.filled[dt.top.refs.na.filled$sample == s,]
+  tmp <- dt.top.refs.na.filled[dt.top.refs.na.filled$sample == s, ]
 
-    ref_content <- setNames(lapply(final_cols, function(x) {
-        na.omit(tmp[tmp$segment == x, ]$taxid)
-    }), final_cols_taxid)
+  ref_content <- setNames(lapply(final_cols, function(x) {
+    na.omit(tmp[tmp$segment == x, ]$taxid)
+  }), final_cols_taxid)
 
-  tmp.df <- tibble('sample' = head(tmp$sample,5),
-                    'reference hit' = 1:5) %>% add_column(!!!ref_content)
+  tmp.df <- tibble(
+    "sample" = head(tmp$sample, 5),
+    "reference hit" = 1:5
+  ) %>% add_column(!!!ref_content)
 
-  df.top.refs.reshaped = rbind(df.top.refs.reshaped, tmp.df)
+  df.top.refs.reshaped <- rbind(df.top.refs.reshaped, tmp.df)
 }
 
 rm(tmp, tmp.df)
-write.csv(  x=df.top.refs.reshaped,
-          row.names = FALSE,
-          file = "top5_references.csv"
-)
 
+dir.create(params$data_output_dir)
+write.csv(
+  x = df.top.refs.reshaped,
+  row.names = FALSE,
+  file = file.path(params$data_output_dir, "top5_references.csv")
+)
 ```
 
 
 ```{r table_ranking_top5_reference, eval = params$reference != "static" && length(l.infiles.read.ranking.refs) != 0}
 # Format table
-df.top.refs.reshaped %>% 
-  group_by(sample) %>% 
-  slice(1:5) %>% 
-  select(sample, everything()) %>% 
+df.top.refs.reshaped %>%
+  group_by(sample) %>%
+  slice(1:5) %>%
+  select(sample, everything()) %>%
   collapse_rows_df(sample) %>%
   formattable() %>%
-  kbl(digits = 3, col.names = NULL, align = c("r"), format = "html",
-      escape = T, linesep = NA) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T,
-                full_width = T) %>%
-  add_header_above(c("Sample","Reference Hit",final_cols)) %>%
-  row_spec(seq(1,nrow(df.top.refs.reshaped),5), background="#EEEEEE") %>% 
-  column_spec(1, color = "black" , background = "#EEEEEE")  %>%
-  column_spec(3:(length(final_cols)+2), width_min = '5in')  %>%
+  kbl(
+    digits = 3, col.names = NULL, align = c("r"), format = "html",
+    escape = T, linesep = NA
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover"), fixed_thead = T,
+    full_width = T
+  ) %>%
+  add_header_above(c("Sample", "Reference Hit", final_cols)) %>%
+  row_spec(seq(1, nrow(df.top.refs.reshaped), 5), background = "#EEEEEE") %>%
+  column_spec(1, color = "black", background = "#EEEEEE") %>%
+  column_spec(3:(length(final_cols) + 2), width_min = "5in") %>%
   scroll_box(height = "400px")
 ```
 
@@ -760,8 +831,8 @@ rm(df.top.refs.reshaped)
 # Read Fasta File
 dt.fasta <- readDNAStringSet(l.infiles.fasta.files)
 names(dt.fasta) <- gsub(pattern = "_L00\\d{0,9}_", replacement = "§$%&%", names(dt.fasta))
-sample_str <- unlist(strsplit(names(dt.fasta), "§$%&%", fixed=TRUE))
-sample.names = unlist(lapply(names(dt.fasta), infer_sample_name))
+sample_str <- unlist(strsplit(names(dt.fasta), "§$%&%", fixed = TRUE))
+sample.names <- unlist(lapply(names(dt.fasta), infer_sample_name))
 segment.names <- unlist(lapply(names(dt.fasta), infer_segment_name))
 
 final_cols <- ordered_segments[ordered_segments %in% unique(segment.names)]
@@ -770,72 +841,80 @@ final_cols <- ordered_segments[ordered_segments %in% unique(segment.names)]
 l.res <- baseContent(dt.fasta)
 l.res["Sample"] <- sample.names
 l.res["Segment"] <- segment.names
-l.res["nonBase"] <- 100-rowSums(l.res[c("G","C","A","T","N")])
+l.res["nonBase"] <- 100 - rowSums(l.res[c("G", "C", "A", "T", "N")])
 l.res <- select(l.res, c("Sample", "Segment", "N", "nonBase"))
-l.res <- reshape(l.res, v.names=c("N", "nonBase"), timevar="Segment", idvar="Sample",
-        direction="wide")
+l.res <- reshape(l.res,
+  v.names = c("N", "nonBase"), timevar = "Segment", idvar = "Sample",
+  direction = "wide"
+)
 
 # Base Content Count
 l.res.count <- baseContentCount(dt.fasta)
-l.res.count["nonBase"] <- rowSums(l.res.count) - rowSums(l.res.count[c("G","C","A","T","N")])
+l.res.count["nonBase"] <- rowSums(l.res.count) - rowSums(l.res.count[c("G", "C", "A", "T", "N")])
 l.res.count["Sample"] <- sample.names
 l.res.count["Segment"] <- segment.names
 l.res.count <- select(l.res.count, c("Sample", "Segment", "N", "nonBase"))
-l.res.count <- reshape(l.res.count, v.names=c("N", "nonBase"), timevar="Segment", idvar="Sample",
-        direction="wide")
+l.res.count <- reshape(l.res.count,
+  v.names = c("N", "nonBase"), timevar = "Segment", idvar = "Sample",
+  direction = "wide"
+)
 ```
 
 ```{r reshape_Base_content_table, eval = length(l.infiles.fasta.files) != 0}
 # initialize tmp dataframes as placeholder and for reshaping purposes
 n <- length(l.infiles.fasta.files)
-base.Ncontent.table <- data.frame("Sample" = l.res$Sample,
-                                 "base_freq" = rep("% N's", n),
-                                 "HA" = numeric(n),"NA" = numeric(n), 
-                                 "MP" = numeric(n),"NP" = numeric(n),
-                                 "NS" = numeric(n), "PA" = numeric(n),
-                                 "PB1" = numeric(n), "PB2" = numeric(n)
-                                 )
+base.Ncontent.table <- data.frame(
+  "Sample" = l.res$Sample,
+  "base_freq" = rep("% N's", n),
+  "HA" = numeric(n), "NA" = numeric(n),
+  "MP" = numeric(n), "NP" = numeric(n),
+  "NS" = numeric(n), "PA" = numeric(n),
+  "PB1" = numeric(n), "PB2" = numeric(n)
+)
 colnames(base.Ncontent.table)[colnames(base.Ncontent.table) %in% c("NA.")] <- c("NA")
 
-base.Ncontent.count.table <- data.frame("Sample" = l.res.count$Sample,
-                                 "base_freq" = rep("N count", n),
-                                 "HA" = numeric(n),"NA" = numeric(n), 
-                                 "MP" = numeric(n),"NP" = numeric(n),
-                                 "NS" = numeric(n), "PA" = numeric(n),
-                                 "PB1" = numeric(n), "PB2" = numeric(n)
-                                 )
+base.Ncontent.count.table <- data.frame(
+  "Sample" = l.res.count$Sample,
+  "base_freq" = rep("N count", n),
+  "HA" = numeric(n), "NA" = numeric(n),
+  "MP" = numeric(n), "NP" = numeric(n),
+  "NS" = numeric(n), "PA" = numeric(n),
+  "PB1" = numeric(n), "PB2" = numeric(n)
+)
 colnames(base.Ncontent.count.table)[colnames(base.Ncontent.count.table) %in% c("NA.")] <- c("NA")
 
-base.NonBasecontent.table <- data.frame("Sample" = l.res$Sample,
-                                 "base_freq" =  rep("% non ATGCN's", n),
-                                 "HA" = numeric(n), "NA" = numeric(n), 
-                                 "MP" = numeric(n), "NP" = numeric(n),
-                                 "NS" = numeric(n), "PA" = numeric(n),
-                                 "PB1" = numeric(n), "PB2" = numeric(n)
-                                 )
+base.NonBasecontent.table <- data.frame(
+  "Sample" = l.res$Sample,
+  "base_freq" = rep("% non ATGCN's", n),
+  "HA" = numeric(n), "NA" = numeric(n),
+  "MP" = numeric(n), "NP" = numeric(n),
+  "NS" = numeric(n), "PA" = numeric(n),
+  "PB1" = numeric(n), "PB2" = numeric(n)
+)
 colnames(base.NonBasecontent.table)[colnames(base.NonBasecontent.table) %in% c("NA.")] <- c("NA")
 
 
-base.NonBasecontent.count.table <- data.frame("Sample" = l.res.count$Sample,
-                                 "base_freq" =  rep("non ATGCN count", n),
-                                 "HA" = numeric(n), "NA" = numeric(n), 
-                                 "MP" = numeric(n), "NP" = numeric(n),
-                                 "NS" = numeric(n), "PA" = numeric(n),
-                                 "PB1" = numeric(n), "PB2" = numeric(n)
-                                 )
+base.NonBasecontent.count.table <- data.frame(
+  "Sample" = l.res.count$Sample,
+  "base_freq" = rep("non ATGCN count", n),
+  "HA" = numeric(n), "NA" = numeric(n),
+  "MP" = numeric(n), "NP" = numeric(n),
+  "NS" = numeric(n), "PA" = numeric(n),
+  "PB1" = numeric(n), "PB2" = numeric(n)
+)
 colnames(base.NonBasecontent.count.table)[colnames(base.NonBasecontent.count.table) %in% c("NA.")] <- c("NA")
 
 # assign corresponding values to each segment
-segments <- list("HA","NA","MP","NP","NS","PA","PB1","PB2")
+segments <- list("HA", "NA", "MP", "NP", "NS", "PA", "PB1", "PB2")
 
 for (s in segments) {
   colN <- paste("N.", s, sep = "")
   colnonBase <- paste("nonBase.", s, sep = "")
-  if( all(c(colN, colnonBase) %in% colnames(l.res))) {
-    base.Ncontent.table[s] <- lapply(lapply(l.res[colN], round , 3), as.character)
-    base.Ncontent.count.table[s] <- lapply(lapply(l.res.count[colN],round,0), as.character)
+  if (all(c(colN, colnonBase) %in% colnames(l.res))) {
+    base.Ncontent.table[s] <- lapply(lapply(l.res[colN], round, 3), as.character)
+    base.Ncontent.count.table[s] <- lapply(lapply(l.res.count[colN], round, 0), as.character)
     base.NonBasecontent.table[s] <- lapply(lapply(l.res[colnonBase], round, 3), as.character)
-    base.NonBasecontent.count.table[s] <- lapply(lapply(l.res.count[colnonBase], round,0), as.character)
+    base.NonBasecontent.count.table[s] <- lapply(lapply(l.res.count[colnonBase], round, 0), as.character)
   }
 }
 
@@ -844,20 +923,20 @@ tmp_base.N.table <- rbind(base.Ncontent.table, base.Ncontent.count.table)
 tmp_base.non.base.table <- rbind(base.NonBasecontent.table, base.NonBasecontent.count.table)
 tmp_base.content.table <- rbind(tmp_base.N.table, tmp_base.non.base.table)
 
-tmp_base.content.table <- tmp_base.content.table[order(tmp_base.content.table$Sample),]
+tmp_base.content.table <- tmp_base.content.table[order(tmp_base.content.table$Sample), ]
 tmp_base.content.table$index <- 1:nrow(tmp_base.content.table)
 
-tmp_base.content.table <- tmp_base.content.table[, names(tmp_base.content.table) %in% c("Sample","base_freq",final_cols)]
-
-write.csv(x = tmp_base.content.table[,1:(length(final_cols)+2)],
-          row.names = FALSE,
-          file = "N_content_and_Ambiguous_calls.csv"
+tmp_base.content.table <- tmp_base.content.table[, names(tmp_base.content.table) %in% c("Sample", "base_freq", final_cols)]
+dir.create(params$data_output_dir)
+write.csv(
+  x = tmp_base.content.table[, 1:(length(final_cols) + 2)],
+  row.names = FALSE,
+  file = file.path(params$data_output_dir, "N_content_and_Ambiguous_calls.csv")
 )
-
 
 ############# marking samples with over 5% N content ###########################
 for (s in segments) {
-  c = ifelse(as.numeric(unlist(base.Ncontent.table[s])) < n_content_threshold | is.na(base.Ncontent.table[s]), "black", "red")
+  c <- ifelse(as.numeric(unlist(base.Ncontent.table[s])) < n_content_threshold | is.na(base.Ncontent.table[s]), "black", "red")
   base.Ncontent.table[s] <- cell_spec(as.numeric(unlist(base.Ncontent.table[s])), color = c)
 }
 
@@ -866,27 +945,28 @@ base.N.table <- rbind(base.Ncontent.table, base.Ncontent.count.table)
 base.non.base.table <- rbind(base.NonBasecontent.table, base.NonBasecontent.count.table)
 base.content.table <- rbind(base.N.table, base.non.base.table)
 
-base.content.table <- base.content.table[order(base.content.table$Sample),]
+base.content.table <- base.content.table[order(base.content.table$Sample), ]
 base.content.table$index <- 1:nrow(base.content.table)
-base.content.table <- base.content.table[, names(base.content.table) %in% c("Sample","base_freq",final_cols)]
-
+base.content.table <- base.content.table[, names(base.content.table) %in% c("Sample", "base_freq", final_cols)]
 ```
 ```{r table_base_content, eval = length(l.infiles.fasta.files) != 0}
 # https://stackoverflow.com/questions/2288485/how-to-convert-a-data-frame-column-to-numeric-type
 # Format table
-base.content.table[,1:(length(final_cols)+2)] %>% #length(final_cols)+2 = Sample, base_freq + 1 col per segment
-  group_by(Sample) %>% 
-  slice(1:4) %>% 
-  select(Sample, everything()) %>% 
+base.content.table[, 1:(length(final_cols) + 2)] %>% # length(final_cols)+2 = Sample, base_freq + 1 col per segment
+  group_by(Sample) %>%
+  slice(1:4) %>%
+  select(Sample, everything()) %>%
   collapse_rows_df(Sample) %>%
   formattable() %>%
   kbl(col.names = NULL, align = c("l"), escape = F) %>%
-  kable_styling(bootstrap_options = c("striped", "hover"), fixed_thead = T,
-                full_width = F) %>%
-  add_header_above(c("Sample"=2,final_cols)) %>%
-  row_spec(seq(1,nrow(base.content.table),4), background="#EEEEEE") %>% 
-  column_spec(1, color = "black" , background = "#EEEEEE")  #%>%
-  #scroll_box(height = "400px")
+  kable_styling(
+    bootstrap_options = c("striped", "hover"), fixed_thead = T,
+    full_width = F
+  ) %>%
+  add_header_above(c("Sample" = 2, final_cols)) %>%
+  row_spec(seq(1, nrow(base.content.table), 4), background = "#EEEEEE") %>%
+  column_spec(1, color = "black", background = "#EEEEEE") # %>%
+# scroll_box(height = "400px")
 ```
 
 ```{r base_content_cleanup, eval = length(l.infiles.fasta.files) != 0}
