@@ -27,8 +27,8 @@ We implemented a filtering function that is able to filter out empty FastQ files
 We made sure that edgecases (stub-test) are covered and verified the correctness of the function by successfully rerunning samples that caused the errors in the first place.
 
 ## Status
-- [x] proposed
-- [ ] accepted
+- [ ] proposed
+- [x] accepted
 - [ ] deprecated
 - [ ] superseded (via ADR#)
 
