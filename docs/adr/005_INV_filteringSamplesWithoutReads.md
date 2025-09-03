@@ -1,13 +1,13 @@
 ## Title
-Filtering function excluding files without reads after Kraken 2 classification or taxonomic read extraction
+Filtering function excluding samples without reads after Kraken 2 classification or taxonomic read extraction
 
 ## Context
 While running Omnifluss on routine runs, we observed errors that were caused by samples of bad quality (e.g. negative controls, samples with little INV content).
-These samples could lead to errors in KRAKENTOOLS_EXTRACTKRAKENREADS or KMA, which is the subsequent process when the automatic reference selection is enabled.
+These samples could lead to errors in `KRAKENTOOLS_EXTRACTKRAKENREADS` or `KMA`, which is the subsequent process when the automatic reference selection is enabled.
 
-To deal with this issue we implemented a filtering function that is once executed after KRAKEN2_KRAKEN2 and once after KRAKENTOOLS_EXTRACTKRAKENREADS in the FASTQ_TAXONOMIC_FILTERING_ALL subworkflow.
+To deal with this issue we implemented a filtering function that is once executed after `KRAKEN2_KRAKEN2` and once after `KRAKENTOOLS_EXTRACTKRAKENREADS` in the `FASTQ_TAXONOMIC_FILTERING_ALL` subworkflow.
 For this function very specific decisions had to be made, which is the reason for this adr.
-The most intuitive way of implementing such a function is to account for single-end and paired-end data and simply check the byte-size of the file(s) (e.g. file(reads).size() ).
+The most intuitive way of implementing such a function is to account for single-end and paired-end data and simply check the byte-size of the file(s) (e.g. `file(reads).size()` ).
 However, this approach was not possible, because the read files are gzipped, which means that the file size can't be zero due to metadata that is stored in such files (even in empty ones).
 
 The alternative to this was to not base the decision on size, but on number of lines, which is equal to zero in empty files. Since there is no native and suitable way to access gzipped files, we decided to use the 
@@ -23,7 +23,7 @@ These files have the same naming convention as gzipped files (`filename.gz`), bu
 The solution for this problem was to explicitly check if a file has a byte-size of zero and only if it has not, to allow it for the checks described previously.
 
 ## Decision
-We implemented a filtering function that is able to filter out empty FastQ files, using an approach with prefiltering based on size and the final decision based on number of lines.
+We implemented a filtering function that is able to filter out empty FastQ files, using an approach with prefiltering based on the file size and the final decision based on number of lines.
 We made sure that edgecases (stub-test) are covered and verified the correctness of the function by successfully rerunning samples that caused the errors in the first place.
 
 ## Status
