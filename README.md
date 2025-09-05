@@ -1,6 +1,6 @@
 [![GitHub Release](https://img.shields.io/github/v/release/rki-mf1/omnifluss)](https://github.com/rki-mf1/omnifluss/releases)
 [![Static Badge](https://img.shields.io/badge/Documentation%20-%20website%20-%20brightgreen?logo=Github%20Pages&link=https%3A%2F%2Frki-mf1.github.io%2Fomnifluss%2F)](https://rki-mf1.github.io/omnifluss/)
-![GitHub Actions Workflow Status](<https://img.shields.io/github/actions/workflow/status/rki-mf1/omnifluss/nf-test.yml?branch=main&logo=githubactions&label=tests%20(%40main)>)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rki-mf1/omnifluss/nf-test.yml?branch=main&logo=githubactions&label=tests%20(%40main))
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/rki-mf1/omnifluss?logo=Github)
 
 # rki-mf1/omnifluss
