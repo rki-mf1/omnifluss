@@ -1,20 +1,22 @@
 ## Title
-Design decisions about how to organize and pass information via Nextflow channels during the reference selection.
+Design decisions about the reference selection and how to load, organize, and pass reference sequences via Nextflow channels.
 
 ## Context
-The INV GR workflow currently has two modes of reference selection, _static_ and _kma_.
-However, in each mode the input to the workflow is given in a different format, a single FASTA file or a database of FASTA files, respectively.
-Both modes must yield a channel of FASTA sequences for downstream steps of the main workflow.
-In case of _kma_ mode index files might be present or absent.
-Required is a Nextflow channel design with functional seperation such that, ideally, a minimal number of channels are passed and no channels need to be joint, split or reordered as part of the main workflow.
+The Influenza workflow currently has two modes of providing reference genome segments via `--reference selection`, _static_ and _kma_.
+For downstream processes of the workflow, both modes must eventually create and pass a channel of one final FASTA file of genome segments.
+
+**Problem.** Each mode of the `--reference_selection` accepts a different input format: with _static_ the workflow takes a single FASTA file (with one sequence per segment) and with _kma_ the workflow takes a directory of multiple FASTA files (one file per segment containing one or more sequences) and their KMA index files, together called _database_.
+These input formats require a Nextflow channel design where, ideally, a minimal number of channels are passed downstream and no channels need to be joint, split or reordered as part of the main workflow.
 
 ## Decision
-The _static_ mode uses the single FASTA file to construct the final reference channel (ch_fasta_references) which is not subject to further selection steps.
-The _kma_ mode uses a directory of one or multiple FASTA files, here called _database_, that is passed to the reference checking subworkflow.
-The reference checking subworkflow constructs a channel of database FASTA files which is subsequently processed by the reference selection subworkflows.
-In _kma_ mode, a set of index files is created corresponding to each database FASTA file if not present.
-The index files for all FASTA files in the database are stored in a separate channel (ch_kma_index).
+We maintain a single global Nextflow channel `ch_final_topRefs` for the purpose of reference selection.
+The _static_ mode simply passes a single FASTA file to `ch_final_topRefs` which is not subject to further selection steps.
+The _kma_ mode uses the database to load its FASTA files and index files into two separate temporary channels.
+These two channels are passed to the reference selection subworkflow `FASTA_REFERENCE_SELECTION_ALL`.
+The reference selection subworkflow returns a single FASTA file of one sequence per segment.
+This file is then stored in the `ch_final_topRefs` channel and passed to subsequent subworkflows.
 
+⚠️ The automatic database indexing is work in progress and not implemented yet! ⤵️
 ![ReferenceSelectionNextflowChannels](docs/images/ref_selection_channels.png)
 
 ## Status
@@ -25,9 +27,7 @@ The index files for all FASTA files in the database are stored in a separate cha
 
 ## Consequences
 - Pro:
-- - properly labeled and streamlined Nextlow channels
-- - mode selection can be taken to the main workflow s.t. we avoid using and logging reference selection subworkflows in _static_ mode
-- - All file checking can be done in pure Groovy
+- - properly labeled and single global Nextlow channel
+- - _static_ mode skips entire reference selection procedure
 - Con:
-- - one more channel to pass between subworkflows in _kma_ mode compared to a joint channel of FASTA files plus their corresponding indexes
-- - creation of _ch_fasta_references_ brings sightly more code to the main workflow _igsmp.nf_
+- - mildly more code in the main workflow due to the `--reference_selection` switch
