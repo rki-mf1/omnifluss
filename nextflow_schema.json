@@ -40,6 +40,10 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "no_intermediate_files": {
+                    "type": "boolean",
+                    "description": "Boolean specifying whether all intermediate files are published (false) or only the most important files (true)"
                 }
             }
         },
