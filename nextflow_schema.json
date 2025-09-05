@@ -43,7 +43,9 @@
                 },
                 "no_intermediate_files": {
                     "type": "boolean",
-                    "description": "Boolean specifying whether all intermediate files are published (false) or only the most important files (true)"
+                    "description": "Publish only the most important files, instead of all intermediate files.",
+                    "help_text": "Set this parameter to only publish the consensus sequences (FASTA), mapping files (BAM) and reports.",
+                    "default": false
                 }
             }
         },
