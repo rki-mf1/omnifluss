@@ -50,6 +50,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 //check presence of sections
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -97,6 +98,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -136,6 +138,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -176,6 +179,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -216,6 +220,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -256,6 +261,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -295,6 +301,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -335,6 +342,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -374,6 +382,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -413,6 +422,7 @@ nextflow_workflow {
                 { assert workflow.success },
                 //check presence of sections
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
@@ -457,6 +467,7 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},

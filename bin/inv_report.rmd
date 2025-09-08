@@ -318,6 +318,107 @@ write.csv(
   file = file.path(params$data_output_dir, "read_statistics.csv")
 )
 ```
+`r if(length(l.infiles.trimming)!= 0){"<div class=superhighimage>"}`
+
+```{r count_trimming_samples, eval = length(l.infiles.trimming) != 0}
+sample.count <- length(unique(df.table$sample))
+plot.width <- 20
+```
+
+`r if(length(l.infiles.trimming) != 0){"For a better overview, the reads counts are plotted in a bar plot per sample. The number of raw reads is shown in light blue and dark blue visualizes trimmed reads."}`
+
+```{r plot_trimming, eval = length(l.infiles.trimming) != 0}
+if (sample.count > stepsize) {
+  # for more than 20 samples split plot into multiple plots with each only 20 samples  
+  for (s in 0:(ceiling(sample.count/stepsize)-1) ) {
+    x = s*stepsize+1
+    y = s*stepsize+stepsize
+    df.summary.subset <- na.omit(df.summary[x:y,])
+    df.plot <- melt(df.summary.subset, id.vars = "sample",
+                    measure.vars = c("reads.before.clip", "reads.after.clip"))
+    
+    g <- ggplot(data = df.plot, aes(sample, value, fill = variable)) +
+      geom_bar(stat = "identity", position = "dodge", width = 0.6) +
+      labs(title = "read counts before & after trimming",
+           x = "sample", y = "count", fill = "trimming") +
+      scale_fill_manual(values = c("#56B4E9", "#0072B2"), labels = c("raw", "trimmed")) +
+      scale_y_continuous(labels = function(x) format(x, scientific = F)) +
+      theme(axis.text.x = element_text(angle = 90, hjust = 1),
+            legend.position = "top") +
+      coord_flip()
+    print(g)
+  }
+} else {
+    df.plot <- melt(df.summary, id.vars = "sample",
+                    measure.vars = c("reads.before.clip", "reads.after.clip"))
+    ggplot(data = df.plot, aes(sample, value, fill = variable)) +
+        geom_bar(stat = "identity", position = "dodge", width = 0.6) +
+        labs(title = "read counts before & after trimming",
+             x = "sample", y = "count", fill = "trimming") +
+        scale_fill_manual(values = c("#56B4E9", "#0072B2"), labels = c("raw", "trimmed")) +
+        scale_y_continuous(labels = function(x) format(x, scientific = F)) +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1),
+              legend.position = "top") +
+        coord_flip()
+}
+```
+
+`r if(length(l.infiles.trimming) != 0){"</div>"}`
+
+`r if(length(l.infiles.trimming) != 0){"## Read Quality Distribution\nFor the forward (R1) and reverse (R2) read the sequence quality distribution is shown after trimming."}`
+
+```{r read_trimming_for_phred, eval = length(l.infiles.trimming) != 0}
+df.trimming.phred.data <- ldply(l.trimming.data.json, function(e){
+    df.output <- data.frame(phred_score_R1 = c(e$"read1_after_filtering"$"quality_curves"$"mean"),
+                            phred_score_R2 = c(e$"read2_after_filtering"$"quality_curves"$"mean"))
+    return(df.output)
+})
+colnames(df.trimming.phred.data) <- c("Sample", "R1", "R2")
+```
+
+`r if(length(l.infiles.trimming) != 0){"<div class=superhighimage>"}`
+```{r plot_phred_score, eval = length(l.infiles.trimming) != 0}
+samples <- unique(df.trimming.phred.data$Sample)
+if (length(samples)>stepsize) {
+  for (s in 0:(ceiling(length(samples)/stepsize)-1)){
+    x= s*stepsize
+    y = ((s+1)*stepsize)-1
+    if (y>length(samples)){
+      y = length(samples)
+    }
+    df.subset <- subset(df.trimming.phred.data, Sample %in% samples[x:y])
+    df.subset <- melt(df.subset, id.vars = "Sample", measure.vars = c("R1", "R2"))
+
+    b <- ggplot(df.subset) +
+    geom_boxplot(aes(x = value, y = Sample, fill = variable), outlier.shape = NA, na.rm=TRUE, width = 0.4) +
+    labs(title = "Per Sequence Quality Scores", x = "Mean Sequence Quality (Phred Score)", y = "Sample", fill = "read") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "top") +
+    scale_fill_manual(values=c("lightgreen", "green4"))
+    print(b)
+    rm(df.subset)
+  }
+} else {
+  
+ df.trimming.phred.data <- melt(df.trimming.phred.data, id.vars = "Sample", measure.vars = c("R1", "R2"))
+  ggplot(df.trimming.phred.data) +
+    geom_boxplot(aes(x = value, y = Sample, fill = variable), outlier.shape = NA, na.rm=TRUE, width = 0.4) +
+    labs(title = "Per Sequence Quality Scores", x = "Mean Sequence Quality (Phred Score)", y = "Sample", fill = "read") +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "top") +
+    scale_fill_manual(values=c("lightgreen", "green4"))
+}
+```
+`r if(length(l.infiles.trimming) != 0){"</div>"}`
+
+```{r trimming_cleanup, eval = length(l.infiles.trimming) != 0}
+rm(df.plot)
+rm(df.summary)
+rm(df.table)
+rm(df.trimming.data)
+rm(df.filter.data)
+rm(reads)
+rm(read_df)
+rm(df.trimming.phred.data)
+```
 
 `r if(length(l.infiles.kraken) != 0){"## Taxonomic Read Classification\nThe taxonomic classification of reads can not only serve to identify contamination,
   but also enable the filtering of reads assigned to certain taxa. In this step influena A, influenza B and Orthomyxoviridae reads were filtered and used for the
