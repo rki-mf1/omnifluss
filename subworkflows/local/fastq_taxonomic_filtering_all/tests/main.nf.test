@@ -123,7 +123,7 @@ nextflow_workflow {
         }
 
         then {
-            //computation of md5sums of files with a byte size of 0 resulted in errors, check only existing files
+            // computation of md5sums of compressed files with a byte size of 0 resulted in errors, check only files that exist
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             assertAll(
                 { assert workflow.success},
@@ -160,7 +160,7 @@ nextflow_workflow {
         }
 
         then {
-            //computation of md5sums of files with a byte size of 0 resulted in errors, check only existing files
+            // computation of md5sums of compressed files with a byte size of 0 resulted in errors, check only files that exist
             def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             assertAll(
                 { assert workflow.success},
