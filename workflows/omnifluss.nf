@@ -58,6 +58,10 @@ workflow OMNIFLUSS {
         exit 1, "When selecting 'static' as 'reference_selection' parameter, 'reference' must be specified, 'reference_selection_db' should not be specified."
     }
 
+    if (params.taxonomic_classifier.split(',').contains('kraken2') && !params.skip_taxonomic_filtering && (params.kraken2_taxid_filter_list == null || params.kraken2_db == null)){
+        exit 1, "When selecting 'kraken2' as 'taxonomic_classifier', 'kraken2_taxid_filter_list' and 'kraken2_db' must be specified."
+    }
+
     //
     // Read QC
     //
