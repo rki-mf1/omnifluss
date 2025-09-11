@@ -40,6 +40,12 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "no_intermediate_files": {
+                    "type": "boolean",
+                    "description": "Publish only the most important files, instead of all intermediate files.",
+                    "help_text": "Set this parameter to only publish the consensus sequences (FASTA), mapping files (BAM) and reports.",
+                    "default": false
                 }
             }
         },
