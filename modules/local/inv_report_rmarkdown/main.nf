@@ -9,6 +9,7 @@ process INV_REPORT_RMARKDOWN {
             'community.wave.seqera.io/library/bioconductor-shortread_pandoc_r-base_r-data.table_pruned:8772a4bbf7f04989' }"
 
     input:
+    path(sample_sheet)
     val(consensus_mincov)
     val(reference_selection)
     path(reporting_information)
@@ -20,6 +21,8 @@ process INV_REPORT_RMARKDOWN {
     path(samtools_coverage)
     path(samtools_flagstat)
     path(consensus_calls)
+    path(empty_kraken2_reads)
+    path(empty_spa_files)
 
     output:
     path "qc_report.html"                                      , emit: report
@@ -37,7 +40,16 @@ process INV_REPORT_RMARKDOWN {
     # create report
     cp -L ${projectDir}/bin/inv_report.rmd inv_report_copied.rmd
 
-    Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(min_cov=${consensus_mincov}, reference='${reference_selection}', information_json='${reporting_information_file}'), output_file='qc_report.html')"
+    # move invalid files to sub directory
+    mkdir invalid_files
+    if [[ "${empty_kraken2_reads}" != "" ]]; then
+        mv ${empty_kraken2_reads} invalid_files
+    fi
+    if [[ "${empty_spa_files}" != "" ]]; then
+        mv ${empty_spa_files} invalid_files
+    fi
+
+    Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(min_cov=${consensus_mincov}, reference='${reference_selection}', information_json='${reporting_information_file}', sample_sheet='${sample_sheet}'), output_file='qc_report.html')"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

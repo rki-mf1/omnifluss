@@ -188,7 +188,7 @@ nextflow_pipeline {
                 {
                     assert file("$outputDir/report/qc_report.html").exists()
                     assert file("$outputDir/report/qc_report.html").getText().contains("<h2>Sequencing Run Information</h2>")
-                    assert file("$outputDir/report/qc_report.html").getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br></p>")
+                    assert file("$outputDir/report/qc_report.html").getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")
                 }
             )
         }

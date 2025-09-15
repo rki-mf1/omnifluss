@@ -2,6 +2,7 @@ include { INV_REPORT_RMARKDOWN } from '../../../modules/local/inv_report_rmarkdo
 
 workflow INV_REPORTING_ALL {
     take:
+    sample_sheet
     consensus_mincov
     reference_selection
     reporting_information
@@ -13,6 +14,8 @@ workflow INV_REPORTING_ALL {
     samtools_coverage
     samtools_flagstat
     consensus_calls
+    empty_kraken2_reads
+    empty_spa_files
 
     main:
     report                        = Channel.empty()
@@ -24,6 +27,7 @@ workflow INV_REPORTING_ALL {
     N_content_and_Ambiguous_calls = Channel.empty()
 
     INV_REPORT_RMARKDOWN(
+        sample_sheet,
         consensus_mincov,
         reference_selection,
         reporting_information,
@@ -34,7 +38,9 @@ workflow INV_REPORTING_ALL {
         bedtools_genomecov,
         samtools_coverage,
         samtools_flagstat,
-        consensus_calls
+        consensus_calls,
+        empty_kraken2_reads,
+        empty_spa_files
     )
     report                        = INV_REPORT_RMARKDOWN.out.report
     versions                      = INV_REPORT_RMARKDOWN.out.versions

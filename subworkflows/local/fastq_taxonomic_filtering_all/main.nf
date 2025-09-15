@@ -17,6 +17,7 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
 
     _ch_classified_reads_assignment = Channel.empty()
     _ch_classified_reads_fastq      = Channel.empty()
+    ch_empty_kraken2_reads          = Channel.empty()
 
     if (tools.split(',').contains('kraken2')) {
 
@@ -85,12 +86,16 @@ workflow FASTQ_TAXONOMIC_FILTERING_ALL {
         // filter empty files
         // Scenario: KRAKEN returned non-empty FASTQ files but all reads were assigned to off-target species w.r.t. taxIDs given to KRAKENTOOLS'
         ch_extracted_kraken2_reads = ch_extracted_kraken2_reads.branch(isFastqEmptyFunction)
+
+        //combining empty fastq files before and after read extraction (covering both scenarios)
+        ch_empty_kraken2_reads = _ch_classified_reads_fastq.empty.mix(ch_extracted_kraken2_reads.empty)
     }
 
     emit:
 
     kraken2_report          = ch_kraken2_report
     extracted_kraken2_reads = ch_extracted_kraken2_reads.nonempty
+    empty_kraken2_reads     = ch_empty_kraken2_reads
     multiqc_files           = ch_multiqc_files
     versions                = ch_versions
 
