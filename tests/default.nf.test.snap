@@ -106,7 +106,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:16:42.177250712"
+        "timestamp": "2025-09-19T10:04:02.136090212"
     },
     "Snapshot - Stable consensus": {
         "content": [
@@ -131,7 +131,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:24:07.627440735"
+        "timestamp": "2025-09-19T10:11:12.049714233"
     },
     "Snapshot - Stub versions": {
         "content": [
@@ -231,7 +231,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:25:41.674398606"
+        "timestamp": "2025-09-19T10:12:53.48221676"
     },
     "Snapshot - Stable versions": {
         "content": [
@@ -331,7 +331,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:23:46.004411563"
+        "timestamp": "2025-09-19T10:10:50.463704037"
     },
     "Snapshot - Stable content": {
         "content": [
@@ -406,7 +406,7 @@
                     "tabix": "1.19.1"
                 },
                 "Workflow": {
-                    "rki-mf1/omnifluss": "v0.2.1"
+                    "rki-mf1/omnifluss": "v0.3.0"
                 }
             },
             [
@@ -940,7 +940,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:23:22.897345772"
+        "timestamp": "2025-09-19T10:10:28.733740064"
     },
     "Snapshot - Stable consensus with report": {
         "content": [
@@ -965,7 +965,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:16:52.98120333"
+        "timestamp": "2025-09-19T10:04:12.914608343"
     },
     "Snapshot - Stub trace": {
         "content": [
@@ -1138,7 +1138,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:25:19.645828803"
+        "timestamp": "2025-09-19T10:12:31.284770535"
     },
     "Snapshot - Stable content with report": {
         "content": [
@@ -1216,7 +1216,7 @@
                     "tabix": "1.19.1"
                 },
                 "Workflow": {
-                    "rki-mf1/omnifluss": "v0.2.1"
+                    "rki-mf1/omnifluss": "v0.3.0"
                 }
             },
             [
@@ -1816,6 +1816,6 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-05T16:16:30.928042731"
+        "timestamp": "2025-09-19T10:03:50.972063909"
     }
 }
