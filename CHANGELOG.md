@@ -3,11 +3,19 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## unreleased
+## 0.3.0 - [2025-09-19]
+
+### `Added`
+
+- added `no_intermediate_files` parameter (boolean), specifying whether to publish intermediate files or not
+- added two read qc plots to the report
+- added display of samples that dropped throughout the workflow
 
 ### `Fixed`
 
 - fixed input parameter validation
+- restructured inputs for reporting
+- implemented a check for kraken2 related parameters if selected
 
 ## 0.2.1 - [2025-08-27]
 
