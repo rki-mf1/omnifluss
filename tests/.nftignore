@@ -12,18 +12,22 @@ fastp/*.fastp.{html,log}
 pipeline_info/*.{html,json,txt,yml}
 
 bedtools/local/*{_small,_medium}.{lowcov,final}.bed
-bcftools/*.vcf.gz
-bcftools/*.vcf.gz.tbi
+bcftools/index/*.vcf.gz.tbi
 bcftools/filter/*.vcf.gz
 bcftools/local/*.vcf.gz
 bcftools/consensus/*.fa
-lofreq/*.{vcf.gz,bam}
+bcftools/norm/*.{vcf.gz,vcf.gz.tbi}
+lofreq/callparallel/*.vcf.gz
+lofreq/filter/*.vcf.gz
+lofreq/indelqual/*.bam
+lofreq/viterbi/*.bam
 pyvcf/*.vcf
 samtools/sort/*.bam
 samtools/index/*.bam.bai
 samtools/stats/*.bam.stats
 samtools/idxstats/*.bam.idxstats
 samtools/flagstat/*.bam.flagstat
+samtools/faidx/*.fasta.fai
 picard/markduplicates/*.{bam,MarkDuplicates.metrics.txt}
 tabix/*.vcf.gz.tbi
 bwa/mem/*.bam
@@ -49,3 +53,9 @@ multiqc/multiqc_data/multiqc_samtools_flagstat.txt
 multiqc/multiqc_data/multiqc_picard_dups.txt
 multiqc/multiqc_data/multiqc_general_stats.txt
 
+multiqc/multiqc_data/multiqc_samtools_coverage.txt
+multiqc/multiqc_data/samtools-coverage{-table,_BQ,_Bases,_Coverage,_MQ,_Mean_depth,_Reads}.txt
+report/qc_report.html
+report/qc_report_data/mapping_statistics.csv
+bedtools/genomecov/*{_small,_medium}.coverage.tsv
+samtools/coverage/*{_small,_medium}.samtools_coverage.txt

@@ -4,6 +4,9 @@ lint:
   - assets/nf-core-omnifluss_logo_light.png
   - docs/images/nf-core-omnifluss_logo_light.png
   - docs/images/nf-core-omnifluss_logo_dark.png
+  - docs/output.md
+  - docs/README.md
+  - docs/usage.md
   - .github/ISSUE_TEMPLATE/config.yml
   - .github/workflows/awstest.yml
   - .github/workflows/awsfulltest.yml
@@ -22,6 +25,9 @@ lint:
   - docs/images/nf-core-omnifluss_logo_light.png
   - docs/images/nf-core-omnifluss_logo_dark.png
   - .github/ISSUE_TEMPLATE/bug_report.yml
+  - .gitignore
+  nf_test_content:
+  - tests/inv_invalidParameters.nf.test
   multiqc_config:
   - report_comment
   nextflow_config:
@@ -49,4 +55,4 @@ template:
   - github_badges
   - igenomes
   - nf_core_configs
-  version: 0.2.1
+  version: 0.3.0

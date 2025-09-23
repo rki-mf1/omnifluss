@@ -21,11 +21,17 @@
                     ]
                 ],
                 "2": [
-                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                    
                 ],
                 "3": [
+                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                ],
+                "4": [
                     "versions.yml:md5,1c34447f43f01ec27ddc7210fb499e05",
                     "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
+                ],
+                "empty_kraken2_reads": [
+                    
                 ],
                 "extracted_kraken2_reads": [
                     [
@@ -56,56 +62,33 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-08T15:27:22.903163282"
+        "timestamp": "2025-09-05T10:36:28.750807081"
     },
     "sarscov2 - single_end - stub": {
         "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    
-                ],
-                "2": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                ],
-                "3": [
-                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
-                ],
-                "extracted_kraken2_reads": [
-                    
-                ],
-                "kraken2_report": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": true
-                        },
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "multiqc_files": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                ],
-                "versions": [
-                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
-                ]
-            }
+            [
+                "kraken",
+                "kraken/classification",
+                "kraken/classification/test.classified.fastq.gz",
+                "kraken/classification/test.kraken2.classifiedreads.txt",
+                "kraken/classification/test.kraken2.report.txt",
+                "kraken/classification/test.unclassified.fastq.gz",
+                "kraken/classification/versions.yml",
+                "pipeline_info",
+                "untar",
+                "untar/kraken2",
+                "untar/kraken2/hash.k2d",
+                "untar/kraken2/opts.k2d",
+                "untar/kraken2/taxo.k2d"
+            ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-08T14:49:26.445121877"
+        "timestamp": "2025-09-05T10:36:44.741930415"
     },
     "sarscov2 - paired_end": {
         "content": [
@@ -132,11 +115,17 @@
                     ]
                 ],
                 "2": [
-                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                    
                 ],
                 "3": [
+                    "test.kraken2.report.txt:md5,4227755fe40478b8d7dc8634b489761e"
+                ],
+                "4": [
                     "versions.yml:md5,1c34447f43f01ec27ddc7210fb499e05",
                     "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
+                ],
+                "empty_kraken2_reads": [
+                    
                 ],
                 "extracted_kraken2_reads": [
                     [
@@ -170,55 +159,34 @@
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-08T14:49:10.712352845"
+        "timestamp": "2025-09-05T10:36:37.941811447"
     },
     "sarscov2 - paired_end - stub": {
         "content": [
-            {
-                "0": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": false
-                        },
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "1": [
-                    
-                ],
-                "2": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                ],
-                "3": [
-                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
-                ],
-                "extracted_kraken2_reads": [
-                    
-                ],
-                "kraken2_report": [
-                    [
-                        {
-                            "id": "test",
-                            "single_end": false
-                        },
-                        "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                    ]
-                ],
-                "multiqc_files": [
-                    "test.kraken2.report.txt:md5,d41d8cd98f00b204e9800998ecf8427e"
-                ],
-                "versions": [
-                    "versions.yml:md5,a55d8b24a0d026c3f06185c5f5fd93be"
-                ]
-            }
+            [
+                "kraken",
+                "kraken/classification",
+                "kraken/classification/test.classified_1.fastq.gz",
+                "kraken/classification/test.classified_2.fastq.gz",
+                "kraken/classification/test.kraken2.classifiedreads.txt",
+                "kraken/classification/test.kraken2.report.txt",
+                "kraken/classification/test.unclassified_1.fastq.gz",
+                "kraken/classification/test.unclassified_2.fastq.gz",
+                "kraken/classification/versions.yml",
+                "pipeline_info",
+                "untar",
+                "untar/kraken2",
+                "untar/kraken2/hash.k2d",
+                "untar/kraken2/opts.k2d",
+                "untar/kraken2/taxo.k2d"
+            ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "24.10.4"
+            "nextflow": "25.04.3"
         },
-        "timestamp": "2025-08-08T14:49:42.182523732"
+        "timestamp": "2025-09-05T10:36:51.900609616"
     }
 }

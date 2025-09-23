@@ -2,13 +2,13 @@ nextflow_workflow {
 
     name "Test Subworkflow INV_REPORTING_ALL"
     script "../main.nf"
-    config "./nextflow.config"
     workflow "INV_REPORTING_ALL"
 
     //  Add tags for the subworkflow
     tag "subworkflows"
     tag "reporting"
     tag "R"
+    tag "INV"
 
     setup {
         def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/refs/heads/INV_illumina/intermediate_data/ENA_data_wf.tar.gz"
@@ -23,18 +23,29 @@ nextflow_workflow {
 
     test("complete data") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.of(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -44,31 +55,49 @@ nextflow_workflow {
                 { assert workflow.success },
                 //check presence of sections
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")},
                 //check snapshot of all outputs but the report (contains a date)
-                { assert snapshot(workflow.out["N_content_and_Ambiguous_calls"], workflow.out["kraken_classification"], workflow.out["mapping_statistics"], workflow.out["read_statistics"], workflow.out["top5_references"], workflow.out["versions"]).match() }
+                { assert snapshot(
+                    workflow.out["N_content_and_Ambiguous_calls"],
+                    workflow.out["kraken_classification"],
+                    workflow.out["mapping_statistics"],
+                    workflow.out["read_statistics"],
+                    workflow.out["top5_references"],
+                    workflow.out["versions"]).match() }
             )
         }
     }
 
-    //(1/8)
+    //(1/9)
     test("missing fastp input") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = []
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = []
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -77,29 +106,41 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
             )
         }
     }
 
-    //(2/8)
+    //(2/9)
     test("missing kraken input") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = []
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = []
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -108,29 +149,42 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
+
             )
         }
     }
 
-    //(3/8)
+    //(3/9)
     test("missing kma input") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = []
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = []
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -139,29 +193,42 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
+
             )
         }
     }
 
-    //(4/8)
+    //(4/9)
     test("missing picard markduplicates input") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = []
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = []
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -170,29 +237,42 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
+
             )
         }
     }
 
-    //(5/8)
+    //(5/9)
     test("missing bedtools genomecov input") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = []
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = []
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -201,29 +281,41 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
             )
         }
     }
 
-    //(6/8)
+    //(6/9)
     test("missing samtools coverage input") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = []
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = []
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -232,29 +324,42 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
+
             )
         }
     }
 
-    //(7/8)
+    //(7/9)
     test("missing samtools flagstat input") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = []
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = []
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -263,29 +368,41 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
             )
         }
     }
 
-    //(8/8)
+    //(8/9)
     test("missing bcftools consensus data") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = []
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = []
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -294,28 +411,89 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")}
+            )
+        }
+    }
+
+    // (9/9)
+    test("missing additional info json") {
+
+        when {
+            params {
+                outdir   = "$outputDir"
+            }
+            workflow {
+                """
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = []
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
+                """
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                //check presence of sections
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
+                { assert file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert ! file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert ! file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")},
+                //check snapshot of all outputs but the report (contains a date)
+                { assert snapshot(
+                    workflow.out["N_content_and_Ambiguous_calls"],
+                    workflow.out["kraken_classification"],
+                    workflow.out["mapping_statistics"],
+                    workflow.out["read_statistics"],
+                    workflow.out["top5_references"],
+                    workflow.out["versions"]).match() }
             )
         }
     }
 
     test("everything missing") {
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = []
-                input[2] = []
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
                 input[3] = []
                 input[4] = []
                 input[5] = []
                 input[6] = []
                 input[7] = []
                 input[8] = []
-                input[9] = '.'
+                input[9] = []
+                input[10] = []
+                input[11] = []
+                input[12] = []
+                input[13] = []
                 """
             }
         }
@@ -324,10 +502,14 @@ nextflow_workflow {
             assertAll(
                 { assert workflow.success },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Counts</h2>") },
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Read Quality Distribution</h2>") },
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Taxonomic Read Classification</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Mapping Statistics</h2>")},
                 { assert !file(workflow.out["report"][0]).getText().contains("<h2>Coverage Distribution</h2>")},
-                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")}
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Consensus Sequence</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<h2>Sequencing Run Information</h2>")},
+                { assert !file(workflow.out["report"][0]).getText().contains("<p><span style=\"font-size:16px; font-weight:bold\">Run</span>: <span style=\"font-size:16px\">Run42</span><br><span style=\"font-size:16px; font-weight:bold\">User</span>: <span style=\"font-size:16px\">Omnifluss Squad</span><br><br></p>")},
+
             )
         }
     }
@@ -339,18 +521,27 @@ nextflow_workflow {
         options '-stub'
 
         when {
+            params {
+                outdir   = "$outputDir"
+            }
             workflow {
                 """
-                input[0] = params.reporting_script
-                input[1] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
-                input[2] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
-                input[3] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
-                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
-                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
-                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
-                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
-                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
-                input[9] = '.'
+                input[0] = []
+                input[1] = 5
+                input[2] = 'kma'
+                input[3] = Channel.value(
+                    file(params.omnifluss_data_base_path + 'INV_illumina/json/valid_reporting_additional_info.json', checkIfExists: true)
+                )
+                input[4] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fastp.json']).collect()
+                input[5] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.report.txt']).collect()
+                input[6] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.kma.spa']).collect()
+                input[7] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.MarkDuplicates.metrics.txt']).collect()
+                input[8] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.coverage.tsv']).collect()
+                input[9] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.samtools_coverage.txt']).collect()
+                input[10] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.sorted.bam.flagstat']).collect()
+                input[11] = Channel.fromPath(['${launchDir}/ENA_data_wf/*.fa']).collect()
+                input[12] = []
+                input[13] = []
                 """
             }
         }

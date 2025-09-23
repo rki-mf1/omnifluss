@@ -78,5 +78,32 @@
             "nextflow": "25.04.3"
         },
         "timestamp": "2025-08-19T12:02:37.773710798"
+    },
+    "missing additional info json": {
+        "content": [
+            [
+                "N_content_and_Ambiguous_calls.csv:md5,7f173d58d0a2f71bde0933f29ccc8ea9"
+            ],
+            [
+                "kraken_classification.csv:md5,e7c1324fdd1e5705b8d3f548a0cab9f3"
+            ],
+            [
+                "mapping_statistics.csv:md5,5f50281a09ccc0373edde59061cf9ac3"
+            ],
+            [
+                "read_statistics.csv:md5,5e9eb833f14bcd57e7404df814ac90d3"
+            ],
+            [
+                "top5_references.csv:md5,eefb80b809c0619a29c6605ba9144661"
+            ],
+            [
+                "versions.yml:md5,ee98c8d2e372f6dd6f4032948dedb86e"
+            ]
+        ],
+        "meta": {
+            "nf-test": "0.9.2",
+            "nextflow": "25.04.6"
+        },
+        "timestamp": "2025-08-27T13:16:06.854414682"
     }
 }

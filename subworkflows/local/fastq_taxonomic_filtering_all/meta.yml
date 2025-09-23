@@ -52,6 +52,11 @@ output:
       description: |
         FASTQ or FASTA file of just reads assigned to the requested taxonomic IDs.
       pattern: "*.{fastq,fasta}"
+  - empty_kraken2_reads:
+      type: file
+      description: |
+        FASTQ or FASTA file without any reads assigned to the requested taxonomic IDs.
+      pattern: "*.{fastq,fasta}"
   - versions:
       type: file
       description: |

@@ -131,6 +131,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
 
     emit:
     spa                 = ch_kma_spa.valid      // channel: [ val(meta), [file(spa)] ]      // nf-core style
+    spa_invalid         = ch_kma_spa.invalid    // channel: [ val(meta), [file(spa)] ]      // nf-core style
     top1ids             = ch_top1ids            // channel: [ val(meta), file(txt) ]        // nf-core style
     final_topRefs       = ch_final_topRefs      // channel: [ val(meta), fasta ]            // nf-core style
     versions            = ch_versions           // channel: [ versions.yml ]

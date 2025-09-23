@@ -40,6 +40,12 @@
                     "type": "string",
                     "description": "MultiQC report title. Printed as page header, used for filename if not otherwise specified.",
                     "fa_icon": "fas fa-file-signature"
+                },
+                "no_intermediate_files": {
+                    "type": "boolean",
+                    "description": "Publish only the most important files, instead of all intermediate files.",
+                    "help_text": "Set this parameter to only publish the consensus sequences (FASTA), mapping files (BAM) and reports.",
+                    "default": false
                 }
             }
         },
@@ -104,17 +110,20 @@
                 },
                 "kraken2_db": {
                     "type": "string",
-                    "description": "Path to a Kraken2 database."
+                    "description": "Path to a Kraken2 database.",
+                    "format": "directory-path"
                 },
                 "kraken2_taxid_filter_list": {
                     "type": "string",
                     "description": "List of taxids to filter from the Kraken2 results.",
-                    "help_text": "Multiple taxids separated with commas."
+                    "help_text": "Multiple taxids separated with a space."
                 },
                 "reference_processing": {
                     "type": "string",
                     "default": "samtools_faidx",
-                    "pattern": "^((inv_prep_ref|samtools_faidx)?,?)*(?<!,)$"
+                    "pattern": "^((inv_prep_ref|samtools_faidx)?,?)*(?<!,)$",
+                    "help_text": "Multiple tools separated with commas.",
+                    "description": "Tools and options for reference preprocessing ."
                 },
                 "aligner": {
                     "type": "string",
@@ -155,6 +164,19 @@
                 "skip_multiqc": {
                     "type": "boolean",
                     "description": "Skip MultiQC report generation"
+                },
+                "skip_report": {
+                    "type": "boolean",
+                    "description": "Skip HTML report generation"
+                },
+                "reporting_additional_information": {
+                    "type": "string",
+                    "pattern": "^\\S+\\.json$",
+                    "schema": "assets/schema_flat_json.json",
+                    "description": "Path to a JSON file containing additional information that is printed in the HTML report.",
+                    "help_text": "The file should contain a single JSON object with no nesting, thus flat key-value pairs.",
+                    "format": "file-path",
+                    "mimetype": "application/json"
                 }
             }
         },
