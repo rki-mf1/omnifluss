@@ -1,0 +1,35 @@
+nextflow_process {
+
+    name "Test Process SAMPLE_SHEET_GENERATION_PYTHON"
+    script "../main.nf"
+    process "SAMPLE_SHEET_GENERATION_PYTHON"
+
+    tag "modules"
+    tag "modules_local"
+    tag "sample_sheet_generation_python"
+
+    test("Sample Sheet Test") {
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id: 'sample_1' ], file('path/to/tmp_dir/sample_1.fa'),
+                    [ id: 'sample_2' ], file('path/to/tmp_dir/sample_2.fa'),
+                    [ id: 'sample_3' ], file('path/to/tmp_dir/sample_3.fa'),
+                ])
+                input[1] = "/path/to/outdir/"
+                input[2] = "."
+                """
+
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success  },
+                { assert snapshot(process.out.sample_sheet).match() }
+            )
+        }
+    }
+}

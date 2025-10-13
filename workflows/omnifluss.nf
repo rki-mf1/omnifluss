@@ -14,6 +14,7 @@ include { BAM_SPECIAL_VARIANTS_CASE_ALL       } from '../subworkflows/local/bam_
 include { BAM_SAMTOOLS_STATS_ALL              } from '../subworkflows/local/bam_samtools_stats_all'
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
 include { INV_REPORTING_ALL                   } from '../subworkflows/local/inv_reporting_all'
+include { SAMPLE_SHEET_GENERATION_PYTHON      } from '../modules/local/sample_sheet_generation_python'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
 include { paramsSummaryMap                    } from 'plugin/nf-schema'
@@ -243,6 +244,13 @@ workflow OMNIFLUSS {
         ch_rescued_variants                 // channel: [ val(meta), bed   ]
     )
     ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
+    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+
+    SAMPLE_SHEET_GENERATION_PYTHON(
+        VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect(),
+        params.outdir,
+        "$projectDir"
+    )
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
     if (! params.skip_report) {
