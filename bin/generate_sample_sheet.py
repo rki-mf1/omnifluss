@@ -52,7 +52,7 @@ def main():
     fastas = []
     
     #form the correct path, depending on whether an absolute or relative outdir was supplied
-    path = args.outdir if args.outdir.startswith("/") else os.path.join(args.project_dir,args.outdir)
+    path = os.path.join(args.outdir,"bcftools/consensus/") if args.outdir.startswith("/") else os.path.join(args.project_dir,args.outdir,"bcftools/consensus/")
     
     
     for elem in args.input.split(","):
