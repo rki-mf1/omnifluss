@@ -26,10 +26,10 @@ See the [Output](#output) chapter for the documentation of omnifluss' outputs.
 
 ### Reproducibility
 
-To ensures that a specific version of omnifluss is used when running the pipeline, you can specify the pipeline version.
-If you keep using the same version tag, you'll be running the same version of the omnifluss, even if there have been changes to the code since that version.
+To ensures that a specific version of omnifluss is used when running the pipeline, you can specify a release tag.
+If you keep using the same release tag, you'll be running the same version of omnifluss, even if there have been changes to the code since that version.
 You can visit the [releases page](https://github.com/rki-mf1/omnifluss/releases) and find the latest pipeline version at the top of the website.
-Then, running omnifluss with the Nextflow option `-r` (using one hyphen, eg. `-r v0.2.1`), you can switch to a particular version of omnifluss:
+Then, by running omnifluss with the Nextflow option `-r` (using one hyphen, eg. `-r v0.2.1`), you can switch to a particular version of omnifluss:
 ```bash
 nextflow run rki-mf1/omnifluss \
     -r v0.2.1 \
@@ -39,7 +39,7 @@ nextflow run rki-mf1/omnifluss \
     --kraken2_db /path/to/my/kraken2db/ \
     --outdir results
 ```
-The release version of omnifluss used in a particular run is written to the Nextlow log file for reproducibility.
+The version of omnifluss used in a particular run is written to the Nextlow log file for reproducibility.
 
 ### Updating the pipeline
 
@@ -57,7 +57,7 @@ nextflow pull -r v0.2.0 rki-mf1/omnifluss
 
 ### Configs and profiles
 
-Omnifluss provides a plethora of parameters (use `--help` to inspect the manual page) to configure to workflow.
+Omnifluss provides a plethora of parameters (use `--help` to inspect the manual page) to configure the workflow.
 To process Illumina paired-end short-read sequencing data of Influenza virus samples, we have prepared a [configuration file](https://github.com/rki-mf1/omnifluss/blob/update_website/conf/pathogens/INV_illumina.config) with best-practise settings.
 This predefined configuration file can be provided to an omnifluss run via the `-profile` option:
 ```bash
@@ -97,8 +97,8 @@ which refers to the structured information
 |INV_ILL_NB2 | /path/to/experiment_NB2_R1.fastq.gz | /path/to/experiment_NB2_R2.fastq.gz |
 |INV_ILL_NB3 | /path/to/experiment_NB3_R1.fastq.gz | /path/to/experiment_NB3_R2.fastq.gz |
 
-The argument parser will automatically detect the sample and paired-end information provided by the samples sheet.
-Technically, the sample sheet can have as many columns as desired, however, only the first three columns are required and have to match the definition table below.
+The argument parser will automatically detect the sample and paired-end information provided by the sample sheet.
+The sample sheet requires a three-column entry per sample which has to match the definition below.
 
 | Column | Description |
 | ------ | ----------- |
