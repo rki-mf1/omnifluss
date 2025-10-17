@@ -8,10 +8,10 @@ keywords:
   - RMarkdown
 
 input:
-  - sample_sheet:
-    type: file
+  - num_samples:
+    type: int
     description: |
-      sample sheet used to start the workflow. Used to infer the total number of samples.
+      Number of input samples.
   - consensus_mincov:
       type: int
       description: |
@@ -73,7 +73,6 @@ input:
     type: file(s)
     description: |
       File containing only a header (unsuccessful reference selection).
-
 
 output:
   - qc_report:
