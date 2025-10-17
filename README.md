@@ -8,12 +8,12 @@
 
 ## Introduction
 
-**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes.
+**rki-mf1/omnifluss**, from _omni_ (Latin: 'all, every') and _Fluss_ (German: 'flow, stream'), is a computational workflow for the reconstruction of virus genomes.
 
-Omnifluss takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.
+`Omnifluss` takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.
 The specific algorithms and software selected for these operations primarily depend on two parameters: virus type and sequencing technology.
 Beside these two parameters many settings and subroutines can be finetuned.
-After a successful run `omnifluss` returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
+After a successful run, Omnifluss returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
 
 ## Usage
 
