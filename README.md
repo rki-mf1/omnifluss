@@ -3,7 +3,6 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rki-mf1/omnifluss/nf-test.yml?branch=main&logo=githubactions&label=tests%20(%40main))
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/rki-mf1/omnifluss?logo=Github)
 
-
 # rki-mf1/omnifluss
 
 ## Introduction
@@ -23,10 +22,12 @@ Please visit our **[omnifluss website](https://rki-mf1.github.io/omnifluss/)** f
 
 You need Nextflow and at least one package manager (conda) or container engine (singularity, docker) available.
 You can install Nextflow via conda:
+
 ```bash
 conda create -n omnifluss -c bioconda -c conda-forge nextflow==25.04.3
 conda activate omnifluss
 ```
+
 </details>
 
 <details><summary> TL;DR (run) </summary>
@@ -37,6 +38,7 @@ nextflow run rki-mf1/omnifluss \
    --input samplesheet.csv \
    --outdir <OUTDIR>
 ```
+
 </details>
 
 ## Credits

@@ -5,6 +5,7 @@
 ## Usage
 
 Basic usage of omnifluss to reconstruct virus genomes:
+
 ```bash
 nextflow run rki-mf1/omnifluss \
     -profile singularity \
@@ -15,6 +16,7 @@ nextflow run rki-mf1/omnifluss \
 This command launches a basic omnifluss run with samples from the _samplesheet_, tasks executed within _singularity_ containers, and results stored in an output folder called _results_.
 We configured and optimised many settings and [Parameters](#parameters) to reconstruct Influenza virus genomes from Illumina paired-end (PE) short-read data.
 These configurations can be trivially added to the basic omnifluss run via another profile:
+
 ```bash
 nextflow run rki-mf1/omnifluss \
     -profile singularity,INV_illumina \
@@ -25,6 +27,7 @@ nextflow run rki-mf1/omnifluss \
 See the [Output](#output) chapter for the documentation of omnifluss' outputs.
 Remember that the commands above use your last cached version (see [Updating the pipeline](#updating-the-pipeline)) of omnifluss.
 If you like to run omnifluss at a specific release version, use the `-r` parameter of Naxtflow:
+
 ```bash
 nextflow run rki-mf1/omnifluss \
     -profile singularity,INV_illumina \
@@ -40,11 +43,13 @@ Further, you can resume an interrupted or broken pipeline runs via [resume](#res
 When you run the commands above, Nextflow automatically pulls the pipeline code from GitHub and stores it as a cached version.
 When running the pipeline, it will use a cached version by default if available - even if the pipeline has been updated on the developers' side.
 To make sure that you're running the latest version of the omnifluss, you can manually update the cached version of the pipeline via
+
 ```bash
 nextflow pull rki-mf1/omnifluss
 ```
 
 Again, you can add `-r` for a specific version
+
 ```bash
 nextflow pull -r v0.2.0 rki-mf1/omnifluss
 ```
@@ -75,20 +80,20 @@ INV_ILL_NB3,/path/to/experiment_NB3_R1.fastq.gz,/path/to/experiment_NB3_R2.fastq
 
 which refers to the structured information
 
-| sample     |          fastq_1                    |          fastq_2                    |
-|------------|-------------------------------------|-------------------------------------|
-|INV_ILL_NB1 | /path/to/experiment_NB1_R1.fastq.gz | /path/to/experiment_NB1_R2.fastq.gz |
-|INV_ILL_NB2 | /path/to/experiment_NB2_R1.fastq.gz | /path/to/experiment_NB2_R2.fastq.gz |
-|INV_ILL_NB3 | /path/to/experiment_NB3_R1.fastq.gz | /path/to/experiment_NB3_R2.fastq.gz |
+| sample      | fastq_1                             | fastq_2                             |
+| ----------- | ----------------------------------- | ----------------------------------- |
+| INV_ILL_NB1 | /path/to/experiment_NB1_R1.fastq.gz | /path/to/experiment_NB1_R2.fastq.gz |
+| INV_ILL_NB2 | /path/to/experiment_NB2_R1.fastq.gz | /path/to/experiment_NB2_R2.fastq.gz |
+| INV_ILL_NB3 | /path/to/experiment_NB3_R1.fastq.gz | /path/to/experiment_NB3_R2.fastq.gz |
 
 The argument parser will auto-detect the sample and paired-end information provided by the samples sheet.
 Technically, the sample sheet can have as many columns as desired, however, only the first three columns are required and have to match the definition table below.
 
-| Column | Description |
-| ------ | ----------- |
+| Column    | Description                                                                                                                                                                             |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`  | Custom sample name. This entry might be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                              |
+| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                              |
 
 ### Segment database
 
@@ -102,6 +107,7 @@ Technically, the sample sheet can have as many columns as desired, however, only
 
 You can especify a plain FASTA file for adapter clipping.
 E.g. for _Illumina Nextera Transposase adapter_
+
 ```
 >Illumina Nextera Transposase adapter fwd
 TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
@@ -111,14 +117,14 @@ GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 
 ## Parameters
 
-> ***Note:***
+> **_Note:_**
 > The documentation of pipeline parameters is generated automatically from the pipeline schema. Options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
 
 Besides the very crucial parameters explained in [Inputs](#inputs), various parameters can be finetuned thoughout the workflow.
 You can find the full list of parameters via `nextflow run rki-mf1/omnifluss -r <release-tag> --help`.
 In order to not bloat the omnifluss run command and save time when typing the run for repeatedly you can provide pipeline parameters in `JSON` or `YAML` format via `-params-file <file>`.
 
-> ***Warning:***
+> **_Warning:_**
 > Do not use the `-c <file>` to specify pipeline parameters as this will result to errors!
 > Custom config files specified in `-c` must only be used for [tuning process resource specifications](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) or module arguments (args).
 
@@ -131,8 +137,8 @@ nextflow run rki-mf1/omnifluss -profile singularity -params-file params.yaml
 with:
 
 ```yaml
-input: 'samplesheet.csv'
-outdir: 'results'
+input: "samplesheet.csv"
+outdir: "results"
 ```
 
 ### `resume`
