@@ -11,7 +11,7 @@ params:
   min_cov: "none"
   reference: "none"
   information_json: "none"
-  sample_sheet: "none"
+  num_samples: "none"
   data_output_dir: "qc_report_data"
   version: "1.0.0"
 ---
@@ -145,9 +145,6 @@ if (params$information_json != "none") {
 #prints information about excluded samples
 if (length(list.files("invalid_files") != 0)) {
 
-  samples <- read.csv(file=params$sample_sheet)
-  samples_number <- nrow(samples)
-
 
   empty_kma <- list.files(path="invalid_files",
                         pattern = "*.kma.spa$",
@@ -169,7 +166,7 @@ if (len_empty_fasta != 0) {
     samples_empty_fasta <- sort(samples_empty_fasta)
     samples_empty_fasta_string <- paste(samples_empty_fasta, sep=", ")
 
-    cat(paste0("<span style='font-size:16px; font-weight:bold'>", len_empty_fasta,"/", samples_number, " samples failed during read extraction:<br></span>"))
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>", len_empty_fasta,"/", params$num_samples, " samples failed during read extraction:<br></span>"))
     cat(paste0("<span style='font-size:16px; font-weight:bold'>",samples_empty_fasta_string,"<br></span>"))
     cat("<br>")
   }
@@ -185,7 +182,7 @@ if (len_empty_kma != 0) {
     samples_empty_kma_string <- paste(samples_empty_kma, collapse=", ")
     length(samples_empty_kma_string)
 
-    cat(paste0("<span style='font-size:16px; font-weight:bold'>", len_empty_kma,"/",samples_number*8," potential sample-segment pairs failed during reference inference:<br></span>"))
+    cat(paste0("<span style='font-size:16px; font-weight:bold'>", len_empty_kma,"/", as.numeric(params$num_samples)*8," potential sample-segment pairs failed during reference inference:<br></span>"))
     cat(paste0("<span style='font-size:16px; font-weight:bold'>",samples_empty_kma_string,"<br></span>"))
     cat("<br>")
   }
@@ -381,14 +378,14 @@ plot.width <- 20
 
 ```{r plot_trimming, eval = length(l.infiles.trimming) != 0}
 if (sample.count > stepsize) {
-  # for more than 20 samples split plot into multiple plots with each only 20 samples  
+  # for more than 20 samples split plot into multiple plots with each only 20 samples
   for (s in 0:(ceiling(sample.count/stepsize)-1) ) {
     x = s*stepsize+1
     y = s*stepsize+stepsize
     df.summary.subset <- na.omit(df.summary[x:y,])
     df.plot <- melt(df.summary.subset, id.vars = "sample",
                     measure.vars = c("reads.before.clip", "reads.after.clip"))
-    
+
     g <- ggplot(data = df.plot, aes(sample, value, fill = variable)) +
       geom_bar(stat = "identity", position = "dodge", width = 0.6) +
       labs(title = "read counts before & after trimming",
@@ -450,7 +447,7 @@ if (length(samples)>stepsize) {
     rm(df.subset)
   }
 } else {
-  
+
  df.trimming.phred.data <- melt(df.trimming.phred.data, id.vars = "Sample", measure.vars = c("R1", "R2"))
   ggplot(df.trimming.phred.data) +
     geom_boxplot(aes(x = value, y = Sample, fill = variable), outlier.shape = NA, na.rm=TRUE, width = 0.4) +

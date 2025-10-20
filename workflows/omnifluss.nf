@@ -35,6 +35,7 @@ workflow OMNIFLUSS {
 
     main:
     ch_reads                    = ch_samplesheet
+    val_number_samples              = ch_samplesheet.count()
     ch_versions                 = Channel.empty()
     ch_multiqc_files            = Channel.empty()
     ch_final_topRefs            = Channel.empty()
@@ -267,7 +268,7 @@ workflow OMNIFLUSS {
         // Reporting
         //
         INV_REPORTING_ALL(
-            params.input,
+            val_number_samples,
             params.consensus_mincov,
             params.reference_selection,
             params.reporting_additional_information ? file(params.reporting_additional_information, checkIfExists: true) : [],
