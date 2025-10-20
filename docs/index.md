@@ -27,4 +27,4 @@ For in depth guidance of how to use omnifluss with your data please see the indi
 
 <hr>
 
-*Last update: October, 09th 2025*
+*Last update: October, 20th 2025*

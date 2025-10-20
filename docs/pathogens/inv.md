@@ -21,7 +21,7 @@ nextflow run rki-mf1/omnifluss \
 > ***Note:***
 > Mind the usage of different hyphen here! We use a single hyphen for Nextflow options and use a double hyphen for omnifluss specific parameters.
 
-This command launches a basic omnifluss run with tasks executed within singularity containers, sequence data defined in the [samplesheet](#sample-sheet), a FASTA file containing a reference sequence, a [Kraken2](https://ccb.jhu.edu/software/kraken2/) database, and results stored in an output folder called _results_.
+This command launches a basic omnifluss run with tasks executed within singularity containers, sequence data defined in the samplesheet, a FASTA file containing a reference sequence, a [Kraken2](https://ccb.jhu.edu/software/kraken2/) database, and results stored in an output folder called _results_.
 See the [Output](#output) chapter for the documentation of omnifluss' outputs.
 
 ### Reproducibility
