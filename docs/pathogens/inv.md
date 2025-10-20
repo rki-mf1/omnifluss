@@ -110,6 +110,9 @@ The sample sheet requires a three-column entry per sample which has to match the
 
 File containing one or multiple reference sequence.
 Parameter value is a FASTA file.
+For the influenza virus, the FASTA file typically contains eight reference sequences, i.e. one per segment.
+However, another collection might suits your reearch question.
+All reads from the `--input` FASTQ files are mapped against the sequences in `--reference` and these mappings will ultimately be used for a reference-guided assembly.
 
 Exactly one of the two parameters `--reference` and `--reference_selection_db` has to be provided to omnifluss when process Influenza virus data.
 These two parameters provide the references for the consensus sequence reconstruction.
@@ -160,7 +163,7 @@ GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 
 ### `--help`
 
-Various parameters can be finetuned thoughout the workflow.
+Various parameters can be finetuned throughout the workflow.
 You can find the full list of parameters via `nextflow run rki-mf1/omnifluss -r <release-tag> --help`.
 
 > ***Note:***
