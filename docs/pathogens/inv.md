@@ -111,7 +111,7 @@ The sample sheet requires a three-column entry per sample which has to match the
 File containing one or multiple reference sequence.
 Parameter value is a FASTA file.
 For the influenza virus, the FASTA file typically contains eight reference sequences, i.e. one per segment.
-However, another collection might suits your reearch question.
+However, another collection might suit your research question.
 All reads from the `--input` FASTQ files are mapped against the sequences in `--reference` and these mappings will ultimately be used for a reference-guided assembly.
 
 Exactly one of the two parameters `--reference` and `--reference_selection_db` has to be provided to omnifluss when process Influenza virus data.
