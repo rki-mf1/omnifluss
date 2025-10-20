@@ -91,20 +91,20 @@ INV_ILL_NB3,/path/to/experiment_NB3_R1.fastq.gz,/path/to/experiment_NB3_R2.fastq
 
 which refers to the structured information
 
-| sample     |          fastq_1                    |          fastq_2                    |
-|------------|-------------------------------------|-------------------------------------|
-|INV_ILL_NB1 | /path/to/experiment_NB1_R1.fastq.gz | /path/to/experiment_NB1_R2.fastq.gz |
-|INV_ILL_NB2 | /path/to/experiment_NB2_R1.fastq.gz | /path/to/experiment_NB2_R2.fastq.gz |
-|INV_ILL_NB3 | /path/to/experiment_NB3_R1.fastq.gz | /path/to/experiment_NB3_R2.fastq.gz |
+| sample      | fastq_1                             | fastq_2                             |
+| ----------- | ----------------------------------- | ----------------------------------- |
+| INV_ILL_NB1 | /path/to/experiment_NB1_R1.fastq.gz | /path/to/experiment_NB1_R2.fastq.gz |
+| INV_ILL_NB2 | /path/to/experiment_NB2_R1.fastq.gz | /path/to/experiment_NB2_R2.fastq.gz |
+| INV_ILL_NB3 | /path/to/experiment_NB3_R1.fastq.gz | /path/to/experiment_NB3_R2.fastq.gz |
 
 The argument parser will automatically detect the sample and paired-end information provided by the sample sheet.
 The sample sheet requires a three-column entry per sample which has to match the definition below.
 
-| Column | Description |
-| ------ | ----------- |
+| Column    | Description                                                                                                                                                                             |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`  | Custom sample name. This entry might be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                              |
+| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                              |
 
 ### `--reference`
 
@@ -154,6 +154,7 @@ Please see `--reference` for more details.
 
 You can especify a plain FASTA file for adapter clipping.
 E.g. for _Illumina Nextera Transposase adapter_
+
 ```
 >Illumina Nextera Transposase adapter fwd
 TCGTCGGCAGCGTCAGATGTGTATAAGAGACAG
@@ -166,7 +167,7 @@ GTCTCGTGGGCTCGGAGATGTGTATAAGAGACAG
 Various parameters can be finetuned throughout the workflow.
 You can find the full list of parameters via `nextflow run rki-mf1/omnifluss -r <release-tag> --help`.
 
-> ***Note:***
+> **_Note:_**
 > The documentation of pipeline parameters is generated automatically from the pipeline schema. Options are part of Nextflow and use a _single_ hyphen (pipeline parameters use a double-hyphen).
 
 ### `-params-file`

@@ -17,7 +17,6 @@ The specific algorithms and software selected for these operations primarily dep
 Beside these two parameters many settings and subroutines can be finetuned.
 After a successful run omnifluss returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
 
-
 ### Technical prerequisites
 
 For system requirements of omnifluss please see the [Prerequisites](prerequisites.md) page.

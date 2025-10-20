@@ -17,7 +17,7 @@ You can install Nextflow via its [official installation instructions](https://ne
 conda create -n omnifluss -c bioconda -c conda-forge nextflow==25.04.3
 ```
 
-> ***Note:***
+> **_Note:_**
 > With Nextflow in your active working environment you don't need to install omnifluss at all!
 > In the standard use case, Nextflow will automatically clone and use the omnifluss source code from its Github repository.
 
