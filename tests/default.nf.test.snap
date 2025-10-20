@@ -70,6 +70,9 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.2.0-1-g3948afb6b"
                 },
+                "SAMPLE_SHEET_GENERATION_PYTHON": {
+                    "generate_sample_sheet.py": "1.0.0"
+                },
                 "SAMTOOLS_COVERAGE": {
                     "samtools": 1.21
                 },
@@ -106,7 +109,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:04:02.136090212"
+        "timestamp": "2025-10-10T09:59:47.1007422"
     },
     "Snapshot - Stable consensus": {
         "content": [
@@ -131,7 +134,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:11:12.049714233"
+        "timestamp": "2025-10-10T10:07:30.109219402"
     },
     "Snapshot - Stub versions": {
         "content": [
@@ -198,6 +201,9 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.2.0-1-g3948afb6b"
                 },
+                "SAMPLE_SHEET_GENERATION_PYTHON": {
+                    "generate_sample_sheet.py": "1.0.0"
+                },
                 "SAMTOOLS_FAIDX": {
                     "samtools": 1.2
                 },
@@ -231,7 +237,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:12:53.48221676"
+        "timestamp": "2025-10-10T10:09:37.728280728"
     },
     "Snapshot - Stable versions": {
         "content": [
@@ -298,6 +304,9 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.2.0-1-g3948afb6b"
                 },
+                "SAMPLE_SHEET_GENERATION_PYTHON": {
+                    "generate_sample_sheet.py": "1.0.0"
+                },
                 "SAMTOOLS_FAIDX": {
                     "samtools": 1.2
                 },
@@ -331,11 +340,11 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:10:50.463704037"
+        "timestamp": "2025-10-10T10:07:08.412433071"
     },
     "Snapshot - Stable content": {
         "content": [
-            129,
+            130,
             {
                 "BCFTOOLS_FILTER": {
                     "bcftools": 1.2
@@ -735,6 +744,7 @@
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-pct.svg",
                 "multiqc/multiqc_report.html",
+                "omnifluss_sample_sheet.csv",
                 "picard",
                 "picard/markduplicates",
                 "picard/markduplicates/SRR31096286_medium.markduplicates.sorted.MarkDuplicates.metrics.txt",
@@ -825,7 +835,8 @@
                 "tabix",
                 "tabix/SRR31096286_medium.adjusted_gt.vcf.gz.tbi",
                 "tabix/SRR31143054_small.adjusted_gt.vcf.gz.tbi",
-                "tabix/versions.yml"
+                "tabix/versions.yml",
+                "versions.yml"
             ],
             [
                 "SRR31096286_medium.fastp.json:md5,b17aba999002d03fc6711f0a60513127",
@@ -933,14 +944,15 @@
                 "SRR31143054_small.NS.top1ref.standardized.fasta.gz:md5,4860d9678b7c0b040e9f5cff2321d3a9",
                 "SRR31143054_small.PA.top1ref.standardized.fasta.gz:md5,94d5479e46a53e7f2c3e16e1a1aaef06",
                 "SRR31143054_small.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
-                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f"
+                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f",
+                "versions.yml:md5,a23a151723e72bdac1c25704658dcf7d"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:10:28.733740064"
+        "timestamp": "2025-10-10T10:06:46.495494485"
     },
     "Snapshot - Stable consensus with report": {
         "content": [
@@ -965,11 +977,11 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:04:12.914608343"
+        "timestamp": "2025-10-10T09:59:57.900287223"
     },
     "Snapshot - Stub trace": {
         "content": [
-            129,
+            130,
             true,
             [
                 "SRR31096286_medium.fa:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -1131,18 +1143,19 @@
                 "SRR31096286_medium.adjusted_gt.vcf.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SRR31096286_medium.adjusted_gt.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SRR31143054_small.adjusted_gt.vcf.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "SRR31143054_small.adjusted_gt.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                "SRR31143054_small.adjusted_gt.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "versions.yml:md5,a23a151723e72bdac1c25704658dcf7d"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:12:31.284770535"
+        "timestamp": "2025-10-10T10:09:15.673784294"
     },
     "Snapshot - Stable content with report": {
         "content": [
-            136,
+            137,
             {
                 "BCFTOOLS_FILTER": {
                     "bcftools": 1.2
@@ -1596,6 +1609,7 @@
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-pct.svg",
                 "multiqc/multiqc_report.html",
+                "omnifluss_sample_sheet.csv",
                 "picard",
                 "picard/markduplicates",
                 "picard/markduplicates/SRR31096286_medium.markduplicates.sorted.MarkDuplicates.metrics.txt",
@@ -1698,7 +1712,8 @@
                 "tabix",
                 "tabix/SRR31096286_medium.adjusted_gt.vcf.gz.tbi",
                 "tabix/SRR31143054_small.adjusted_gt.vcf.gz.tbi",
-                "tabix/versions.yml"
+                "tabix/versions.yml",
+                "versions.yml"
             ],
             [
                 "SRR31096286_medium.fastp.json:md5,b17aba999002d03fc6711f0a60513127",
@@ -1809,13 +1824,14 @@
                 "SRR31143054_small.NS.top1ref.standardized.fasta.gz:md5,4860d9678b7c0b040e9f5cff2321d3a9",
                 "SRR31143054_small.PA.top1ref.standardized.fasta.gz:md5,94d5479e46a53e7f2c3e16e1a1aaef06",
                 "SRR31143054_small.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
-                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f"
+                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f",
+                "versions.yml:md5,a23a151723e72bdac1c25704658dcf7d"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:03:50.972063909"
+        "timestamp": "2025-10-10T09:59:36.085855294"
     }
 }
