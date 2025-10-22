@@ -7,7 +7,6 @@ process SAMPLE_SHEET_GENERATION_PYTHON {
 
     input:
     val input
-    val outdir
     val projectDir
 
     output:
@@ -15,8 +14,9 @@ process SAMPLE_SHEET_GENERATION_PYTHON {
     path "versions.yml"                    , emit: versions
 
     script:
+    def publish_dir_path      = task.ext.publish_dir_bcftools_consensus
     """
-    generate_sample_sheet.py --input "$input" --outdir "$outdir" --project_dir "$projectDir"
+    generate_sample_sheet.py --input "$input" --outdir "$publish_dir_path" --project_dir "$projectDir"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -248,7 +248,6 @@ workflow OMNIFLUSS {
 
     SAMPLE_SHEET_GENERATION_PYTHON(
         VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect(),
-        params.outdir,
         "$projectDir"
     )
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)

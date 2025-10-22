@@ -9,10 +9,6 @@ input:
     type: str
     description: |
       collection of channels of the format [ [meta], fasta ] as a string.
-  - outdir:
-      type: str
-      description: |
-        output directory.
   - projectDir:
       type: string
       description: |
