@@ -59,7 +59,10 @@ def main():
         #extract and generate paths to fastas
         if elem.endswith(".fa") or elem.endswith(".fa]"):
             elem = elem.rstrip("]")
-            fastas.append(os.path.join(path,elem.split("/")[-1]))
+            file = os.path.join(path,elem.split("/")[-1])
+            assert os.path.exists(file), f"Following file doesn't exist: {file}"
+            
+            fastas.append(file)
             
         #extract ids
         else:
