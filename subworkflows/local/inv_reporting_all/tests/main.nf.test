@@ -12,7 +12,7 @@ nextflow_workflow {
 
     setup {
         def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/refs/heads/INV_illumina/intermediate_data/ENA_data_wf.tar.gz"
-        def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+        def omnifluss_data_command = ['bash', '-c', "curl --output-dir ${launchDir} -L --retry 5 --retry-delay 10 ${omnifluss_data_url}"]
         def omnifluss_data_proc = omnifluss_data_command.execute()
         omnifluss_data_proc.waitFor()
 
