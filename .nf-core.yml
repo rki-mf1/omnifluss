@@ -51,6 +51,7 @@ template:
   org: rki-mf1
   outdir: .
   skip_features:
+    - ci
     - github_badges
     - igenomes
   version: 0.3.0
