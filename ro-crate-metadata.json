@@ -22,7 +22,7 @@
             "@id": "./",
             "@type": "Dataset",
             "creativeWorkStatus": "Stable",
-            "datePublished": "2025-10-28T11:00:01+00:00",
+            "datePublished": "2025-09-19T07:46:28+00:00",
             "description": "[![GitHub Release](https://img.shields.io/github/v/release/rki-mf1/omnifluss)](https://github.com/rki-mf1/omnifluss/releases)\n[![Static Badge](https://img.shields.io/badge/Documentation%20-%20website%20-%20brightgreen?logo=Github%20Pages&link=https%3A%2F%2Frki-mf1.github.io%2Fomnifluss%2F)](https://rki-mf1.github.io/omnifluss/)\n![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rki-mf1/omnifluss/nf-test.yml?branch=main&logo=githubactions&label=tests%20(%40main))\n![GitHub commit activity](https://img.shields.io/github/commit-activity/y/rki-mf1/omnifluss?logo=Github)\n\n\n# rki-mf1/omnifluss\n\n## Introduction\n\n**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes.\n\nOmnifluss takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.\nThe specific algorithms and software selected for these operations primarily depend on two parameters: virus type and sequencing technology.\nBeside these two parameters many settings and subroutines can be finetuned.\nAfter a successful run `omnifluss` returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.\n\n## Usage\n\nPlease visit our **[omnifluss website](https://rki-mf1.github.io/omnifluss/)** for our full documentation.\n\n<details><summary> TL;DR (setup environment) </summary>\n\nYou need Nextflow and at least one package manager (conda) or container engine (singularity, docker) available.\nYou can install Nextflow via conda:\n```bash\nconda create -n omnifluss -c bioconda -c conda-forge nextflow==25.04.3\nconda activate omnifluss\n```\n</details>\n\n<details><summary> TL;DR (run) </summary>\n\n```bash\nnextflow run rki-mf1/omnifluss \\\n   -profile <docker/singularity/.../institute/virus> \\\n   --input samplesheet.csv \\\n   --outdir <OUTDIR>\n```\n</details>\n\n## Credits\n\nrki-mf1/omnifluss was originally written by the RKI MF1 Viroinf team.\n\n## Funding\n\nThis project was supported by co-funding from the European Union\u2019s EU4Health programme under project no. 101113012 (IMS-HERA2).\n\n## Citations\n\n\\<WIP\\>\n\nAn extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.\n",
             "hasPart": [
                 {
@@ -96,7 +96,7 @@
             },
             "mentions": [
                 {
-                    "@id": "#e7ea460c-ac4e-4427-90cd-bcb9e3b23936"
+                    "@id": "#84f5d447-b36c-4a10-a4ac-5294fefc6147"
                 }
             ],
             "name": "rki-mf1/omnifluss"
@@ -129,7 +129,7 @@
                 }
             ],
             "dateCreated": "",
-            "dateModified": "2025-10-28T12:00:01Z",
+            "dateModified": "2025-10-28T11:52:02Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "keywords": [
                 "nf-core",
@@ -168,11 +168,11 @@
             "version": "!>=25.04.0"
         },
         {
-            "@id": "#e7ea460c-ac4e-4427-90cd-bcb9e3b23936",
+            "@id": "#84f5d447-b36c-4a10-a4ac-5294fefc6147",
             "@type": "TestSuite",
             "instance": [
                 {
-                    "@id": "#0cdad43d-bc91-4b3c-a7e5-05a9dec7cd1c"
+                    "@id": "#18f491f1-cb45-4db3-85d9-88d1688aea0b"
                 }
             ],
             "mainEntity": {
@@ -181,7 +181,7 @@
             "name": "Test suite for rki-mf1/omnifluss"
         },
         {
-            "@id": "#0cdad43d-bc91-4b3c-a7e5-05a9dec7cd1c",
+            "@id": "#18f491f1-cb45-4db3-85d9-88d1688aea0b",
             "@type": "TestInstance",
             "name": "GitHub Actions workflow for testing rki-mf1/omnifluss",
             "resource": "repos/rki-mf1/omnifluss/actions/workflows/nf-test.yml",
