@@ -54,5 +54,4 @@ template:
     - ci
     - github_badges
     - igenomes
-    - nf_core_configs
   version: 0.3.0
