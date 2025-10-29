@@ -901,8 +901,6 @@
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "samtools-flagstat-pct-table.txt:md5,564810c45a62e29c3c94d522141dfb97",
-                "samtools-flagstat-table.txt:md5,c2615ba1f63742a0bbdc603591369dd0",
                 "SRR31096286_medium.special_case_variant_mask.bed:md5,2851442a1e943a847d46791aa1c388f8",
                 "SRR31143054_small.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SRR31096286_medium.HA.top1ref.fa.gz:md5,63b6c8e526b50258042aef0cf5a314b3",
@@ -943,7 +941,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-29T12:22:21.572395628"
+        "timestamp": "2025-10-29T16:38:17.011406616"
     },
     "Snapshot - Stable consensus with report": {
         "content": [
@@ -1776,8 +1774,6 @@
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "samtools-flagstat-pct-table.txt:md5,682301f69856db044034ba863944602e",
-                "samtools-flagstat-table.txt:md5,eb7db8a404ef33d237b620a2929ae1b9",
                 "N_content_and_Ambiguous_calls.csv:md5,983f9fc145207afeafc714444b217d66",
                 "read_statistics.csv:md5,61cf20d1d0b7cabb9a4f1dc60db3a78e",
                 "top5_references.csv:md5,eefb80b809c0619a29c6605ba9144661",
@@ -1821,6 +1817,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-29T12:13:07.548306033"
+        "timestamp": "2025-10-29T16:28:36.607899388"
     }
 }

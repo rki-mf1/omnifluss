@@ -684,8 +684,6 @@
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "samtools-flagstat-pct-table.txt:md5,411a1281509c30c6cea81b9288c2d9c6",
-                "samtools-flagstat-table.txt:md5,1735e7638e42959dd434344328ce47ca",
                 "SRR31096286_medium.special_case_variant_mask.bed:md5,2851442a1e943a847d46791aa1c388f8",
                 "SRR31143054_small.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SRR31096286_medium.MP.top1ref.fa.gz:md5,3e2ee7287bca18575c8d8b0d94bcf938",
@@ -722,6 +720,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2025-10-29T12:34:31.111621507"
+        "timestamp": "2025-10-29T16:48:56.244950905"
     }
 }

@@ -48,6 +48,8 @@ multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_
 multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt
 multiqc/multiqc_data/samtools-flagstat-dp_Read_counts.txt
 multiqc/multiqc_data/samtools-flagstat-dp_Percentage_of_total.txt
+multiqc/multiqc_data/samtools-flagstat-pct-table.txt
+multiqc/multiqc_data/samtools-flagstat-table.txt
 multiqc/multiqc_data/picard_deduplication.txt
 multiqc/multiqc_data/multiqc_samtools_stats.txt
 multiqc/multiqc_data/multiqc_samtools_idxstats.txt
