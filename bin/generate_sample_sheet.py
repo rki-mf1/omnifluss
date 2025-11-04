@@ -25,9 +25,9 @@ def parse_args():
     )
     
     parser.add_argument(
-    "-pd",
-    "--project_dir",
-    help="project directory used in the Nextflow run",
+    "-ld",
+    "--launch_dir",
+    help="launch dir of the nextflow workflow",
     type=str,
     required=True,
     )
@@ -52,7 +52,7 @@ def main():
     fastas = []
     
     #form the correct path, depending on whether an absolute or relative outdir was supplied
-    path = args.outdir if args.outdir.startswith("/") else os.path.join(args.project_dir,args.outdir)  
+    path = args.outdir if args.outdir.startswith("/") else os.path.join(args.launch_dir,args.outdir)  
     
     for elem in args.input.split(","):
         

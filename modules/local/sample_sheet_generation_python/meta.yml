@@ -9,10 +9,10 @@ input:
     type: str
     description: |
       collection of channels of the format [ [meta], fasta ] as a string.
-  - projectDir:
+  - launch_dir:
       type: string
       description: |
-        path to the main.nf script
+        path from where the workflow was launched
 
 output:
   - sample_sheet:

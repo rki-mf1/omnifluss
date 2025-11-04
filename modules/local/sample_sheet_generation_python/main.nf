@@ -7,7 +7,7 @@ process SAMPLE_SHEET_GENERATION_PYTHON {
 
     input:
     val input
-    val projectDir
+    val launch_dir
 
     output:
     path "omnifluss_sample_sheet.csv"      , emit: sample_sheet
@@ -16,7 +16,7 @@ process SAMPLE_SHEET_GENERATION_PYTHON {
     script:
     def publish_dir_path      = task.ext.publish_dir_bcftools_consensus
     """
-    generate_sample_sheet.py --input "$input" --outdir "$publish_dir_path" --project_dir "$projectDir"
+    generate_sample_sheet.py --input "$input" --outdir "$publish_dir_path" --launch_dir "$launch_dir"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
