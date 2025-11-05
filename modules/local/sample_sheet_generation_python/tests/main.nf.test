@@ -1,0 +1,48 @@
+nextflow_process {
+
+    name "Test Process SAMPLE_SHEET_GENERATION_PYTHON"
+    script "../main.nf"
+    process "SAMPLE_SHEET_GENERATION_PYTHON"
+
+    tag "modules"
+    tag "modules_local"
+    tag "sample_sheet_generation_python"
+
+    setup {
+        def omnifluss_data_url = "https://github.com/rki-mf1/omnifluss_data/raw/refs/heads/INV_illumina/dummy_files/sample_sheet_fastas.tar.gz"
+        def omnifluss_data_command = ['bash', '-c', "curl -L --retry 5 --retry-delay 10 ${omnifluss_data_url} | tar xzf - -C ${launchDir}"]
+        def omnifluss_data_proc = omnifluss_data_command.execute()
+        omnifluss_data_proc.waitFor()
+
+        if (omnifluss_data_proc.exitValue() != 0) {
+            throw new RuntimeException("Error - failed to download input data: ${omnifluss_data_proc.err.text}")
+        }
+    }
+
+    test("Sample Sheet Test") {
+
+        config "./sample_sheet.config"
+
+        when {
+            process {
+                """
+                input[0] = Channel.of([
+                    [ id: 'sample_1' ], file('temporary/directories/sample_sheet_generation_python/sample_1.fa'),
+                    [ id: 'sample_2' ], file('temporary/directories/sample_sheet_generation_python/sample_2.fa'),
+                    [ id: 'sample_3' ], file('temporary/directories/sample_sheet_generation_python/sample_3.fa')
+                ])
+                input[1] = ""
+                """
+
+            }
+        }
+
+        then {
+            assertAll (
+                { assert process.success  },
+                { assert path(process.out.sample_sheet.get(0)).exists() }
+                
+            )
+        }
+    }
+}

@@ -15,3 +15,5 @@ pipeline_info/*.{html,json,txt,yml}
 */*/versions.yml
 
 **/*.gz
+
+omnifluss_sample_sheet.csv
