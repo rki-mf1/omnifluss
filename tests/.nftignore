@@ -63,3 +63,4 @@ report/qc_report.html
 report/qc_report_data/mapping_statistics.csv
 bedtools/genomecov/*{_small,_medium}.coverage.tsv
 samtools/coverage/*{_small,_medium}.samtools_coverage.txt
+omnifluss_sample_sheet.csv

@@ -22,7 +22,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:58:08.320225586"
+        "timestamp": "2025-10-10T11:30:36.843419009"
     },
     "Snapshot - Stable versions": {
         "content": [
@@ -89,6 +89,9 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.2.0-1-g3948afb6b"
                 },
+                "SAMPLE_SHEET_GENERATION_PYTHON": {
+                    "generate_sample_sheet.py": "1.0.0"
+                },
                 "SAMTOOLS_FAIDX": {
                     "samtools": 1.2
                 },
@@ -122,11 +125,11 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:57:57.545875853"
+        "timestamp": "2025-10-10T11:30:25.103538252"
     },
     "Snapshot - Stable content": {
         "content": [
-            123,
+            124,
             {
                 "BCFTOOLS_FILTER": {
                     "bcftools": 1.2
@@ -524,6 +527,7 @@
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-pct.svg",
                 "multiqc/multiqc_report.html",
+                "omnifluss_sample_sheet.csv",
                 "picard",
                 "picard/markduplicates",
                 "picard/markduplicates/SRR31096286_medium.markduplicates.sorted.MarkDuplicates.metrics.txt",
@@ -610,7 +614,8 @@
                 "tabix",
                 "tabix/SRR31096286_medium.adjusted_gt.vcf.gz.tbi",
                 "tabix/SRR31143054_small.adjusted_gt.vcf.gz.tbi",
-                "tabix/versions.yml"
+                "tabix/versions.yml",
+                "versions.yml"
             ],
             [
                 "SRR31096286_medium.fastp.json:md5,b17aba999002d03fc6711f0a60513127",
@@ -713,7 +718,8 @@
                 "SRR31143054_small.NS.top1ref.standardized.fasta.gz:md5,4860d9678b7c0b040e9f5cff2321d3a9",
                 "SRR31143054_small.PA.top1ref.standardized.fasta.gz:md5,94d5479e46a53e7f2c3e16e1a1aaef06",
                 "SRR31143054_small.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
-                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f"
+                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f",
+                "versions.yml:md5,a23a151723e72bdac1c25704658dcf7d"
             ]
         ],
         "meta": {
