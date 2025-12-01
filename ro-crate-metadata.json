@@ -129,7 +129,7 @@
                 }
             ],
             "dateCreated": "",
-            "dateModified": "2025-09-19T09:46:28Z",
+            "dateModified": "2025-10-28T11:52:02Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "keywords": [
                 "nf-core",
@@ -165,7 +165,7 @@
             "url": {
                 "@id": "https://www.nextflow.io/"
             },
-            "version": "!>=24.04.2"
+            "version": "!>=25.04.0"
         },
         {
             "@id": "#84f5d447-b36c-4a10-a4ac-5294fefc6147",
