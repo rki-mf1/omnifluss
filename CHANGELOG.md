@@ -5,11 +5,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## 0.4.0 - [2025-12-09]
+
 ### `Updated`
 
 - nf-core tools/template version `3.4.1`
 - include nf-core configs template part
 - minimum Nextflow version `25.04.0`
+
+### `Added`
+  
+- added output samplesheet for clade assignment using rki-mf1/omnifluss_downstream
 
 ## 0.3.0 - [2025-09-19]
 
