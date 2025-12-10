@@ -200,7 +200,7 @@
                     "tabix": "1.19.1"
                 },
                 "Workflow": {
-                    "rki-mf1/omnifluss": "v0.3.0"
+                    "rki-mf1/omnifluss": "v0.4.0"
                 }
             },
             [

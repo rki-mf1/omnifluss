@@ -34,8 +34,11 @@ conda activate omnifluss
 
 ```bash
 nextflow run rki-mf1/omnifluss \
+   -r v0.4.0 \
    -profile <docker/singularity/.../institute/virus> \
    --input samplesheet.csv \
+   --reference my_virus_reference.fasta \
+   --kraken2_db /path/to/my/kraken2db/ \
    --outdir <OUTDIR>
 ```
 
