@@ -1,0 +1,32 @@
+name: "SAMPLE_SHEET_GENERATION_PYTHON"
+description: Generate a sample sheet that can be used in omnifluss_downstream.
+keywords:
+  - sample_sheet
+  - python
+
+input:
+  - input:
+    type: str
+    description: |
+      collection of channels of the format [ [meta], fasta ] as a string.
+  - launch_dir:
+      type: string
+      description: |
+        path from where the workflow was launched
+
+output:
+  - sample_sheet:
+      type: file
+      description: |
+        sample sheet in csv format that can be used for omnifluss_downstream
+      pattern: "omnifluss_sample_sheet.csv"
+  - versions:
+      type: file
+      description: File containing software versions
+      pattern: "versions.yml"
+    
+
+authors:
+  - "@DimitriTernovoj"
+maintainers:
+  - "@DimitriTernovoj"

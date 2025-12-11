@@ -2,7 +2,7 @@ include { INV_REPORT_RMARKDOWN } from '../../../modules/local/inv_report_rmarkdo
 
 workflow INV_REPORTING_ALL {
     take:
-    sample_sheet
+    num_samples
     consensus_mincov
     reference_selection
     reporting_information
@@ -27,7 +27,7 @@ workflow INV_REPORTING_ALL {
     N_content_and_Ambiguous_calls = Channel.empty()
 
     INV_REPORT_RMARKDOWN(
-        sample_sheet,
+        num_samples,
         consensus_mincov,
         reference_selection,
         reporting_information,

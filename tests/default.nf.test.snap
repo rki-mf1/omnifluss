@@ -70,6 +70,9 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.2.0-1-g3948afb6b"
                 },
+                "SAMPLE_SHEET_GENERATION_PYTHON": {
+                    "generate_sample_sheet.py": "1.0.0"
+                },
                 "SAMTOOLS_COVERAGE": {
                     "samtools": 1.21
                 },
@@ -106,7 +109,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:04:02.136090212"
+        "timestamp": "2025-10-10T09:59:47.1007422"
     },
     "Snapshot - Stable consensus": {
         "content": [
@@ -131,7 +134,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:11:12.049714233"
+        "timestamp": "2025-10-10T10:07:30.109219402"
     },
     "Snapshot - Stub versions": {
         "content": [
@@ -198,6 +201,9 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.2.0-1-g3948afb6b"
                 },
+                "SAMPLE_SHEET_GENERATION_PYTHON": {
+                    "generate_sample_sheet.py": "1.0.0"
+                },
                 "SAMTOOLS_FAIDX": {
                     "samtools": 1.2
                 },
@@ -231,7 +237,7 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:12:53.48221676"
+        "timestamp": "2025-10-10T10:09:37.728280728"
     },
     "Snapshot - Stable versions": {
         "content": [
@@ -298,6 +304,9 @@
                 "PICARD_MARKDUPLICATES": {
                     "picard": "3.2.0-1-g3948afb6b"
                 },
+                "SAMPLE_SHEET_GENERATION_PYTHON": {
+                    "generate_sample_sheet.py": "1.0.0"
+                },
                 "SAMTOOLS_FAIDX": {
                     "samtools": 1.2
                 },
@@ -331,11 +340,11 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:10:50.463704037"
+        "timestamp": "2025-10-10T10:07:08.412433071"
     },
     "Snapshot - Stable content": {
         "content": [
-            129,
+            130,
             {
                 "BCFTOOLS_FILTER": {
                     "bcftools": 1.2
@@ -406,7 +415,7 @@
                     "tabix": "1.19.1"
                 },
                 "Workflow": {
-                    "rki-mf1/omnifluss": "v0.3.0"
+                    "rki-mf1/omnifluss": "v0.4.0"
                 }
             },
             [
@@ -569,7 +578,9 @@
                 "multiqc/multiqc_data/fastqc_sequence_counts_plot.txt",
                 "multiqc/multiqc_data/fastqc_sequence_duplication_levels_plot.txt",
                 "multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt",
+                "multiqc/multiqc_data/llms-full.txt",
                 "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
                 "multiqc/multiqc_data/multiqc_fastp.txt",
@@ -583,10 +594,11 @@
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_data/picard_MarkIlluminaAdapters_histogram.txt",
                 "multiqc/multiqc_data/picard_MeanQualityByCycle_histogram.txt",
+                "multiqc/multiqc_data/picard_MeanQualityByCycle_histogram_1.txt",
                 "multiqc/multiqc_data/picard_QualityScoreDistribution_histogram.txt",
                 "multiqc/multiqc_data/picard_deduplication.txt",
-                "multiqc/multiqc_data/samtools-flagstat-dp_Percentage_of_total.txt",
-                "multiqc/multiqc_data/samtools-flagstat-dp_Read_counts.txt",
+                "multiqc/multiqc_data/samtools-flagstat-pct-table.txt",
+                "multiqc/multiqc_data/samtools-flagstat-table.txt",
                 "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt",
                 "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt",
                 "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt",
@@ -626,11 +638,10 @@
                 "multiqc/multiqc_plots/pdf/fastqc_sequence_counts_plot-pct.pdf",
                 "multiqc/multiqc_plots/pdf/fastqc_sequence_duplication_levels_plot.pdf",
                 "multiqc/multiqc_plots/pdf/fastqc_top_overrepresented_sequences_table.pdf",
-                "multiqc/multiqc_plots/pdf/general_stats_table.pdf",
                 "multiqc/multiqc_plots/pdf/picard_deduplication-cnt.pdf",
                 "multiqc/multiqc_plots/pdf/picard_deduplication-pct.pdf",
-                "multiqc/multiqc_plots/pdf/samtools-flagstat-dp_Percentage_of_total.pdf",
-                "multiqc/multiqc_plots/pdf/samtools-flagstat-dp_Read_counts.pdf",
+                "multiqc/multiqc_plots/pdf/samtools-flagstat-pct-table.pdf",
+                "multiqc/multiqc_plots/pdf/samtools-flagstat-table.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.pdf",
@@ -673,11 +684,10 @@
                 "multiqc/multiqc_plots/png/fastqc_sequence_counts_plot-pct.png",
                 "multiqc/multiqc_plots/png/fastqc_sequence_duplication_levels_plot.png",
                 "multiqc/multiqc_plots/png/fastqc_top_overrepresented_sequences_table.png",
-                "multiqc/multiqc_plots/png/general_stats_table.png",
                 "multiqc/multiqc_plots/png/picard_deduplication-cnt.png",
                 "multiqc/multiqc_plots/png/picard_deduplication-pct.png",
-                "multiqc/multiqc_plots/png/samtools-flagstat-dp_Percentage_of_total.png",
-                "multiqc/multiqc_plots/png/samtools-flagstat-dp_Read_counts.png",
+                "multiqc/multiqc_plots/png/samtools-flagstat-pct-table.png",
+                "multiqc/multiqc_plots/png/samtools-flagstat-table.png",
                 "multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.png",
                 "multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.png",
                 "multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.png",
@@ -720,11 +730,10 @@
                 "multiqc/multiqc_plots/svg/fastqc_sequence_counts_plot-pct.svg",
                 "multiqc/multiqc_plots/svg/fastqc_sequence_duplication_levels_plot.svg",
                 "multiqc/multiqc_plots/svg/fastqc_top_overrepresented_sequences_table.svg",
-                "multiqc/multiqc_plots/svg/general_stats_table.svg",
                 "multiqc/multiqc_plots/svg/picard_deduplication-cnt.svg",
                 "multiqc/multiqc_plots/svg/picard_deduplication-pct.svg",
-                "multiqc/multiqc_plots/svg/samtools-flagstat-dp_Percentage_of_total.svg",
-                "multiqc/multiqc_plots/svg/samtools-flagstat-dp_Read_counts.svg",
+                "multiqc/multiqc_plots/svg/samtools-flagstat-pct-table.svg",
+                "multiqc/multiqc_plots/svg/samtools-flagstat-table.svg",
                 "multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.svg",
                 "multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.svg",
@@ -735,6 +744,7 @@
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-pct.svg",
                 "multiqc/multiqc_report.html",
+                "omnifluss_sample_sheet.csv",
                 "picard",
                 "picard/markduplicates",
                 "picard/markduplicates/SRR31096286_medium.markduplicates.sorted.MarkDuplicates.metrics.txt",
@@ -825,7 +835,8 @@
                 "tabix",
                 "tabix/SRR31096286_medium.adjusted_gt.vcf.gz.tbi",
                 "tabix/SRR31143054_small.adjusted_gt.vcf.gz.tbi",
-                "tabix/versions.yml"
+                "tabix/versions.yml",
+                "versions.yml"
             ],
             [
                 "SRR31096286_medium.fastp.json:md5,b17aba999002d03fc6711f0a60513127",
@@ -899,6 +910,7 @@
                 "multiqc_fastqc.txt:md5,9ce86050bf1136d9f9ecfbc5b35c2245",
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SRR31096286_medium.special_case_variant_mask.bed:md5,2851442a1e943a847d46791aa1c388f8",
                 "SRR31143054_small.special_case_variant_mask.bed:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -933,14 +945,15 @@
                 "SRR31143054_small.NS.top1ref.standardized.fasta.gz:md5,4860d9678b7c0b040e9f5cff2321d3a9",
                 "SRR31143054_small.PA.top1ref.standardized.fasta.gz:md5,94d5479e46a53e7f2c3e16e1a1aaef06",
                 "SRR31143054_small.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
-                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f"
+                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f",
+                "versions.yml:md5,a23a151723e72bdac1c25704658dcf7d"
             ]
         ],
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
+            "nf-test": "0.9.3",
+            "nextflow": "25.10.0"
         },
-        "timestamp": "2025-09-19T10:10:28.733740064"
+        "timestamp": "2025-10-29T16:38:17.011406616"
     },
     "Snapshot - Stable consensus with report": {
         "content": [
@@ -965,11 +978,11 @@
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:04:12.914608343"
+        "timestamp": "2025-10-10T09:59:57.900287223"
     },
     "Snapshot - Stub trace": {
         "content": [
-            129,
+            130,
             true,
             [
                 "SRR31096286_medium.fa:md5,d41d8cd98f00b204e9800998ecf8427e",
@@ -1131,18 +1144,19 @@
                 "SRR31096286_medium.adjusted_gt.vcf.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SRR31096286_medium.adjusted_gt.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "SRR31143054_small.adjusted_gt.vcf.gz.csi:md5,d41d8cd98f00b204e9800998ecf8427e",
-                "SRR31143054_small.adjusted_gt.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e"
+                "SRR31143054_small.adjusted_gt.vcf.gz.tbi:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "versions.yml:md5,a23a151723e72bdac1c25704658dcf7d"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
             "nextflow": "25.04.3"
         },
-        "timestamp": "2025-09-19T10:12:31.284770535"
+        "timestamp": "2025-10-10T10:09:15.673784294"
     },
     "Snapshot - Stable content with report": {
         "content": [
-            136,
+            137,
             {
                 "BCFTOOLS_FILTER": {
                     "bcftools": 1.2
@@ -1216,7 +1230,7 @@
                     "tabix": "1.19.1"
                 },
                 "Workflow": {
-                    "rki-mf1/omnifluss": "v0.3.0"
+                    "rki-mf1/omnifluss": "v0.4.0"
                 }
             },
             [
@@ -1383,7 +1397,9 @@
                 "multiqc/multiqc_data/fastqc_sequence_counts_plot.txt",
                 "multiqc/multiqc_data/fastqc_sequence_duplication_levels_plot.txt",
                 "multiqc/multiqc_data/fastqc_top_overrepresented_sequences_table.txt",
+                "multiqc/multiqc_data/llms-full.txt",
                 "multiqc/multiqc_data/multiqc.log",
+                "multiqc/multiqc_data/multiqc.parquet",
                 "multiqc/multiqc_data/multiqc_citations.txt",
                 "multiqc/multiqc_data/multiqc_data.json",
                 "multiqc/multiqc_data/multiqc_fastp.txt",
@@ -1398,6 +1414,7 @@
                 "multiqc/multiqc_data/multiqc_sources.txt",
                 "multiqc/multiqc_data/picard_MarkIlluminaAdapters_histogram.txt",
                 "multiqc/multiqc_data/picard_MeanQualityByCycle_histogram.txt",
+                "multiqc/multiqc_data/picard_MeanQualityByCycle_histogram_1.txt",
                 "multiqc/multiqc_data/picard_QualityScoreDistribution_histogram.txt",
                 "multiqc/multiqc_data/picard_deduplication.txt",
                 "multiqc/multiqc_data/samtools-coverage-table.txt",
@@ -1407,8 +1424,8 @@
                 "multiqc/multiqc_data/samtools-coverage_MQ.txt",
                 "multiqc/multiqc_data/samtools-coverage_Mean_depth.txt",
                 "multiqc/multiqc_data/samtools-coverage_Reads.txt",
-                "multiqc/multiqc_data/samtools-flagstat-dp_Percentage_of_total.txt",
-                "multiqc/multiqc_data/samtools-flagstat-dp_Read_counts.txt",
+                "multiqc/multiqc_data/samtools-flagstat-pct-table.txt",
+                "multiqc/multiqc_data/samtools-flagstat-table.txt",
                 "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Normalised_Counts.txt",
                 "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts.txt",
                 "multiqc/multiqc_data/samtools-idxstats-mapped-reads-plot_Raw_Counts.txt",
@@ -1448,7 +1465,6 @@
                 "multiqc/multiqc_plots/pdf/fastqc_sequence_counts_plot-pct.pdf",
                 "multiqc/multiqc_plots/pdf/fastqc_sequence_duplication_levels_plot.pdf",
                 "multiqc/multiqc_plots/pdf/fastqc_top_overrepresented_sequences_table.pdf",
-                "multiqc/multiqc_plots/pdf/general_stats_table.pdf",
                 "multiqc/multiqc_plots/pdf/picard_deduplication-cnt.pdf",
                 "multiqc/multiqc_plots/pdf/picard_deduplication-pct.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-coverage-table.pdf",
@@ -1464,8 +1480,8 @@
                 "multiqc/multiqc_plots/pdf/samtools-coverage_Mean_depth-log.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-coverage_Reads-cnt.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-coverage_Reads-log.pdf",
-                "multiqc/multiqc_plots/pdf/samtools-flagstat-dp_Percentage_of_total.pdf",
-                "multiqc/multiqc_plots/pdf/samtools-flagstat-dp_Read_counts.pdf",
+                "multiqc/multiqc_plots/pdf/samtools-flagstat-pct-table.pdf",
+                "multiqc/multiqc_plots/pdf/samtools-flagstat-table.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.pdf",
                 "multiqc/multiqc_plots/pdf/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.pdf",
@@ -1508,7 +1524,6 @@
                 "multiqc/multiqc_plots/png/fastqc_sequence_counts_plot-pct.png",
                 "multiqc/multiqc_plots/png/fastqc_sequence_duplication_levels_plot.png",
                 "multiqc/multiqc_plots/png/fastqc_top_overrepresented_sequences_table.png",
-                "multiqc/multiqc_plots/png/general_stats_table.png",
                 "multiqc/multiqc_plots/png/picard_deduplication-cnt.png",
                 "multiqc/multiqc_plots/png/picard_deduplication-pct.png",
                 "multiqc/multiqc_plots/png/samtools-coverage-table.png",
@@ -1524,8 +1539,8 @@
                 "multiqc/multiqc_plots/png/samtools-coverage_Mean_depth-log.png",
                 "multiqc/multiqc_plots/png/samtools-coverage_Reads-cnt.png",
                 "multiqc/multiqc_plots/png/samtools-coverage_Reads-log.png",
-                "multiqc/multiqc_plots/png/samtools-flagstat-dp_Percentage_of_total.png",
-                "multiqc/multiqc_plots/png/samtools-flagstat-dp_Read_counts.png",
+                "multiqc/multiqc_plots/png/samtools-flagstat-pct-table.png",
+                "multiqc/multiqc_plots/png/samtools-flagstat-table.png",
                 "multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.png",
                 "multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.png",
                 "multiqc/multiqc_plots/png/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.png",
@@ -1568,7 +1583,6 @@
                 "multiqc/multiqc_plots/svg/fastqc_sequence_counts_plot-pct.svg",
                 "multiqc/multiqc_plots/svg/fastqc_sequence_duplication_levels_plot.svg",
                 "multiqc/multiqc_plots/svg/fastqc_top_overrepresented_sequences_table.svg",
-                "multiqc/multiqc_plots/svg/general_stats_table.svg",
                 "multiqc/multiqc_plots/svg/picard_deduplication-cnt.svg",
                 "multiqc/multiqc_plots/svg/picard_deduplication-pct.svg",
                 "multiqc/multiqc_plots/svg/samtools-coverage-table.svg",
@@ -1584,8 +1598,8 @@
                 "multiqc/multiqc_plots/svg/samtools-coverage_Mean_depth-log.svg",
                 "multiqc/multiqc_plots/svg/samtools-coverage_Reads-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools-coverage_Reads-log.svg",
-                "multiqc/multiqc_plots/svg/samtools-flagstat-dp_Percentage_of_total.svg",
-                "multiqc/multiqc_plots/svg/samtools-flagstat-dp_Read_counts.svg",
+                "multiqc/multiqc_plots/svg/samtools-flagstat-pct-table.svg",
+                "multiqc/multiqc_plots/svg/samtools-flagstat-table.svg",
                 "multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Normalised_Counts-log.svg",
                 "multiqc/multiqc_plots/svg/samtools-idxstats-mapped-reads-plot_Observed_over_Expected_Counts-cnt.svg",
@@ -1596,6 +1610,7 @@
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-cnt.svg",
                 "multiqc/multiqc_plots/svg/samtools_alignment_plot-pct.svg",
                 "multiqc/multiqc_report.html",
+                "omnifluss_sample_sheet.csv",
                 "picard",
                 "picard/markduplicates",
                 "picard/markduplicates/SRR31096286_medium.markduplicates.sorted.MarkDuplicates.metrics.txt",
@@ -1698,7 +1713,8 @@
                 "tabix",
                 "tabix/SRR31096286_medium.adjusted_gt.vcf.gz.tbi",
                 "tabix/SRR31143054_small.adjusted_gt.vcf.gz.tbi",
-                "tabix/versions.yml"
+                "tabix/versions.yml",
+                "versions.yml"
             ],
             [
                 "SRR31096286_medium.fastp.json:md5,b17aba999002d03fc6711f0a60513127",
@@ -1772,6 +1788,7 @@
                 "multiqc_fastqc.txt:md5,9ce86050bf1136d9f9ecfbc5b35c2245",
                 "picard_MarkIlluminaAdapters_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_MeanQualityByCycle_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
+                "picard_MeanQualityByCycle_histogram_1.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "picard_QualityScoreDistribution_histogram.txt:md5,d41d8cd98f00b204e9800998ecf8427e",
                 "N_content_and_Ambiguous_calls.csv:md5,983f9fc145207afeafc714444b217d66",
                 "read_statistics.csv:md5,61cf20d1d0b7cabb9a4f1dc60db3a78e",
@@ -1809,13 +1826,14 @@
                 "SRR31143054_small.NS.top1ref.standardized.fasta.gz:md5,4860d9678b7c0b040e9f5cff2321d3a9",
                 "SRR31143054_small.PA.top1ref.standardized.fasta.gz:md5,94d5479e46a53e7f2c3e16e1a1aaef06",
                 "SRR31143054_small.PB1.top1ref.standardized.fasta.gz:md5,74abfd335f2ae927c889359d8b467ed3",
-                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f"
+                "SRR31143054_small.PB2.top1ref.standardized.fasta.gz:md5,3100e522538a87adbf74c1aac817866f",
+                "versions.yml:md5,a23a151723e72bdac1c25704658dcf7d"
             ]
         ],
         "meta": {
             "nf-test": "0.9.2",
-            "nextflow": "25.04.3"
+            "nextflow": "25.04.6"
         },
-        "timestamp": "2025-09-19T10:03:50.972063909"
+        "timestamp": "2025-11-05T15:28:53.404618303"
     }
 }

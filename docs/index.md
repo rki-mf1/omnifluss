@@ -6,22 +6,25 @@
 ![Static Badge](https://img.shields.io/badge/run_with-docker-0db7ed?logo=docker&labelColor=black)
 ![Static Badge](https://img.shields.io/badge/run_with-singularity-1d355c?labelColor=black)
 
+<img src="omnifluss.png" alt="The Omnifluss Omnibus" width="256" height="256"/>
 
 # Omnifluss
 
-**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes.
+**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes. The word "omnifluss" is a neologism of the prefix *omni* ([ˈɔmni] - from Latin *all* or *whole*) and the word *Fluss* ([flʊs] - from German *flow* or *flux*).
 
 Omnifluss takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.
 The specific algorithms and software selected for these operations primarily depend on two parameters: virus type and sequencing technology.
 Beside these two parameters many settings and subroutines can be finetuned.
-After a successful run `omnifluss` returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
-
+After a successful run omnifluss returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
 
 ### Technical prerequisites
 
 For system requirements of omnifluss please see the [Prerequisites](prerequisites.md) page.
 
+### Analyse your data
+
+For in depth guidance of how to use omnifluss with your data please see the individual virus pages.
 
 <hr>
 
-*Last update: July, 15th 2025*
+*Last update: October, 20th 2025*

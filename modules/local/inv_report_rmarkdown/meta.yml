@@ -8,10 +8,10 @@ keywords:
   - RMarkdown
 
 input:
-  - sample_sheet:
-    type: file
+  - num_samples:
+    type: int
     description: |
-      sample sheet used to start the workflow. Used to infer the total number of samples.
+      Number of input samples.
   - consensus_mincov:
       type: int
       description: |
@@ -104,9 +104,8 @@ output:
       pattern: "top5_references.csv"
   - N_content_and_Ambiguous_calls:
       type: file
-      description: Underlying csv-file for N-/Ambiguous contents file 
+      description: Underlying csv-file for N-/Ambiguous contents file
       pattern: "N_content_and_Ambiguous_calls.csv"
-    
 
 authors:
   - "@DimitriTernovoj"

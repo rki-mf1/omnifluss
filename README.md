@@ -3,17 +3,16 @@
 ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/rki-mf1/omnifluss/nf-test.yml?branch=main&logo=githubactions&label=tests%20(%40main))
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/rki-mf1/omnifluss?logo=Github)
 
-
 # rki-mf1/omnifluss
 
 ## Introduction
 
-**rki-mf1/omnifluss** is a bioinformatics pipeline for the reconstruction of virus genomes.
+**rki-mf1/omnifluss**, from _omni_ (Latin: 'all, every') and _Fluss_ (German: 'flow, stream'), is a computational workflow for the reconstruction of virus genomes.
 
-Omnifluss takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.
+`Omnifluss` takes raw sequencing data and performs operations such as quality filtering, primer clipping, taxanomic classification, alignment, variant calling, consensus assembly, and optionally reference selection.
 The specific algorithms and software selected for these operations primarily depend on two parameters: virus type and sequencing technology.
 Beside these two parameters many settings and subroutines can be finetuned.
-After a successful run `omnifluss` returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
+After a successful run, Omnifluss returns a consensus sequence, intermediate files, and an HTML report that includes statistics of the individual operations.
 
 ## Usage
 
@@ -23,20 +22,26 @@ Please visit our **[omnifluss website](https://rki-mf1.github.io/omnifluss/)** f
 
 You need Nextflow and at least one package manager (conda) or container engine (singularity, docker) available.
 You can install Nextflow via conda:
+
 ```bash
 conda create -n omnifluss -c bioconda -c conda-forge nextflow==25.04.3
 conda activate omnifluss
 ```
+
 </details>
 
 <details><summary> TL;DR (run) </summary>
 
 ```bash
 nextflow run rki-mf1/omnifluss \
+   -r v0.4.0 \
    -profile <docker/singularity/.../institute/virus> \
    --input samplesheet.csv \
+   --reference my_virus_reference.fasta \
+   --kraken2_db /path/to/my/kraken2db/ \
    --outdir <OUTDIR>
 ```
+
 </details>
 
 ## Credits

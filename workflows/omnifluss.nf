@@ -14,6 +14,7 @@ include { BAM_SPECIAL_VARIANTS_CASE_ALL       } from '../subworkflows/local/bam_
 include { BAM_SAMTOOLS_STATS_ALL              } from '../subworkflows/local/bam_samtools_stats_all'
 include { VCF_CALL_CONSENSUS_ALL              } from '../subworkflows/local/vcf_call_consensus_all'
 include { INV_REPORTING_ALL                   } from '../subworkflows/local/inv_reporting_all'
+include { SAMPLE_SHEET_GENERATION_PYTHON      } from '../modules/local/sample_sheet_generation_python'
 include { MULTIQC                             } from '../modules/nf-core/multiqc/main'
 
 include { paramsSummaryMap                    } from 'plugin/nf-schema'
@@ -35,6 +36,7 @@ workflow OMNIFLUSS {
 
     main:
     ch_reads                    = ch_samplesheet
+    val_number_samples              = ch_samplesheet.count()
     ch_versions                 = Channel.empty()
     ch_multiqc_files            = Channel.empty()
     ch_final_topRefs            = Channel.empty()
@@ -245,6 +247,12 @@ workflow OMNIFLUSS {
     ch_consensus_calls = VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect{it[1]}
     ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
 
+    SAMPLE_SHEET_GENERATION_PYTHON(
+        VCF_CALL_CONSENSUS_ALL.out.consensus_calls.collect(),
+        "$launchDir"
+    )
+    ch_versions = ch_versions.mix(VCF_CALL_CONSENSUS_ALL.out.versions)
+
     if (! params.skip_report) {
         //collect files for report
         ch_fastp_jsons = ch_fastp_jsons.ifEmpty([])
@@ -267,7 +275,7 @@ workflow OMNIFLUSS {
         // Reporting
         //
         INV_REPORTING_ALL(
-            params.input,
+            val_number_samples,
             params.consensus_mincov,
             params.reference_selection,
             params.reporting_additional_information ? file(params.reporting_additional_information, checkIfExists: true) : [],

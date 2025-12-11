@@ -9,7 +9,7 @@ process INV_REPORT_RMARKDOWN {
             'community.wave.seqera.io/library/bioconductor-shortread_pandoc_r-base_r-data.table_pruned:8772a4bbf7f04989' }"
 
     input:
-    path(sample_sheet)
+    val(num_samples)
     val(consensus_mincov)
     val(reference_selection)
     path(reporting_information)
@@ -49,7 +49,7 @@ process INV_REPORT_RMARKDOWN {
         mv ${empty_spa_files} invalid_files
     fi
 
-    Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(min_cov=${consensus_mincov}, reference='${reference_selection}', information_json='${reporting_information_file}', sample_sheet='${sample_sheet}'), output_file='qc_report.html')"
+    Rscript -e "rmarkdown::render('inv_report_copied.rmd', params=list(min_cov=${consensus_mincov}, reference='${reference_selection}', information_json='${reporting_information_file}', num_samples='${num_samples}'), output_file='qc_report.html')"
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
