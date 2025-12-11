@@ -1,0 +1,364 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.0.6">
+    
+    
+      
+        <title>005 INV filteringSamplesWithoutReads - Omnifluss documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.558e4712.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.2505c338.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#title" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="Omnifluss documentation" class="md-header__button md-logo" aria-label="Omnifluss documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Omnifluss documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              005 INV filteringSamplesWithoutReads
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Omnifluss documentation" class="md-nav__button md-logo" aria-label="Omnifluss documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    Omnifluss documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../prerequisites/" class="md-nav__link">
+        Prerequisites
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../pathogens/inv/" class="md-nav__link">
+        Influenza virus
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../contributions/" class="md-nav__link">
+        Contributions
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#title" class="md-nav__link">
+    Title
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#context" class="md-nav__link">
+    Context
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decision" class="md-nav__link">
+    Decision
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    Status
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consequences" class="md-nav__link">
+    Consequences
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+  <h1>005 INV filteringSamplesWithoutReads</h1>
+
+<h2 id="title">Title</h2>
+<p>Filtering function excluding samples without reads after Kraken 2 classification or taxonomic read extraction</p>
+<h2 id="context">Context</h2>
+<p>While running Omnifluss on routine runs, we observed errors that were caused by samples of bad quality (e.g. negative controls, samples with little INV content).
+These samples could lead to errors in <code>KRAKENTOOLS_EXTRACTKRAKENREADS</code> or <code>KMA</code>, which is the subsequent process when the automatic reference selection is enabled.</p>
+<p>To deal with this issue we implemented a filtering function that is once executed after <code>KRAKEN2_KRAKEN2</code> and once after <code>KRAKENTOOLS_EXTRACTKRAKENREADS</code> in the <code>FASTQ_TAXONOMIC_FILTERING_ALL</code> subworkflow.
+For this function very specific decisions had to be made, which is the reason for this adr.
+The most intuitive way of implementing such a function is to account for single-end and paired-end data and simply check the byte-size of the file(s) (e.g. <code>file(reads).size()</code> ).
+However, this approach was not possible, because the read files are gzipped, which means that the file size can't be zero due to metadata that is stored in such files (even in empty ones).</p>
+<p>The alternative to this was to not base the decision on size, but on number of lines, which is equal to zero in empty files. Since there is no native and suitable way to access gzipped files, we decided to use the 
+countFastq operator, which counts the number of records in a channel of FastQ files. This operator has the downside that it is relatively slow and would do a lot of unnecessary work in our case, since all the reads would be counted,
+although it would be sufficient to terminate after observing a single one.</p>
+<p>With this in mind we implemented a pre-filter that is based on size. Instead of counting the reads for every file, only files smaller than a certain threshold (500 at the time of writing) are passed for read counting.
+That way we can reduce the computational burden, while still be able to base the final decision on the number of reads.</p>
+<p>While the essence of the function is covered, we observed a special case, which needed to be accounted for. We observed that our stub tests lead to EOF errors in the filtering function. 
+These errors were caused by the countFastq operator, when applying it on files with byte-size zero. These files could only occur in stub tests, because "fake" gzipped files are created there.
+These files have the same naming convention as gzipped files (<code>filename.gz</code>), but are simply generated with <code>touch filename.gz</code>, which leads to them having a byte-size of zero, although looking like gzipped files.
+The solution for this problem was to explicitly check if a file has a byte-size of zero and only if it has not, to allow it for the checks described previously.</p>
+<h2 id="decision">Decision</h2>
+<p>We implemented a filtering function that is able to filter out empty FastQ files, using an approach with prefiltering based on the file size and the final decision based on number of lines.
+We made sure that edgecases (stub-test) are covered and verified the correctness of the function by successfully rerunning samples that caused the errors in the first place.</p>
+<h2 id="status">Status</h2>
+<ul>
+<li>[ ] proposed</li>
+<li>[x] accepted</li>
+<li>[ ] deprecated</li>
+<li>[ ] superseded (via ADR#)</li>
+</ul>
+<h2 id="consequences">Consequences</h2>
+<ul>
+<li>Pro:</li>
+<li>reliable filtering based on size and number of lines</li>
+<li>efficient approach</li>
+<li>Con:</li>
+<li>implementation not very intuitive without the information about the reasoning</li>
+<li>specific check needed only for stub-tests</li>
+</ul>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.e5c33ebb.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.51d95adb.min.js"></script>
+      
+        <script src="../../search/main.js"></script>
+      
+    
+  </body>
+</html>
