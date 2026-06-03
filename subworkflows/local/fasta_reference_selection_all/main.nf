@@ -69,7 +69,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_kma_spa = ch_kma_spa.branch(constraint)
 
         /****************************************************************/
-        /* STEP 2: Get ID of Top1 refrences                             */
+        /* STEP 2: Get ID of Top1 references                             */
         /****************************************************************/
         INV_GET_TOP1_REFERENCE_AWK(
             ch_kma_spa.valid
@@ -78,7 +78,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_top1ids  = ch_top1ids.mix(INV_GET_TOP1_REFERENCE_AWK.out.txt)
 
         /****************************************************************/
-        /* STEP 3: Get FASTA of Top1 refrences                          */
+        /* STEP 3: Get FASTA of Top1 references                          */
         /****************************************************************/
         ch_reference_db_fastas_cpy = ch_reference_db_fastas
             .map{ meta, fasta -> return [meta.id, meta, fasta] }
@@ -109,7 +109,7 @@ workflow FASTA_REFERENCE_SELECTION_ALL {
         ch_top1fastas_standardized  = ch_top1fastas_standardized.mix(SEQKIT_REPLACE.out.fastx)
 
         /****************************************************************/
-        /* STEP 5: Concat FASTAs of Top1 refrences                      */
+        /* STEP 5: Concat FASTAs of Top1 references                      */
         /****************************************************************/
         ch_top1fastas_standardized
             .map{ meta, fasta -> return [[id:meta.id, single_end:meta.single_end], fasta] }
