@@ -109,12 +109,15 @@ baseContentCount <- function(x) {
 }
 
 infer_segment_name <- function(x) {
-  split <- unlist(strsplit(x, "\\|"))
-  return(split[length(split)])
+  # get segment from fasta header suffix
+  # suffix can be `__` or `|`
+  # `__` will be produced by omnifluss with automatic reference selection
+  #  we hope for a `|<segment>` suffix for static reference selection
+  sub("^.*(?:__|\\|)(PB2|PB1|PA|HA|NP|NA|MP|M|NS)$", "\\1", x)
 }
 
 infer_sample_name <- function(x) {
-  return(strsplit(x, "\\|ref:")[[1]][1])
+  return(strsplit(x, "\\__ref_")[[1]][1])
 }
 
 collapse_rows_df <- function(df, variable) {
