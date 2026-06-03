@@ -61,6 +61,7 @@ library("reshape2")
 library("ShortRead")
 library("dplyr")
 library("tibble")
+library("stringr")
 
 stepsize <- 20
 n_content_threshold <- 5
@@ -108,12 +109,24 @@ baseContentCount <- function(x) {
   return(alf)
 }
 
-infer_segment_name <- function(x) {
-  # get segment from fasta header suffix
+infer_segment_name <- function(header) {
+  # first check the suffix of the header
   # suffix can be `__` or `|`
   # `__` will be produced by omnifluss with automatic reference selection
   #  we hope for a `|<segment>` suffix for static reference selection
-  sub("^.*(?:__|\\|)(PB2|PB1|PA|HA|NP|NA|MP|M|NS)$", "\\1", x)
+  seg <- str_match(
+    header,
+    "(?:__|\\|)(PB2|PB1|PA|HA|NP|NA|MP|M|NS)$"
+  )[,2]
+  # if no matching suffix is found, try to match the segment name anywhere in the header
+  # assume `|` as separator as this is default for GISAID
+  if (!is.na(seg))
+    return(seg)
+
+  str_match(
+    header,
+    "\\|(PB2|PB1|PA|HA|NP|NA|MP|M|NS)(?:\\||$)"
+  )[,2]
 }
 
 infer_sample_name <- function(x) {
@@ -613,11 +626,7 @@ dt.coverage <- as.data.table(ldply(l.infiles.coverage, fread, sep = "\t"))
 colnames(dt.coverage) <- c("sample", "chromosome", "position", "depth")
 
 # rename chromosome column values
-dt.coverage$chromosome <- sapply(dt.coverage$chromosome, function(x) {
-  segment <- tail(unlist(strsplit(x, "|", fixed = TRUE)), n = 1)
-  segment <- toString(segment)
-  return(segment)
-})
+dt.coverage$chromosome <- sapply(dt.coverage$chromosome, infer_segment_name)
 
 dt.output <- dt.coverage[, sum(depth > 10), by = sample]
 setnames(dt.output, "V1", "covered.bases")
@@ -633,13 +642,15 @@ dt.bamstats_coverage[, ("meandepth") := round(.SD, 0), .SDcols = "meandepth"]
 colnames(dt.bamstats_coverage) <- c("sample", "chromosome", "reads mapped [%]", "coverage [%]", "mean depth [bp]")
 
 # rename chromosome column values
-dt.bamstats_coverage$chromosome <- sapply(dt.bamstats_coverage$chromosome, function(x) {
-  segment <- tail(unlist(strsplit(x, "|", fixed = TRUE)), n = 1)
-  segment <- toString(segment)
-  return(segment)
-})
+dt.bamstats_coverage$chromosome <- sapply(dt.bamstats_coverage$chromosome, infer_segment_name)
 
 dt.bamstats_coverage <- reshape(dt.bamstats_coverage, idvar = "sample", timevar = "chromosome", direction = "wide")
+dir.create(params$data_output_dir)
+write.csv(
+  x = dt.bamstats_coverage,
+  row.names = FALSE,
+  file = file.path(params$data_output_dir, "test_bamstats_coverage1.csv")
+)
 
 # adding placeholder column(s) for missing segment(s)
 ls.segment <- list("*HA", "*NA", "*MP", "*NP", "*NS", "*PA", "*PB1", "*PB2")
@@ -656,7 +667,12 @@ if (ncol(dt.bamstats_coverage) != 25) {
     }
   }
 }
-
+dir.create(params$data_output_dir)
+write.csv(
+  x = dt.bamstats_coverage,
+  row.names = FALSE,
+  file = file.path(params$data_output_dir, "test_bamstats_coverage2.csv")
+)
 segment_order <- c(".HA", ".NA", ".MP", ".NP", ".NS", ".PA", ".PB1", ".PB2")
 col_order <- unlist(lapply(segment_order, function(seg) {
   grep(paste0("\\", seg, "$"), names(dt.bamstats_coverage), value = TRUE)
