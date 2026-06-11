@@ -130,7 +130,7 @@ infer_segment_name <- function(header) {
 }
 
 infer_sample_name <- function(x) {
-  return(strsplit(x, "\\__ref_")[[1]][1])
+  return(strsplit(x, "__ref_|\\|ref:")[[1]][1])
 }
 
 collapse_rows_df <- function(df, variable) {
@@ -645,12 +645,6 @@ colnames(dt.bamstats_coverage) <- c("sample", "chromosome", "reads mapped [%]", 
 dt.bamstats_coverage$chromosome <- sapply(dt.bamstats_coverage$chromosome, infer_segment_name)
 
 dt.bamstats_coverage <- reshape(dt.bamstats_coverage, idvar = "sample", timevar = "chromosome", direction = "wide")
-dir.create(params$data_output_dir)
-write.csv(
-  x = dt.bamstats_coverage,
-  row.names = FALSE,
-  file = file.path(params$data_output_dir, "test_bamstats_coverage1.csv")
-)
 
 # adding placeholder column(s) for missing segment(s)
 ls.segment <- list("*HA", "*NA", "*MP", "*NP", "*NS", "*PA", "*PB1", "*PB2")
@@ -667,12 +661,7 @@ if (ncol(dt.bamstats_coverage) != 25) {
     }
   }
 }
-dir.create(params$data_output_dir)
-write.csv(
-  x = dt.bamstats_coverage,
-  row.names = FALSE,
-  file = file.path(params$data_output_dir, "test_bamstats_coverage2.csv")
-)
+
 segment_order <- c(".HA", ".NA", ".MP", ".NP", ".NS", ".PA", ".PB1", ".PB2")
 col_order <- unlist(lapply(segment_order, function(seg) {
   grep(paste0("\\", seg, "$"), names(dt.bamstats_coverage), value = TRUE)
