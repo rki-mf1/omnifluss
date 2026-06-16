@@ -111,7 +111,7 @@ baseContentCount <- function(x) {
 
 infer_segment_name <- function(header) {
   # first check the suffix of the header
-  # suffix can be `__` or `|`
+  # suffix can be separated by `__` or `|`
   # `__` will be produced by omnifluss with automatic reference selection
   #  we hope for a `|<segment>` suffix for static reference selection
   seg <- str_match(
