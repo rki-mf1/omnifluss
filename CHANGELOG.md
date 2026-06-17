@@ -5,6 +5,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+### `Changed`
+
+- removed `:` from consensus fasta header, to be compatible with `omnifluss_downstream` tools
+  - general delimiter of different ID/header parts is now `__`
+
 ## 0.4.0 - [2025-12-09]
 
 ### `Updated`
@@ -14,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - minimum Nextflow version `25.04.0`
 
 ### `Added`
-  
+
 - added output samplesheet for clade assignment using rki-mf1/omnifluss_downstream
 
 ## 0.3.0 - [2025-09-19]
