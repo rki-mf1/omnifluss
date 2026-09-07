@@ -413,9 +413,6 @@
                 },
                 "TABIX_TABIX": {
                     "tabix": "1.19.1"
-                },
-                "Workflow": {
-                    "rki-mf1/omnifluss": "v0.4.0"
                 }
             },
             [
@@ -953,7 +950,7 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2026-06-03T13:55:13.289819542"
+        "timestamp": "2026-09-07T17:13:17.185387077"
     },
     "Snapshot - Stable consensus with report": {
         "content": [
@@ -1228,9 +1225,6 @@
                 },
                 "TABIX_TABIX": {
                     "tabix": "1.19.1"
-                },
-                "Workflow": {
-                    "rki-mf1/omnifluss": "v0.4.0"
                 }
             },
             [
@@ -1834,6 +1828,6 @@
             "nf-test": "0.9.3",
             "nextflow": "25.10.0"
         },
-        "timestamp": "2026-06-03T13:47:58.407172958"
+        "timestamp": "2026-09-07T16:55:59.119404316"
     }
 }
