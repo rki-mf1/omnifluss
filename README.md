@@ -34,7 +34,7 @@ conda activate omnifluss
 
 ```bash
 nextflow run rki-mf1/omnifluss \
-   -r v0.4.0 \
+   -r v0.4.1 \
    -profile <docker/singularity/.../institute/virus> \
    --input samplesheet.csv \
    --reference my_virus_reference.fasta \
